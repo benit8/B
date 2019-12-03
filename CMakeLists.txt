@@ -46,14 +46,10 @@ PUBLIC
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/Vector.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Directory.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/File.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Path.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Stat.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/Print.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/IODevice.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/OS/Time.hpp
-	# ${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/Stream.hpp
-	# ${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/FileStream.hpp
-	# ${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/BufferStream.hpp
 
 PRIVATE
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/Buffer.cpp
@@ -64,14 +60,10 @@ PRIVATE
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/String.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/StringBase.hpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/StringView.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Time.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/Vector.inl
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Directory.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/File.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Stat.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/IODevice.cpp
 	${CMAKE_CURRENT_LIST_DIR}/sources/B/OS/Time.cpp
-	# ${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/Stream.cpp
-	# ${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/FileStream.cpp
-	# ${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/BufferStream.cpp
 )
