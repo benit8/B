@@ -27,8 +27,8 @@ template <typename Key, typename Value>
 class Map : public Associative<Key, Value>
 {
 public:
-	using Iterator = ContainerIterator<Map, Pair<Key, Value>>;
-	using ConstIterator = ContainerIterator<const Map, const Pair<Key, Value>>;
+	using Iterator = SequenceIterator<Map, Pair<Key, Value>>;
+	using ConstIterator = SequenceIterator<const Map, const Pair<Key, Value>>;
 
 public:
 	Map();

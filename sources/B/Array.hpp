@@ -33,8 +33,8 @@ struct Array
 	T _data[S];
 
 public:
-	using Iterator = ContainerIterator<Array, T>;
-	using ConstIterator = ContainerIterator<const Array, const T>;
+	using Iterator = SequenceIterator<Array, T>;
+	using ConstIterator = SequenceIterator<const Array, const T>;
 
 public:
 	Iterator begin() { return Iterator(*this, 0); }
@@ -65,7 +65,8 @@ public:
 		return data()[i];
 	}
 
-	void fill(const T &value) {
+	void fill(const T &value)
+	{
 		for (usize i = 0; i < S; ++i)
 			data()[i] = value;
 	}

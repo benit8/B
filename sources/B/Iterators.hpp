@@ -1,6 +1,6 @@
 /*
 ** B, 2019
-** Traversable.hpp
+** Iterators.hpp
 */
 
 #pragma once
@@ -8,59 +8,59 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <type_traits>
-#include "B/Container.hpp"
+#include "B/Sequence.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B
 {
 
-template <typename C, typename T>
-class ContainerIterator
+template <typename S, typename T>
+class SequenceIterator
 {
 public:
-	ContainerIterator &operator =(const ContainerIterator &other) { m_index = other.m_index; return *this; }
-	ContainerIterator &operator ++() { ++m_index; return *this; }
-	ContainerIterator &operator --() { --m_index; return *this; }
-	ContainerIterator operator +(int value) { return ContainerIterator(m_container, m_index + value); }
-	ContainerIterator operator -(int value) { return ContainerIterator(m_container, m_index - value); }
-	int operator -(const ContainerIterator &other) { return m_index - other.m_index; }
-	bool operator ==(ContainerIterator &other) const { return m_index == other.m_index; }
-	bool operator !=(ContainerIterator &other) const { return m_index != other.m_index; }
-	bool operator <(ContainerIterator &other) const { return m_index < other.m_index; }
-	bool operator >(ContainerIterator &other) const { return m_index > other.m_index; }
-	bool operator <=(ContainerIterator &other) const { return m_index <= other.m_index; }
-	bool operator >=(ContainerIterator &other) const { return m_index >= other.m_index; }
+	SequenceIterator &operator =(const SequenceIterator &other) { m_index = other.m_index; return *this; }
+	SequenceIterator &operator ++() { ++m_index; return *this; }
+	SequenceIterator &operator --() { --m_index; return *this; }
+	SequenceIterator operator +(int value) { return SequenceIterator(m_sequence, m_index + value); }
+	SequenceIterator operator -(int value) { return SequenceIterator(m_sequence, m_index - value); }
+	int operator -(const SequenceIterator &other) { return m_index - other.m_index; }
+	bool operator ==(SequenceIterator &other) const { return m_index == other.m_index; }
+	bool operator !=(SequenceIterator &other) const { return m_index != other.m_index; }
+	bool operator <(SequenceIterator &other) const { return m_index < other.m_index; }
+	bool operator >(SequenceIterator &other) const { return m_index > other.m_index; }
+	bool operator <=(SequenceIterator &other) const { return m_index <= other.m_index; }
+	bool operator >=(SequenceIterator &other) const { return m_index >= other.m_index; }
 
 	T &operator *()
 	{
-		if constexpr (std::is_base_of<Container<T>, C>::value)
-			return *m_container.slot(m_index);
+		if constexpr (std::is_base_of<Sequence<T>, S>::value)
+			return *m_sequence.slot(m_index);
 		else
-			return m_container[m_index];
+			return m_sequence[m_index];
 	}
 
 	T *operator ->()
 	{
-		if constexpr (std::is_base_of<Container<T>, C>::value)
-			return m_container.slot(m_index);
+		if constexpr (std::is_base_of<Sequence<T>, S>::value)
+			return m_sequence.slot(m_index);
 		else
-			return &m_container[m_index];
+			return &m_sequence[m_index];
 	}
 
-	bool isEnd() const { return m_index >= m_container.size(); }
+	bool isEnd() const { return m_index >= m_sequence.size(); }
 	usize index() const { return m_index; }
 
 protected:
-	ContainerIterator(C &container, usize index)
-	: m_container(container)
+	SequenceIterator(S &sequence, usize index)
+	: m_sequence(sequence)
 	, m_index(index)
 	{}
 
-	C &m_container;
+	S &m_sequence;
 	usize m_index = 0;
 
-	friend C;
+	friend S;
 };
 
 }

@@ -30,15 +30,15 @@ template <typename T>
 class Vector : public Sequence<T>
 {
 public:
-	using Iterator = ContainerIterator<Vector, T>;
-	using ConstIterator = ContainerIterator<const Vector, const T>;
+	using Iterator = SequenceIterator<Vector, T>;
+	using ConstIterator = SequenceIterator<const Vector, const T>;
 
 public:
 	Vector();
 	Vector(const Vector &other);
 	Vector(Vector &&other);
 	Vector(const T *buffer, usize size);
-	Vector(usize size, const T &val = T());
+	explicit Vector(usize size, const T &val = T());
 	Vector(std::initializer_list<T> il);
 
 	Iterator begin();

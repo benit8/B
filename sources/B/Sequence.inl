@@ -1,6 +1,6 @@
 /*
 ** B, 2019
-** Container.inl
+** Sequence.inl
 */
 
 #pragma once
@@ -12,15 +12,15 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename T> const usize Container<T>::max = -1;
-template <typename T> const usize Container<T>::maxSize = max / sizeof(T);
-template <typename T> const usize Container<T>::minimumSize = 8;
-template <typename T> const usize Container<T>::growthFactor = 2;
+template <typename T> const usize Sequence<T>::max = -1;
+template <typename T> const usize Sequence<T>::maxSize = max / sizeof(T);
+template <typename T> const usize Sequence<T>::minimumSize = 8;
+template <typename T> const usize Sequence<T>::growthFactor = 2;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-Container<T>::Container()
+Sequence<T>::Sequence()
 : m_data(nullptr)
 , m_capacity(0)
 , m_size(0)
@@ -28,7 +28,7 @@ Container<T>::Container()
 }
 
 template <typename T>
-Container<T>::~Container()
+Sequence<T>::~Sequence()
 {
 	reset();
 }
@@ -36,37 +36,37 @@ Container<T>::~Container()
 ////////////////////////////////////////////////////////////
 
 template <typename T>
-T *Container<T>::data()
+T *Sequence<T>::data()
 {
 	return m_data;
 }
 
 template <typename T>
-const T *Container<T>::data() const
+const T *Sequence<T>::data() const
 {
 	return m_data;
 }
 
 template <typename T>
-usize Container<T>::size() const
+usize Sequence<T>::size() const
 {
 	return m_size;
 }
 
 template <typename T>
-usize Container<T>::capacity() const
+usize Sequence<T>::capacity() const
 {
 	return m_capacity;
 }
 
 template <typename T>
-bool Container<T>::null() const
+bool Sequence<T>::null() const
 {
 	return data() == nullptr;
 }
 
 template <typename T>
-bool Container<T>::empty() const
+bool Sequence<T>::empty() const
 {
 	return null() || size() == 0;
 }
@@ -74,7 +74,7 @@ bool Container<T>::empty() const
 ////////////////////////////////////////////////////////////
 
 template <typename T>
-void Container<T>::clear()
+void Sequence<T>::clear()
 {
 	if (!null()) {
 		if constexpr (!std::is_trivial<T>::value) {
@@ -86,7 +86,7 @@ void Container<T>::clear()
 }
 
 template <typename T>
-void Container<T>::reset()
+void Sequence<T>::reset()
 {
 	if (!null()) {
 		if constexpr (!std::is_trivial<T>::value) {
@@ -100,7 +100,7 @@ void Container<T>::reset()
 }
 
 template <typename T>
-void Container<T>::reserve(usize newSize)
+void Sequence<T>::reserve(usize newSize)
 {
 	if (newSize <= capacity() && capacity() > 0)
 		return;
@@ -116,7 +116,7 @@ void Container<T>::reserve(usize newSize)
 }
 
 template <typename T>
-void Container<T>::resize(usize newSize, const T &filler)
+void Sequence<T>::resize(usize newSize, const T &filler)
 {
 	if (newSize == size())
 		return;
@@ -128,7 +128,7 @@ void Container<T>::resize(usize newSize, const T &filler)
 }
 
 template <typename T>
-void Container<T>::shrink()
+void Sequence<T>::shrink()
 {
 	if (empty() || size() == capacity())
 		return;
@@ -139,10 +139,44 @@ void Container<T>::shrink()
 	m_capacity = size();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+T &Sequence<T>::at(usize i)
+{
+	if (i >= this->size())
+		throw std::out_of_range(format("Tried to access out of range element: %$/%$", i, this->size()));
+	return *this->slot(i);
+}
+
+template <typename T>
+const T &Sequence<T>::at(usize i) const
+{
+	if (i >= this->size())
+		throw std::out_of_range(format("Tried to access out of range element: %$/%$", i, this->size()));
+	return *this->slot(i);
+}
+
 ////////////////////////////////////////////////////////////
 
 template <typename T>
-usize Container<T>::recommend(usize size) const
+const T *Sequence<T>::slot(usize i) const
+{
+	if (i >= capacity())
+		throw std::out_of_range(format("Tried to access out of range slot: %$/%$", i, capacity()));
+	return &m_data[i];
+}
+
+template <typename T>
+T *Sequence<T>::slot(usize i)
+{
+	if (i >= capacity())
+		throw std::out_of_range(format("Tried to access out of range slot: %$/%$", i, capacity()));
+	return &m_data[i];
+}
+
+template <typename T>
+usize Sequence<T>::recommend(usize size) const
 {
 	// Round up to the nearest power
 	auto roundUp = [] (usize n, usize p = 8) {
@@ -158,22 +192,6 @@ usize Container<T>::recommend(usize size) const
 	if (size >= maxSize / 2)
 		return maxSize;
 	return roundUp(B::max(capacity() * growthFactor, size));
-}
-
-template <typename T>
-const T *Container<T>::slot(usize i) const
-{
-	if (i >= capacity())
-		throw std::out_of_range(format("Tried to access out of range slot: %$/%$", i, capacity()));
-	return &m_data[i];
-}
-
-template <typename T>
-T *Container<T>::slot(usize i)
-{
-	if (i >= capacity())
-		throw std::out_of_range(format("Tried to access out of range slot: %$/%$", i, capacity()));
-	return &m_data[i];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

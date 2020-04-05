@@ -132,12 +132,12 @@ bool IODevice::readLine(String &line)
 
 		usize pos = m_buffer.find('\n');
 		if (pos == (usize)-1) {
-			line.append(StringView((char*)m_buffer.data(), m_buffer.size()));
+			line.append((char*)m_buffer.data(), m_buffer.size());
 			m_buffer.clear();
 			continue;
 		}
 		else {
-			line.append(StringView((char*)m_buffer.data(), pos));
+			line.append((char*)m_buffer.data(), pos);
 			m_buffer.erase(0, pos + 1);
 			break;
 		}

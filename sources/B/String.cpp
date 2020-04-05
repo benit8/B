@@ -117,6 +117,41 @@ String &String::fill(char c, usize len, bool append)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+String &String::insert(usize pos, const String &s)
+{
+	if (s.empty())
+		return *this;
+
+	reserve(length() + s.length());
+	if (pos < length())
+		std::memmove(slot(pos + s.length()), slot(pos), length() - pos);
+	std::memcpy(slot(pos), s.cStr(), s.length());
+
+	m_size += s.length();
+	m_data[length()] = '\0';
+	return *this;
+}
+
+String &String::insert(usize pos, const char *s)
+{
+	return insert(pos, s, strlen(s));
+}
+
+String &String::insert(usize pos, const char *s, size_t l)
+{
+	if (l == 0)
+		return *this;
+
+	reserve(length() + l);
+	if (pos < l)
+		std::memmove(slot(pos + l), slot(pos), length() - pos);
+	std::memcpy(slot(pos), s, l);
+
+	m_size += l;
+	m_data[length()] = '\0';
+	return *this;
+}
+
 String &String::insert(usize pos, char c, usize n /*1*/)
 {
 	if (n == 0)
@@ -124,24 +159,9 @@ String &String::insert(usize pos, char c, usize n /*1*/)
 
 	reserve(length() + n);
 	if (pos < length())
-		std::memmove(this->slot(pos + n), this->slot(pos), length() - pos);
-	std::memset(this->slot(pos), c, n);
+		std::memmove(slot(pos + n), slot(pos), length() - pos);
+	std::memset(slot(pos), c, n);
 	m_size += n;
-	m_data[length()] = '\0';
-	return *this;
-}
-
-String &String::insert(usize pos, const StringView &s)
-{
-	if (s.empty())
-		return *this;
-
-	reserve(length() + s.length());
-	if (pos < length())
-		std::memmove(this->slot(pos + s.length()), this->slot(pos), length() - pos);
-	std::memcpy(this->slot(pos), s.cStr(), s.length());
-
-	m_size += s.length();
 	m_data[length()] = '\0';
 	return *this;
 }
@@ -156,12 +176,12 @@ String &String::erase(usize start /*0*/, usize len /*-1*/)
 	if (start + len < length())
 		std::memmove(slot(start), slot(start + len), length() - len);
 
-	this->m_size -= len;
+	m_size -= len;
 	m_data[length()] = '\0';
 	return *this;
 }
 
-String &String::replace(usize start, usize len, const StringView &replacement)
+String &String::replace(usize start, usize len, const String &replacement)
 {
 	if (empty() || len == 0 || start >= length())
 		return *this;
@@ -178,7 +198,7 @@ String &String::replace(usize start, usize len, const StringView &replacement)
 	return *this;
 }
 
-String &String::replace(const StringView &search, const StringView &replacement)
+String &String::replace(const String &search, const String &replacement)
 {
 	return *this = String::join(split(search), replacement);
 }
@@ -213,7 +233,7 @@ String &String::shuffle()
 	return *this;
 }
 
-String &String::padRight(usize totalLength, const StringView &pad)
+String &String::padRight(usize totalLength, const String &pad)
 {
 	if (totalLength <= length() || pad.length() == 0)
 		return *this;
@@ -229,7 +249,7 @@ String &String::padRight(usize totalLength, const StringView &pad)
 	return *this;
 }
 
-String &String::padLeft(usize totalLength, const StringView &pad)
+String &String::padLeft(usize totalLength, const String &pad)
 {
 	if (totalLength <= length() || pad.length() == 0)
 		return *this;
@@ -246,7 +266,7 @@ String &String::padLeft(usize totalLength, const StringView &pad)
 	return *this;
 }
 
-String &String::padCenter(usize totalLength, const StringView &pad)
+String &String::padCenter(usize totalLength, const String &pad)
 {
 	if (totalLength <= length() || pad.length() == 0)
 		return *this;
@@ -338,14 +358,14 @@ Vector<String> String::chunk(usize chunkLength) const
 	return chunks;
 }
 
-Vector<String> String::split(const StringView &del, bool keepEmpty, usize limit) const
+Vector<String> String::split(const String &del, bool keepEmpty, usize limit) const
 {
 	if (empty())
 		return {};
 
 	usize pos = 0, lastPos = 0;
 	Vector<String> v;
-	while (v.size() < limit && (pos = find(del, pos)) != StringBase::nPos) {
+	while (v.size() < limit && (pos = find(del, pos)) != nPos) {
 		if (pos - lastPos > 0 || keepEmpty)
 			v.append(substr(lastPos, pos - lastPos));
 		pos += del.length();
@@ -356,7 +376,7 @@ Vector<String> String::split(const StringView &del, bool keepEmpty, usize limit)
 	return v;
 }
 
-String String::join(const Vector<String> &elements, const StringView &glue)
+String String::join(const Vector<String> &elements, const String &glue)
 {
 	if (elements.empty())
 		return {};
@@ -379,7 +399,7 @@ String String::join(const Vector<String> &elements, const StringView &glue)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool String::startsWith(const StringView &s) const
+bool String::startsWith(const String &s) const
 {
 	if (s.empty())
 		return true;
@@ -390,7 +410,7 @@ bool String::startsWith(const StringView &s) const
 	return std::memcmp(m_data, s.cStr(), s.length()) == 0;
 }
 
-bool String::endsWith(const StringView &s) const
+bool String::endsWith(const String &s) const
 {
 	if (s.empty())
 		return true;
@@ -407,7 +427,7 @@ usize String::find(char c, usize start) const
 		if (m_data[i] == c)
 			return i;
 	}
-	return StringBase::nPos;
+	return nPos;
 }
 
 usize String::findLast(char c, usize end) const
@@ -415,14 +435,14 @@ usize String::findLast(char c, usize end) const
 	usize i = (end >= length()) ? length() - 1 : end;
 	while (m_data[i] != c) {
 		if (--i == 0)
-			return StringBase::nPos;
+			return nPos;
 	}
 	return i;
 }
 
 
 // Boyer-Moore-Horspool
-usize String::find(const StringView &s, usize start) const
+usize String::find(const String &s, usize start) const
 {
 	static usize table[256] = {0};
 
@@ -446,10 +466,10 @@ usize String::find(const StringView &s, usize start) const
 		pos += table[(u8)m_data[pos + s.length() - 1]];
 	}
 
-	return StringBase::nPos;
+	return nPos;
 }
 
-usize String::findLast(const StringView &s, usize end) const
+usize String::findLast(const String &s, usize end) const
 {
 	static usize table[256] = {0};
 
@@ -476,24 +496,24 @@ usize String::findLast(const StringView &s, usize end) const
 		pos -= table[(u8)m_data[pos - s.length() + 1]];
 	}
 
-	return StringBase::nPos;
+	return nPos;
 }
 
-usize String::findOf(const StringView &s, usize start) const
+usize String::findOf(const String &s, usize start) const
 {
 	for (usize i = start; i < length(); ++i) {
-		if (s.find(m_data[i]) != StringBase::nPos)
+		if (s.find(m_data[i]) != nPos)
 			return i;
 	}
-	return StringBase::nPos;
+	return nPos;
 }
 
-usize String::findLastOf(const StringView &s, usize end) const
+usize String::findLastOf(const String &s, usize end) const
 {
 	usize i = (end >= length()) ? length() - 1 : end;
-	while (s.find(m_data[i]) == StringBase::nPos) {
+	while (s.find(m_data[i]) == nPos) {
 		if (--i == 0)
-			return StringBase::nPos;
+			return nPos;
 	}
 	return i;
 }

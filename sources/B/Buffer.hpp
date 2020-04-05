@@ -21,11 +21,11 @@ namespace B {
 namespace B
 {
 
-class Buffer
+class Buffer : public Container<byte>
 {
 public:
 	Buffer();
-	Buffer(usize size);
+	explicit Buffer(usize size);
 	Buffer(const Buffer &other);
 	Buffer(Buffer &&other);
 	~Buffer();
@@ -37,11 +37,12 @@ public:
 
 	byte *data() { return m_data; }
 	const byte *data() const { return m_data; }
-	usize size() const { return m_size; }
+	usize size() const override { return m_size; }
 	bool null() const { return data() == nullptr; }
-	bool empty() const { return null() || size() == 0; }
+	bool empty() const override { return null() || size() == 0; }
 
-	void fill(byte c = 0);
+	void clear() override;
+	void fill(byte c);
 	Buffer slice(usize start = 0, usize length = -1) const;
 	usize find(byte c) const;
 

@@ -8,13 +8,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B {
-	template <typename Key, typename Value>
+	template <typename K, typename V>
 	class Associative;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Container.hpp"
+#include "B/Sequence.hpp"
 #include "B/Pair.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,44 +24,37 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename Key, typename Value>
-class Associative : public Container< Pair<Key, Value> >
+template <typename K, typename V>
+class Associative : public Sequence<Pair<K, V>>
 {
 public:
-	virtual Value &at(const Key &key);
-	virtual const Value &at(const Key &key) const;
-	Value &operator [](const Key &key) { return at(key); }
-	const Value &operator [](const Key &key) const { return at(key); }
-	// Value &operator [](Key &&key) { return at(key); }
+	virtual V &at(const K &key)
+	{
+		usize index = -1;
+		if (!this->search(key, index))
+			this->insert(index, key, V());
+		return this->slot(index)->value;
+	}
 
-	virtual bool contains(const Key &key) const = 0;
-	virtual bool insert(const Key &key, const Value &value) = 0;
-	virtual bool erase(const Key &key) = 0;
+	virtual const V &at(const K &key) const
+	{
+		usize index = -1;
+		if (!this->search(key, index))
+			throw std::out_of_range("Tried to access inexistant element");
+		return this->slot(index)->value;
+	}
+
+	V &operator [](const K &key) { return at(key); }
+	const V &operator [](const K &key) const { return at(key); }
+
+	virtual bool contains(const K &key) const = 0;
+	virtual bool insert(const K &key, const V &value) = 0;
+	virtual bool erase(const K &key) = 0;
 
 protected:
-	virtual bool search(const Key &search, usize &index) const = 0;
-	virtual bool insert(usize pos, const Key &key, const Value &value) = 0;
+	virtual bool search(const K &search, usize &index) const = 0;
+	virtual bool insert(usize pos, const K &key, const V &value) = 0;
 };
-
-////////////////////////////////////////////////////////////////////////////////
-
-template <typename Key, typename Value>
-Value &Associative<Key, Value>::at(const Key &key)
-{
-	usize index = -1;
-	if (!this->search(key, index))
-		this->insert(index, key, Value());
-	return this->slot(index)->value;
-}
-
-template <typename Key, typename Value>
-const Value &Associative<Key, Value>::at(const Key &key) const
-{
-	usize index = -1;
-	if (!this->search(key, index))
-		throw std::out_of_range("Tried to access inexistant element");
-	return this->slot(index)->value;
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 

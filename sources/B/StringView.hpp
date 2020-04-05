@@ -13,26 +13,26 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/StringBase.hpp"
+#include "B/Vector.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B
 {
 
-class StringView : public StringBase<StringView>
+class StringView
 {
 public:
 	StringView();
 	StringView(const StringView &other);
-	StringView(const char *str);
+	explicit StringView(const char *str);
 	StringView(const char *str, usize length);
 
-	inline const char *cStr() const { return m_chars; }
-	inline usize length() const { return m_len; }
-	inline bool null() const { return m_chars == nullptr; }
-	inline bool empty() const { return null() || m_len == 0; }
-	inline char operator [](usize i) const { return m_chars[i]; }
+	const char *cStr() const { return m_chars; }
+	usize length() const { return m_len; }
+	bool null() const { return m_chars == nullptr; }
+	bool empty() const { return null() || m_len == 0; }
+	char operator [](usize i) const { return m_chars[i]; }
 
 	StringView substr(usize start = 0, usize length = nPos) const;
 	Vector<StringView> split(const StringView &delimiter, bool keepEmpty = true, usize limit = -1) const;
@@ -57,6 +57,8 @@ public:
 	bool operator >=(const StringView &rhs) const;
 
 	friend std::ostream &operator <<(std::ostream &, const StringView &);
+
+	static const usize nPos = -1;
 
 private:
 	const char *m_chars = nullptr;

@@ -99,7 +99,7 @@ Queue<T> &Queue<T>::operator =(const Queue<T> &rhs)
 	this->clear();
 	this->reserve(rhs.size());
 	Type<T>::copy(this->slot(0), rhs.slot(0), rhs.size());
-	this->m_size = rhs.size();
+	this->m_size = rhs.m_size;
 	return *this;
 }
 
@@ -110,8 +110,9 @@ Queue<T> &Queue<T>::operator =(Queue<T> &&rhs)
 	this->m_data = std::move(rhs.m_data);
 	this->m_size = std::move(rhs.m_size);
 	this->m_capacity = std::move(rhs.m_capacity);
+	this->m_start = std::move(rhs.m_start);
 	rhs.m_data = nullptr;
-	rhs.m_size = rhs.m_capacity = 0;
+	rhs.m_size = rhs.m_capacity = rhs.m_start = 0;
 	return *this;
 }
 
@@ -120,7 +121,7 @@ Queue<T> &Queue<T>::operator =(Queue<T> &&rhs)
 template <typename T>
 std::ostream &operator <<(std::ostream &os, const Queue<T> &q)
 {
-	os << "Queue<" << typeid(T).name() << ">(" << q.size() << "/" << q.capacity() << ") ";
+	os << "Queue<" << typeid(T).name() << ">(" << q.size() << '/' << q.capacity() << ") ";
 	if (q.null())
 		return os << "null";
 

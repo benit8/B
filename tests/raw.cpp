@@ -4,13 +4,13 @@
 */
 
 #include "B.hpp"
-using namespace B;
 
 #include <cstdio>
 #include <sys/stat.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/*
 class ParsedArgs
 {
 public:
@@ -24,7 +24,7 @@ public:
 private:
 	ParsedArgs() {}
 
-	ParsedArgs(bool /**/)
+	explicit ParsedArgs(bool)
 	: m_failed(false)
 	{
 	}
@@ -68,7 +68,7 @@ public:
 	};
 
 public:
-	ArgParser(const String &programName)
+	explicit ArgParser(const String &programName)
 	: m_programName(programName)
 	{}
 
@@ -104,10 +104,10 @@ private:
 	Map<String, Arg> m_args;
 	Vector<Arg> m_singleValues;
 };
+*/
 
 
-
-int main(int ac, char **av)
+int main(int /*ac*/, char **/*av*/)
 {
 	// ArgParser args(av[0]);
 	// args.add("archive", 'a', "", "same as -dR --preserve=all");
@@ -117,6 +117,26 @@ int main(int ac, char **av)
 	// auto res = args.parse(ac, av);
 	// if (!res)
 	// 	fprintf(stderr, "Args parsing failed\n");
+
+
+	// printf("dad is %d\n", ::getpid());
+	// B::Process child({"sleep", "5"});
+	// printf("main is in %d\n", ::getpid());
+	// usleep(1000000);
+	// for (usize i = 0; child.running(); ++i) {
+	// 	if (i == 30) {
+	// 		child.stop();
+	// 		break;
+	// 	}
+
+	// 	B::print("Child process is running...\n");
+	// 	usleep(1000000);
+	// }
+
+	// if (child.running()) {
+	// 	child.join();
+	// 	B::print("Child process exited with code: %$\n", child.exitCode());
+	// }
 
 
 	// File f(ac > 1 ? av[1] : "run.sh");
@@ -135,12 +155,12 @@ int main(int ac, char **av)
 	// print("\n");
 
 
-	std::istringstream iss("true  String m_programName; Map<String, Arg> m_args;	Vector<Arg> m_singleValues;");
-	bool b = 0;
-	while (iss >> b)
-		print("b: '%$'\n", b);
+	// std::istringstream iss("true  String m_programName; Map<String, Arg> m_args;	Vector<Arg> m_singleValues;");
+	// bool b = 0;
+	// while (iss >> b)
+	// 	print("b: '%$'\n", b);
 
-	print("good:%$ oef:%$ fail:%$ bad:%$\n", iss.good(), iss.eof(), iss.fail(), iss.bad());
+	// print("good:%$ oef:%$ fail:%$ bad:%$\n", iss.good(), iss.eof(), iss.fail(), iss.bad());
 
 	return 0;
 }

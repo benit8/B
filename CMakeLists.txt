@@ -16,7 +16,7 @@ PRIVATE
 
 target_compile_options(B
 PRIVATE
-	-fPIC
+	-nodefaultlibs
 	-W -Wall -Wextra
 	-g3
 )
@@ -28,42 +28,49 @@ PUBLIC
 
 target_sources(B
 PUBLIC
-	${CMAKE_CURRENT_LIST_DIR}/sources/B.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Array.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Associative.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Buffer.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Container.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Common.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Iterators.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Map.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Pair.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Queue.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Sequence.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Stack.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/String.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/StringView.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Types.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Vector.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Directory.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/File.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Stat.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/Print.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/IODevice.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/OS/Time.hpp
+	sources/B.hpp
+	sources/B/Array.hpp
+	sources/B/Associative.hpp
+	sources/B/Buffer.hpp
+	sources/B/Container.hpp
+	sources/B/Common.hpp
+	sources/B/Iterators.hpp
+	sources/B/Map.hpp
+	sources/B/Pair.hpp
+	sources/B/Queue.hpp
+	sources/B/Sequence.hpp
+	sources/B/SingleList.hpp
+	sources/B/Stack.hpp
+	sources/B/String.hpp
+	sources/B/StringView.hpp
+	sources/B/Traits.hpp
+	sources/B/Types.hpp
+	sources/B/Vector.hpp
+	sources/B/FS/Directory.hpp
+	sources/B/FS/File.hpp
+	sources/B/FS/Stat.hpp
+	sources/B/IO/Print.hpp
+	sources/B/IO/IODevice.hpp
+	sources/B/OS/Pipe.hpp
+	sources/B/OS/Process.hpp
+	sources/B/OS/Time.hpp
+	sources/B/OS/ThreadPool.hpp
 
 PRIVATE
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Buffer.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Container.inl
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Map.inl
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Queue.inl
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Stack.inl
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/String.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/StringBase.hpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/StringView.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/Vector.inl
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Directory.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/File.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/FS/Stat.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/IO/IODevice.cpp
-	${CMAKE_CURRENT_LIST_DIR}/sources/B/OS/Time.cpp
+	sources/B/Buffer.cpp
+	sources/B/Map.inl
+	sources/B/Queue.inl
+	sources/B/Sequence.inl
+	sources/B/SingleList.inl
+	sources/B/Stack.inl
+	sources/B/String.cpp
+	sources/B/StringView.cpp
+	sources/B/Vector.inl
+	sources/B/FS/Directory.cpp
+	sources/B/FS/File.cpp
+	sources/B/FS/Stat.cpp
+	sources/B/IO/IODevice.cpp
+	sources/B/OS/Pipe.cpp
+	sources/B/OS/Process.cpp
+	sources/B/OS/Time.cpp
 )

@@ -14,6 +14,8 @@
 #include <sys/types.h>
 #include <utility>
 
+#include "Traits.hpp"
+
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B
@@ -54,8 +56,8 @@ public:
 		if (destination == source)
 			return;
 
-		if constexpr (std::is_trivial<T>::value)
-			std::memmove(destination, source, count * sizeof(T));
+		if constexpr (Traits<T>::isTrivial())
+			::memmove(destination, source, count * sizeof(T));
 		else {
 			if (destination < source) {
 				for (size_t i = 0; i < count; ++i) {
@@ -80,8 +82,8 @@ public:
 		if (destination == source)
 			return;
 
-		if constexpr (std::is_trivial<T>::value)
-			std::memmove(destination, source, count * sizeof(T));
+		if constexpr (Traits<T>::isTrivial())
+			::memmove(destination, source, count * sizeof(T));
 		else {
 			if (destination < source) {
 				for (size_t i = 0; i < count; ++i)
@@ -97,12 +99,12 @@ public:
 	static void set(T *destination, const T &value, size_t count)
 	{
 		assert(destination);
-		// if constexpr (std::is_trivial<T>::value)
-		// 	std::memset(destination, value, count * sizeof(T));
-		// else {
+		if constexpr (Traits<T>::isTrivial())
+			::memset(destination, value, count * sizeof(T));
+		else {
 			for (size_t i = 0; i < count; ++i)
 				new (&destination[i]) T(value);
-		// }
+		}
 	}
 
 	static bool compare(const T *a, const T *b, size_t count)
@@ -113,8 +115,8 @@ public:
 		if (a == b)
 			return true;
 
-		if constexpr (std::is_trivial<T>::value)
-			return std::memcmp(a, b, count * sizeof(T)) == 0;
+		if constexpr (Traits<T>::isTrivial())
+			return ::memcmp(a, b, count * sizeof(T)) == 0;
 
 		for (size_t i = 0; i < count; ++i) {
 			if (a[i] != b[i])

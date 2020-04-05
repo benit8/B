@@ -20,6 +20,7 @@ CXXFLAGS	+=	-std=c++17
 CXXFLAGS	+=	-I../sources
 CXXFLAGS	+=	-W -Wall -Wextra
 CXXFLAGS	+=	-g3
+CXXFLAGS	+=	-nodefaultlibs
 
 LDFLAGS		+=	-L../.build/ -lB
 
@@ -39,7 +40,7 @@ fclean: clean
 re: fclean all
 
 raw: raw.o
-	$(CC) -o raw raw.o $(CXXFLAGS) $(LDFLAGS)
+	$(CC) -o raw raw.o $(LDFLAGS)
 
 dump:
 	@ echo "CXXFLAGS: [$(CXXFLAGS)]"

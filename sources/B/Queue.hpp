@@ -14,7 +14,7 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Container.hpp"
+#include "B/Sequence.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +22,7 @@ namespace B
 {
 
 template <typename T>
-class Queue : public Container<T>
+class Queue : public Sequence<T>
 {
 public:
 	Queue();
@@ -51,8 +51,7 @@ private:
 	// index isn't 0, we memmove the queue contents to the left. If it equals 0,
 	// then there's no more space in the queue and we reallocate.
 
-	template <typename T_>
-	friend std::ostream &operator <<(std::ostream&, const Queue<T_>&);
+	friend std::ostream &operator <<<>(std::ostream&, const Queue<T>&);
 };
 
 }

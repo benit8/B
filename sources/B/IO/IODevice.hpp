@@ -42,7 +42,7 @@ public:
 	OpenMode mode() const { return m_mode; }
 	int error() const { return m_error; }
 	bool isOpen() const { return m_fd != -1; }
-	StringView errorString() const { return strerror(m_error); }
+	StringView errorString() const { return StringView(strerror(m_error)); }
 	bool hasError() const { return m_error != 0; }
 
 protected:

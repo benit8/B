@@ -96,6 +96,11 @@ void Buffer::fill(byte c)
 	std::memset(data(), c, size());
 }
 
+void Buffer::clear()
+{
+	std::memset(data(), 0, size());
+}
+
 Buffer Buffer::slice(usize start, usize length) const
 {
 	if (start >= size())

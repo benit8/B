@@ -14,7 +14,7 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Container.hpp"
+#include "B/Sequence.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +22,7 @@ namespace B
 {
 
 template <typename T>
-class Stack : public Container<T>
+class Stack : public Sequence<T>
 {
 public:
 	Stack();
@@ -37,8 +37,7 @@ public:
 	void pop();
 
 private:
-	template <typename T_>
-	friend std::ostream &operator <<(std::ostream&, const Stack<T_>&);
+	friend std::ostream &operator <<<>(std::ostream&, const Stack<T>&);
 };
 
 }
