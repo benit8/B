@@ -1,9 +1,9 @@
 /*
-** B, 2019
+** B, 2020
 ** Directory.cpp
 */
 
-#include "Directory.hpp"
+#include "B/FileSystem/Directory.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@ Directory::Entry &Directory::Entry::operator =(struct dirent *e)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Directory::Directory(const StringView &name)
+Directory::Directory(const String &name)
 {
 	m_dirp = opendir(name.cStr());
 }

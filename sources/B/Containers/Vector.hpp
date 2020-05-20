@@ -14,8 +14,8 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Sequence.hpp"
-#include "B/Iterators.hpp"
+#include "B/Containers/Iterators.hpp"
+#include "B/Containers/Sequence.hpp"
 
 #include <initializer_list> // initializer_list
 #include <functional>       // function
@@ -106,6 +106,9 @@ public:
 	Vector &operator +=(Vector &&other) { append(std::move(other)); return *this; }
 	Vector &operator +=(std::initializer_list<T> il) { append(il); return *this; }
 
+	T &operator [](usize i) { return data()[i]; }
+	const T &operator [](usize i) const { return data()[i]; }
+
 	bool operator ==(const Vector &other);
 	bool operator ==(std::initializer_list<T> il);
 	bool operator !=(const Vector &other);
@@ -120,4 +123,4 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Vector.inl"
+#include "Vector.inl"

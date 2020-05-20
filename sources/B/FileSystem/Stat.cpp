@@ -1,9 +1,9 @@
 /*
-** B, 2019
+** B, 2020
 ** Stat.cpp
 */
 
-#include "Stat.hpp"
+#include "B/FileSystem/Stat.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,7 @@ Stat::Stat(int fd)
 	m_good = fstat(fd, &m_stat) == 0;
 }
 
-Stat::Stat(const StringView &filename, bool dereference)
+Stat::Stat(const String &filename, bool dereference)
 {
 	m_good = (dereference ? ::lstat : ::stat)(filename.cStr(), &m_stat) == 0;
 }
@@ -27,22 +27,21 @@ Stat::Stat(const StringView &filename, bool dereference)
 File::Type Stat::type() const
 {
 	switch (m_stat.st_mode & S_IFMT) {
-		case S_IFBLK: return File::Block;
-		case S_IFCHR: return File::Character;
-		case S_IFDIR: return File::Directory;
-		case S_IFIFO: return File::FIFO;
-		case S_IFLNK: return File::SymLink;
-		case S_IFREG: return File::Regular;
-		case S_IFSOCK: return File::Socket;
+		case S_IFBLK: return File::Type::Block;
+		case S_IFCHR: return File::Type::Character;
+		case S_IFDIR: return File::Type::Directory;
+		case S_IFIFO: return File::Type::FIFO;
+		case S_IFLNK: return File::Type::SymLink;
+		case S_IFREG: return File::Type::Regular;
+		case S_IFSOCK: return File::Type::Socket;
 		default: break;
 	}
-	return File::Unknown;
+	return File::Type::Unknown;
 }
 
 File::Perms Stat::perms() const
 {
-	mode_t mode = m_stat.st_mode & File::AllFull;
-	return (File::Perms)mode;
+	return (File::Perms)m_stat.st_mode & File::Perms::AllFull;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

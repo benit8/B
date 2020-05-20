@@ -14,9 +14,9 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Iterators.hpp"
 #include "B/Types.hpp"
-#include "B/Vector.hpp"
+#include "B/Containers/Iterators.hpp"
+#include "B/Containers/Vector.hpp"
 #include "B/IO/Print.hpp"
 
 #include <stdexcept>
@@ -51,7 +51,7 @@ public:
 	T &at(usize i)
 	{
 		if (i >= S)
-			throw std::runtime_error(format("Array::at: i:%$ >= size:%$", i, S));
+			throw std::runtime_error(format("Array::at: i(%$) >= size(%$)", i, S));
 		return data()[i];
 	}
 
@@ -61,7 +61,7 @@ public:
 	const T &at(usize i) const
 	{
 		if (i >= S)
-			throw std::runtime_error(format("Array::at: i:%$ >= size:%$", i, S));
+			throw std::runtime_error(format("Array::at: i(%$) >= size(%$)", i, S));
 		return data()[i];
 	}
 

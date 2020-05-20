@@ -23,27 +23,26 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef int8_t   i8;
-typedef uint8_t  u8;
-typedef int16_t  i16;
-typedef uint16_t u16;
-typedef int32_t  i32;
-typedef uint32_t u32;
-typedef int64_t  i64;
-typedef uint64_t u64;
+using i8  = int8_t;
+using u8  = uint8_t;
+using i16 = int16_t;
+using u16 = uint16_t;
+using i32 = int32_t;
+using u32 = uint32_t;
+using i64 = int64_t;
+using u64 = uint64_t;
 
-typedef ssize_t isize;
-typedef size_t  usize;
+using isize = ssize_t;
+using usize = size_t;
 
-typedef float       f32;
-typedef double      f64;
-typedef long double f128;
+using f32  = float;
+using f64  = double;
+using f128 = long double;
 
-typedef u8 byte;
+using byte = u8;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/// From SerenityOS' AK::TypedTransfer
 template<typename T>
 class Type
 {

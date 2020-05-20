@@ -1,5 +1,5 @@
 ##
-## Benito's lib, 2019
+## B, 2020
 ## CMakeLists.txt
 ##
 
@@ -16,7 +16,7 @@ PRIVATE
 
 target_compile_options(B
 PRIVATE
-	-nodefaultlibs
+	-fPIC
 	-W -Wall -Wextra
 	-g3
 )
@@ -29,48 +29,43 @@ PUBLIC
 target_sources(B
 PUBLIC
 	sources/B.hpp
-	sources/B/Array.hpp
-	sources/B/Associative.hpp
 	sources/B/Buffer.hpp
-	sources/B/Container.hpp
 	sources/B/Common.hpp
-	sources/B/Iterators.hpp
-	sources/B/Map.hpp
-	sources/B/Pair.hpp
-	sources/B/Queue.hpp
-	sources/B/Sequence.hpp
-	sources/B/SingleList.hpp
-	sources/B/Stack.hpp
+	sources/B/EnumOperators.hpp
 	sources/B/String.hpp
 	sources/B/StringView.hpp
 	sources/B/Traits.hpp
 	sources/B/Types.hpp
-	sources/B/Vector.hpp
-	sources/B/FS/Directory.hpp
-	sources/B/FS/File.hpp
-	sources/B/FS/Stat.hpp
+	sources/B/Containers/Array.hpp
+	sources/B/Containers/Associative.hpp
+	sources/B/Containers/Container.hpp
+	sources/B/Containers/Iterators.hpp
+	sources/B/Containers/Map.hpp
+	sources/B/Containers/Pair.hpp
+	sources/B/Containers/Queue.hpp
+	sources/B/Containers/Sequence.hpp
+	sources/B/Containers/SingleList.hpp
+	sources/B/Containers/Stack.hpp
+	sources/B/Containers/Vector.hpp
+	sources/B/FileSystem/Directory.hpp
+	sources/B/FileSystem/File.hpp
+	sources/B/FileSystem/Stat.hpp
 	sources/B/IO/Print.hpp
-	sources/B/IO/IODevice.hpp
-	sources/B/OS/Pipe.hpp
-	sources/B/OS/Process.hpp
-	sources/B/OS/Time.hpp
-	sources/B/OS/ThreadPool.hpp
+	sources/B/Platform/Pipe.hpp
+	sources/B/Platform/Process.hpp
+	sources/B/Platform/Time.hpp
+	sources/B/Platform/ThreadPool.hpp
 
 PRIVATE
 	sources/B/Buffer.cpp
-	sources/B/Map.inl
-	sources/B/Queue.inl
-	sources/B/Sequence.inl
-	sources/B/SingleList.inl
-	sources/B/Stack.inl
 	sources/B/String.cpp
 	sources/B/StringView.cpp
-	sources/B/Vector.inl
-	sources/B/FS/Directory.cpp
-	sources/B/FS/File.cpp
-	sources/B/FS/Stat.cpp
-	sources/B/IO/IODevice.cpp
-	sources/B/OS/Pipe.cpp
-	sources/B/OS/Process.cpp
-	sources/B/OS/Time.cpp
+	sources/B/Containers/Map.inl
+	sources/B/Containers/SingleList.inl
+	sources/B/Containers/Vector.inl
+	sources/B/FileSystem/Directory.cpp
+	sources/B/FileSystem/Stat.cpp
+	sources/B/Platform/Pipe.cpp
+	sources/B/Platform/Process.cpp
+	sources/B/Platform/Time.cpp
 )

@@ -7,8 +7,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <type_traits>
-#include "B/Sequence.hpp"
+namespace B {
+	template <typename S, typename T>
+	class SequenceIterator;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include "B/Containers/Sequence.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -34,18 +40,12 @@ public:
 
 	T &operator *()
 	{
-		if constexpr (std::is_base_of<Sequence<T>, S>::value)
-			return *m_sequence.slot(m_index);
-		else
-			return m_sequence[m_index];
+		return m_sequence[m_index];
 	}
 
 	T *operator ->()
 	{
-		if constexpr (std::is_base_of<Sequence<T>, S>::value)
-			return m_sequence.slot(m_index);
-		else
-			return &m_sequence[m_index];
+		return &m_sequence[m_index];
 	}
 
 	bool isEnd() const { return m_index >= m_sequence.size(); }

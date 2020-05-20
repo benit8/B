@@ -1,0 +1,22 @@
+/*
+** B, 2019
+** Sequence.inl
+*/
+
+#pragma once
+
+////////////////////////////////////////////////////////////////////////////////
+
+namespace B
+{
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename T> const usize Sequence<T>::max = -1;
+template <typename T> const usize Sequence<T>::maxSize = max / sizeof(T);
+template <typename T> const usize Sequence<T>::minimumSize = 8;
+template <typename T> const usize Sequence<T>::growthFactor = 2;
+
+////////////////////////////////////////////////////////////////////////////////
+
+}

@@ -14,8 +14,8 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Sequence.hpp"
-#include "B/Pair.hpp"
+#include "B/Containers/Sequence.hpp"
+#include "B/Containers/Pair.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@ public:
 	{
 		usize index = -1;
 		if (!this->search(key, index))
-			this->insert(index, key, V());
+			this->insertAt(index, key, V());
 		return this->slot(index)->value;
 	}
 
@@ -53,7 +53,7 @@ public:
 
 protected:
 	virtual bool search(const K &search, usize &index) const = 0;
-	virtual bool insert(usize pos, const K &key, const V &value) = 0;
+	virtual bool insertAt(usize pos, const K &key, const V &value) = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

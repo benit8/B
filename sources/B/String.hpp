@@ -13,8 +13,9 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Sequence.hpp"
 #include "B/StringView.hpp"
+#include "B/Containers/Sequence.hpp"
+#include "B/Containers/Vector.hpp"
 
 #include <iostream>
 #include <string>
@@ -30,11 +31,10 @@ class String : public Sequence<char>
 {
 public:
 	String();
-	String(const String &other);
 	String(String &&other);
-	explicit String(const StringView &other);
+	String(const String &other);
+	String(const std::string &str);
 	String(const char *str);
-	explicit String(const std::string &str);
 	String(const char *str, usize length);
 	String(char c, usize n);
 	~String();
@@ -42,97 +42,169 @@ public:
 	const char *cStr() const { return data(); }
 	usize length() const { return size(); }
 
-	String &assign(const String &s);
-	String &assign(const StringView &s);
-	String &assign(String &&s);
-	String &assign(const char *s);
-	String &assign(const char *s, usize l);
-	String &fill(char c, usize l, bool a = false);
+	char &at(usize i);
+	char &operator [](usize i) { return data()[i]; }
+	const char &at(usize i) const;
+	const char &operator [](usize i) const { return data()[i]; }
 
-	String &insert(usize p, const String &s);
-	String &insert(usize p, const char *s);
-	String &insert(usize p, const char *s, size_t l);
-	String &insert(usize p, char c, usize n = 1);
-	// template <typename... Args>
-	// String &insertf(usize p, const char *fmt, const Args&... args);
-	String &append(const String &str) { return insert(size(), str); }
-	String &append(const char *str) { return insert(size(), str); }
-	String &append(const char *str, size_t l) { return insert(size(), str, l); }
-	String &append(char c, usize n = 1) { return insert(size(), c, n); }
-	// template <typename... Args>
-	// String &appendf(const char *fmt, const Args&... args);
-	String &prepend(const String &str) { return insert(0, str); }
-	String &prepend(const char *str) { return insert(0, str); }
-	String &prepend(const char *str, size_t l) { return insert(0, str, l); }
-	String &prepend(char c, usize n = 1) { return insert(0, c, n); }
-	// template <typename... Args>
-	// String &prependf(const char *fmt, const Args&... args);
-	String &erase(usize start = 0, usize length = -1);
-	String &replace(usize start, usize length, const String &s);
-	String &replace(const String &search, const String &replacement);
-	String &repeat(usize n);
-	String &reverse();
-	String &shuffle();
-	String &padRight(usize totalLength, const String &p = String(" "));
-	String &padLeft(usize totalLength, const String &p = String(" "));
-	String &padCenter(usize totalLength, const String &p = String(" "));
-	String &trimRight();
-	String &trimLeft();
-	String &trim();
-	String &toLower();
-	String &toUpper();
+	void assign(String &&s);
+	void assign(const String &s);
+	void assign(const char *s);
+	void assign(const char *s, usize l);
+
+	void fill(char c, usize l, bool a = false);
+
+	void insert(usize p, const String &s);
+	void insert(usize p, const char *s);
+	void insert(usize p, const char *s, usize l);
+	void insert(usize p, char c, usize n = 1);
+	template <typename... Args>
+	void insertf(usize p, const char *fmt, const Args&... args)
+	{
+		insert(p, format(fmt, args...));
+	}
+
+	void append(const String &s)        { return insert(size(), s); }
+	void append(const char *s)          { return insert(size(), s); }
+	void append(const char *s, usize l) { return insert(size(), s, l); }
+	void append(char c, usize n = 1)    { return insert(size(), c, n); }
+	template <typename... Args>
+	void appendf(const char *fmt, const Args&... args)
+	{
+		insert(size(), format(fmt, args...));
+	}
+
+	void prepend(const String &s)        { return insert(0, s); }
+	void prepend(const char *s)          { return insert(0, s); }
+	void prepend(const char *s, usize l) { return insert(0, s, l); }
+	void prepend(char c, usize n = 1)    { return insert(0, c, n); }
+	template <typename... Args>
+	void prependf(const char *fmt, const Args&... args)
+	{
+		insert(0, format(fmt, args...));
+	}
+
+	void erase(usize start = 0, usize length = -1);
+
+	void replace(usize start, usize length, const String &s) { replace(start, length, s.cStr(), s.length()); }
+	void replace(usize start, usize length, const char *s)   { replace(start, length, s, strlen(s)); }
+	void replace(usize start, usize length, const char *s, usize l);
+	void replace(const String &search, const String &replacement);
+
+	void repeat(usize n);
+
+	void reverse();
+
+	void shuffle();
+
+	void padRight(usize totalLength, const String &pad)     { padRight(totalLength, pad.cStr(), pad.length()); }
+	void padRight(usize totalLength, const char *pad = " ") { padRight(totalLength, pad, strlen(pad)); }
+	void padRight(usize totalLength, const char *pad, usize l);
+
+	void padLeft(usize totalLength, const String &pad)     { padLeft(totalLength, pad.cStr(), pad.length()); }
+	void padLeft(usize totalLength, const char *pad = " ") { padLeft(totalLength, pad, strlen(pad)); }
+	void padLeft(usize totalLength, const char *pad, usize l);
+
+	void padCenter(usize totalLength, const String &pad)     { padCenter(totalLength, pad.cStr(), pad.length()); }
+	void padCenter(usize totalLength, const char *pad = " ") { padCenter(totalLength, pad, strlen(pad)); }
+	void padCenter(usize totalLength, const char *pad, usize l);
+
+	void trimRight();
+	void trimLeft();
+	void trim();
+
+	void toLower();
+	void toUpper();
 
 	String substr(usize start = 0, usize length = -1) const;
-	Vector<String> chunk(usize chunksLength = 1) const;
-	Vector<String> split(const String &delim, bool keepEmpty = true, usize limit = -1) const;
-	static String join(const Vector<String> &elements, const String &glue);
 
-	template <typename... Args>
-	static String format(const char *fmt, const Args&... args) { return format(fmt, args...); }
+	Vector<String> chunk(usize chunksLength) const;
+
+	Vector<String> split(const String &delim, bool keepEmptySpans = true, usize limit = -1) const { return split(delim.cStr(), delim.length(), keepEmptySpans, limit); }
+	Vector<String> split(const char *delim,   bool keepEmptySpans = true, usize limit = -1) const { return split(delim, strlen(delim), keepEmptySpans, limit); }
+	Vector<String> split(const char *delim, usize delimLength, bool keepEmptySpans = true, usize limit = -1) const;
+
+	static String join(const Vector<String> &spans, const String &glue) { return join(spans, glue.cStr(), glue.length()); }
+	static String join(const Vector<String> &spans, const char *glue)   { return join(spans, glue, strlen(glue)); }
+	static String join(const Vector<String> &spans, const char *glue, usize glueLength);
 
 	bool startsWith(const String &s) const;
+	bool startsWith(const char *s) const;
+	bool startsWith(char c) const;
+
 	bool endsWith(const String &s) const;
+	bool endsWith(const char *s) const;
+	bool endsWith(char c) const;
+
+	usize find(const String &s, usize p = 0) const { return find(s.cStr(), s.length(), p); }
+	usize find(const char *s, usize p = 0) const   { return find(s, strlen(s), p); }
+	usize find(const char *s, usize l, usize p = 0) const;
 	usize find(char c, usize p = 0) const;
+
+	usize findLast(const String &s, usize p = nPos) const { return findLast(s.cStr(), s.length(), p); }
+	usize findLast(const char *s, usize p = nPos) const   { return findLast(s, strlen(s), p); }
+	usize findLast(const char *s, usize l, usize p = nPos) const;
 	usize findLast(char c, usize p = nPos) const;
-	usize find(const String &s, usize p = 0) const;
-	usize findLast(const String &s, usize p = nPos) const;
-	usize findOf(const String &s, usize p = 0) const;
-	usize findLastOf(const String &s, usize p = nPos) const;
 
-	int compare(const String &s) const;
-	int compare(const char *s) const;
-	int caseCompare(const String &s) const;
-	int caseCompare(const char *s) const;
+	usize findOf(const String &s, usize p = 0) const { return findOf(s.cStr(), s.length(), p); }
+	usize findOf(const char *s, usize p = 0) const   { return findOf(s, strlen(s), p); }
+	usize findOf(const char *s, usize l, usize p = 0) const;
+
+	usize findLastOf(const String &s, usize p = nPos) const { return findOf(s.cStr(), s.length(), p); }
+	usize findLastOf(const char *s, usize p = nPos) const   { return findOf(s, strlen(s), p); }
+	usize findLastOf(const char *s, usize l, usize p = nPos) const;
+
+	int compare(const String &s) const { return compare(s.cStr(), s.length()); }
+	int compare(const char *s) const   { return compare(s, strlen(s)); }
+	int compare(const char *s, usize l) const;
+	// int operator <=>(const String &rhs) const { return compare(rhs); }
+	// int operator <=>(const char *rhs) const   { return compare(rhs); }
+
+	int caseCompare(const String &s) const { return compare(s.cStr(), s.length()); }
+	int caseCompare(const char *s) const   { return compare(s, strlen(s)); }
+	int caseCompare(const char *s, usize l) const;
 
 
+	String &operator =(String &&s)      { assign(std::move(s)); return *this; }
 	String &operator =(const String &s) { assign(s); return *this; }
-	String &operator =(String &&s) { assign(std::move(s)); return *this; }
-	String &operator =(const char *s) { assign(s); return *this; }
-	String &operator +=(char c) { append(c); return *this; }
-	String &operator +=(const String &s) { append(s); return *this; }
-	String &operator *=(usize n) { repeat(n); return *this; }
-	bool operator ==(const String &rhs) const;
-	bool operator !=(const String &rhs) const;
-	bool operator <(const String &rhs) const;
-	bool operator <=(const String &rhs) const;
-	bool operator >(const String &rhs) const;
-	bool operator >=(const String &rhs) const;
-	operator StringView() const { return StringView(cStr(), length()); }
+	String &operator =(const char *s)   { assign(s); return *this; }
 
-	friend String operator +(const String &lhs, const String &rhs);
-	friend String operator +(const String &lhs, const char *rhs);
-	friend String operator +(const char *lhs, const String &rhs);
-	friend String operator +(const String &lhs, char rhs);
-	friend String operator +(char lhs, const String &rhs);
-	friend String operator *(const String &lhs, usize rhs);
-	friend String operator *(usize lhs, const String & rhs);
-	friend Vector<String> operator /(const String &lhs, const String &rhs);
+	String &operator +=(const String &s) { append(s); return *this; }
+	String &operator +=(const char *s)   { append(s); return *this; }
+	String &operator +=(char c)          { append(c); return *this; }
+
+	String &operator *=(usize n) { repeat(n); return *this; }
+
+	bool operator ==(const String &rhs) const { return compare(rhs) == 0; }
+	bool operator ==(const char *rhs) const   { return compare(rhs) == 0; }
+	bool operator !=(const String &rhs) const { return compare(rhs) != 0; }
+	bool operator !=(const char *rhs) const   { return compare(rhs) != 0; }
+	bool operator  <(const String &rhs) const { return compare(rhs)  < 0; }
+	bool operator  <(const char *rhs) const   { return compare(rhs)  < 0; }
+	bool operator <=(const String &rhs) const { return compare(rhs) <= 0; }
+	bool operator <=(const char *rhs) const   { return compare(rhs) <= 0; }
+	bool operator  >(const String &rhs) const { return compare(rhs)  > 0; }
+	bool operator  >(const char *rhs) const   { return compare(rhs)  > 0; }
+	bool operator >=(const String &rhs) const { return compare(rhs) >= 0; }
+	bool operator >=(const char *rhs) const   { return compare(rhs) >= 0; }
+
+	String operator +(const String &rhs);
+	String operator +(const char *rhs);
+	String operator +(char rhs);
+
+	String operator *(usize rhs);
+
+	Vector<String> operator /(const String &rhs) const { return split(rhs); }
+	Vector<String> operator /(const char *rhs)   const { return split(rhs); }
+
+	// friend Writer &operator <<(Writer &lhs, const String &rhs);
 	friend std::ostream &operator <<(std::ostream &lhs, const String &rhs);
 
 	static const usize nPos = -1;
 
 private:
-	void reserve(usize newSize) override;
+	// Allocate for the null terminator too
+	void reserve(usize newSize) override { return Sequence<char>::reserve(newSize + 1); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

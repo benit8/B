@@ -18,25 +18,15 @@ struct Pair
 	Key key;
 	Value value;
 
-	Pair();
-	Pair(const Key &k, const Value &v);
+	Pair() = default;
 	Pair(const Pair &other) = default;
 	Pair(Pair &&other) = default;
+
+	Pair(const Key &k, const Value &v)
+	: key(k)
+	, value(v)
+	{}
 };
-
-////////////////////////////////////////////////////////////////////////////////
-
-template <typename Key, typename Value>
-Pair<Key, Value>::Pair()
-: key()
-, value()
-{}
-
-template <typename Key, typename Value>
-Pair<Key, Value>::Pair(const Key &k, const Value &v)
-: key(k)
-, value(v)
-{}
 
 ////////////////////////////////////////////////////////////////////////////////
 

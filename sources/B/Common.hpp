@@ -14,11 +14,9 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cassert>
-#include <cstring>
+#include "B/EnumOperators.hpp"
+
 #include <fcntl.h>
-#include <type_traits>
-#include <utility>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +25,7 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-enum OpenMode
+enum class OpenMode : int
 {
 	NotOpen   = -1,
 	ReadOnly  = O_RDONLY,  // 0
@@ -38,9 +36,12 @@ enum OpenMode
 	ForceNew  = O_EXCL,    // 128
 	Truncate  = O_TRUNC,   // 512
 	Append    = O_APPEND,  // 1024
-};
 
-enum SeekMode
+	StandardFlags = O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_TRUNC | O_APPEND,
+};
+ENABLE_ENUM_OPERATORS(OpenMode);
+
+enum class SeekMode : int
 {
 	Start   = SEEK_SET,
 	Current = SEEK_CUR,
@@ -49,44 +50,32 @@ enum SeekMode
 
 ////////////////////////////////////////////////////////////////////////////////
 
-inline OpenMode operator|(OpenMode lhs, OpenMode rhs)
-{
-	return OpenMode(static_cast<int>(lhs) | static_cast<int>(rhs));
-}
-
-inline OpenMode operator&(OpenMode lhs, OpenMode rhs)
-{
-	return OpenMode(static_cast<int>(lhs) & static_cast<int>(rhs));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-template<typename T>
-inline constexpr auto min(const T &a, const T &b)
+template<typename T1, typename T2>
+inline constexpr auto min(const T1 &a, const T2 &b)
 {
 	return (a < b) ? a : b;
 }
 
-template<typename T>
-inline constexpr auto max(const T &a, const T &b)
+template<typename T1, typename T2>
+inline constexpr auto max(const T1 &a, const T2 &b)
 {
 	return (a > b) ? a : b;
 }
 
-template<typename T, typename... Ts>
-inline constexpr auto min(const T &a, const T &b, const Ts&... z)
+template<typename T1, typename T2, typename... Ts>
+inline constexpr auto min(const T1 &a, const T2 &b, const Ts&... z)
 {
 	return min(a, min(b, z...));
 }
 
-template<typename T, typename... Ts>
-inline constexpr auto max(const T &a, const T &b, const Ts&... z)
+template<typename T1, typename T2, typename... Ts>
+inline constexpr auto max(const T1 &a, const T2 &b, const Ts&... z)
 {
 	return max(a, max(b, z...));
 }
 
-template<typename T>
-inline constexpr auto clamp(const T &value, const T &mini, const T &maxi)
+template<typename T1, typename T2, typename T3>
+inline constexpr auto clamp(const T1 &value, const T2 &mini, const T3 &maxi)
 {
 	return max(mini, min(value, maxi));
 }

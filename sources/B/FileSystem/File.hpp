@@ -1,5 +1,5 @@
 /*
-** B, 2019
+** B, 2020
 ** File.hpp
 */
 
@@ -13,7 +13,7 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/IO/IODevice.hpp"
+#include "B/EnumOperators.hpp"
 
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -23,10 +23,10 @@ namespace B {
 namespace B
 {
 
-class File : public IODevice
+class File
 {
 public:
-	enum Type : int
+	enum class Type : int
 	{
 		Unknown   = -1,        // The file type could not be determined
 		Block     = S_IFBLK,   // Block device
@@ -38,17 +38,20 @@ public:
 		Socket    = S_IFSOCK,  // UNIX domain socket
 	};
 
-	enum Perms : uint
+	enum class Perms : mode_t
 	{
-		UserExec   = S_IXUSR,  // 0100
-		UserWrite  = S_IWUSR,  // 0200
-		UserRead   = S_IRUSR,  // 0400
-		GroupExec  = S_IXGRP,  // 0010
-		GroupWrite = S_IWGRP,  // 0020
-		GroupRead  = S_IRGRP,  // 0040
 		OtherExec  = S_IXOTH,  // 0001
 		OtherWrite = S_IWOTH,  // 0002
 		OtherRead  = S_IROTH,  // 0004
+		GroupExec  = S_IXGRP,  // 0010
+		GroupWrite = S_IWGRP,  // 0020
+		GroupRead  = S_IRGRP,  // 0040
+		UserExec   = S_IXUSR,  // 0100
+		UserWrite  = S_IWUSR,  // 0200
+		UserRead   = S_IRUSR,  // 0400
+		SetUid     = S_ISUID,  // 1000
+		SetGid     = S_ISGID,  // 2000
+		StickyBit  = S_ISVTX,  // 4000
 
 		UserFull   = UserRead | UserWrite | UserExec,
 		GroupFull  = GroupRead | GroupWrite | GroupExec,
@@ -58,18 +61,13 @@ public:
 		AllWrite   = UserWrite | GroupWrite | OtherWrite,
 		AllExec    = UserExec | GroupExec | OtherExec,
 		AllFull    = UserFull | GroupFull | OtherFull,
+
+		FileDefault = UserFull | GroupRead | GroupWrite | OtherRead,
+		DirDefault = FileDefault | AllExec,
 	};
-
-public:
-	File(const StringView &filename);
-
-	bool open(OpenMode mode);
-
-	const String &filename() const { return m_filename; }
-
-private:
-	String m_filename;
 };
+
+ENABLE_ENUM_OPERATORS(File::Perms);
 
 ////////////////////////////////////////////////////////////////////////////////
 

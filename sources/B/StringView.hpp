@@ -9,11 +9,12 @@
 
 namespace B {
 	class StringView;
+	class String;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/Vector.hpp"
+#include "B/Containers/Vector.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -24,8 +25,8 @@ class StringView
 {
 public:
 	StringView();
-	StringView(const StringView &other);
-	explicit StringView(const char *str);
+	StringView(const String &other);
+	StringView(const char *str);
 	StringView(const char *str, usize length);
 
 	const char *cStr() const { return m_chars; }
@@ -34,29 +35,32 @@ public:
 	bool empty() const { return null() || m_len == 0; }
 	char operator [](usize i) const { return m_chars[i]; }
 
+	void trimRight(usize n);
+	void trimLeft(usize n);
 	StringView substr(usize start = 0, usize length = nPos) const;
-	Vector<StringView> split(const StringView &delimiter, bool keepEmpty = true, usize limit = -1) const;
+	Vector<StringView> split(StringView delimiter, bool keepEmpty = true, usize limit = -1) const;
+	String toString() const;
 
-	int compare(const StringView &s) const;
-	bool startsWith(const StringView &s) const;
-	bool endsWith(const StringView &s) const;
+	int compare(StringView s) const;
+	bool startsWith(StringView s) const;
+	bool endsWith(StringView s) const;
 	usize find(char c, usize start = 0) const;
+	usize find(StringView s, usize start = 0) const;
 	usize findLast(char c, usize end = nPos) const;
-	usize find(const StringView &s, usize start = 0) const;
-	usize findLast(const StringView &s, usize end = nPos) const;
-	usize findOf(const StringView &s, usize start = 0) const;
-	usize findLastOf(const StringView &s, usize end = nPos) const;
+	usize findLast(StringView s, usize end = nPos) const;
+	usize findOf(StringView s, usize start = 0) const;
+	usize findLastOf(StringView s, usize end = nPos) const;
 
 	StringView &operator =(nullptr_t);
-	StringView &operator =(const StringView &other);
-	bool operator ==(const StringView &rhs) const;
-	bool operator !=(const StringView &rhs) const;
-	bool operator <(const StringView &rhs) const;
-	bool operator <=(const StringView &rhs) const;
-	bool operator >(const StringView &rhs) const;
-	bool operator >=(const StringView &rhs) const;
+	bool operator ==(StringView rhs) const;
+	bool operator !=(StringView rhs) const;
+	bool operator <(StringView rhs) const;
+	bool operator <=(StringView rhs) const;
+	bool operator >(StringView rhs) const;
+	bool operator >=(StringView rhs) const;
 
-	friend std::ostream &operator <<(std::ostream &, const StringView &);
+	// friend Writer &operator <<(Writer &, StringView);
+	friend std::ostream &operator <<(std::ostream &, StringView);
 
 	static const usize nPos = -1;
 

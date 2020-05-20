@@ -15,19 +15,19 @@ namespace B
 String::String()
 {}
 
+String::String(String &&other)
+{
+	assign(std::move(other));
+}
+
 String::String(const String &other)
 {
 	assign(other);
 }
 
-String::String(const StringView &other)
+String::String(const std::string &str)
 {
-	assign(other.cStr(), other.length());
-}
-
-String::String(String &&other)
-{
-	assign(std::move(other));
+	assign(str.c_str(), str.length());
 }
 
 String::String(const char *str)
@@ -40,11 +40,6 @@ String::String(const char *buffer, usize length)
 	assign(buffer, length);
 }
 
-String::String(const std::string &str)
-{
-	assign(str.c_str(), str.length());
-}
-
 String::String(char c, usize n)
 {
 	fill(c, n);
@@ -52,26 +47,28 @@ String::String(char c, usize n)
 
 String::~String()
 {
-	clear();
+	reset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-String &String::assign(const String &s)
+char &String::at(usize i)
 {
-	reserve(s.length());
-	std::memcpy(m_data, s.cStr(), s.length());
-	m_data[s.length()] = '\0';
-	m_size = s.length();
-	return *this;
+	if (i >= length())
+		throw std::out_of_range(format("String::at(): i(%$) >= length(%$)", i, length()));
+	return data()[i];
 }
 
-String &String::assign(const StringView &s)
+const char &String::at(usize i) const
 {
-	return assign(s.cStr(), s.length());
+	if (i >= length())
+		throw std::out_of_range(format("String::at(): i(%$) >= length(%$)", i, length()));
+	return data()[i];
 }
 
-String &String::assign(String &&s)
+////////////////////////////////////////////////////////////////////////////////
+
+void String::assign(String &&s)
 {
 	clear();
 	if (m_data)
@@ -83,25 +80,30 @@ String &String::assign(String &&s)
 
 	s.m_data = nullptr;
 	s.m_size = s.m_capacity = 0;
-
-	return *this;
 }
 
-String &String::assign(const char *str)
+void String::assign(const String &s)
 {
-	return assign(str, strlen(str));
+	reserve(s.length());
+	::memcpy(m_data, s.cStr(), s.length());
+	m_data[s.length()] = '\0';
+	m_size = s.length();
 }
 
-String &String::assign(const char *buffer, usize length)
+void String::assign(const char *s)
+{
+	assign(s, strlen(s));
+}
+
+void String::assign(const char *buffer, usize length)
 {
 	reserve(length);
-	std::memcpy(m_data, buffer, length);
+	::memcpy(m_data, buffer, length);
 	m_size = length;
 	m_data[length] = '\0';
-	return *this;
 }
 
-String &String::fill(char c, usize len, bool append)
+void String::fill(char c, usize len, bool append)
 {
 	reserve(append ? length() + len : len);
 
@@ -111,224 +113,209 @@ String &String::fill(char c, usize len, bool append)
 	for (usize i = 0; i < len; ++i)
 		m_data[m_size++] = c;
 	m_data[length()] = '\0';
-
-	return *this;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-String &String::insert(usize pos, const String &s)
+void String::insert(usize pos, const String &s)
 {
 	if (s.empty())
-		return *this;
+		return;
 
 	reserve(length() + s.length());
 	if (pos < length())
-		std::memmove(slot(pos + s.length()), slot(pos), length() - pos);
-	std::memcpy(slot(pos), s.cStr(), s.length());
+		::memmove(slot(pos + s.length()), slot(pos), length() - pos);
+	::memcpy(slot(pos), s.cStr(), s.length());
 
 	m_size += s.length();
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::insert(usize pos, const char *s)
+void String::insert(usize pos, const char *s)
 {
-	return insert(pos, s, strlen(s));
+	insert(pos, s, strlen(s));
 }
 
-String &String::insert(usize pos, const char *s, size_t l)
+void String::insert(usize pos, const char *s, size_t l)
 {
 	if (l == 0)
-		return *this;
+		return;
 
 	reserve(length() + l);
 	if (pos < l)
-		std::memmove(slot(pos + l), slot(pos), length() - pos);
-	std::memcpy(slot(pos), s, l);
+		::memmove(slot(pos + l), slot(pos), length() - pos);
+	::memcpy(slot(pos), s, l);
 
 	m_size += l;
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::insert(usize pos, char c, usize n /*1*/)
+void String::insert(usize pos, char c, usize n /*1*/)
 {
 	if (n == 0)
-		return *this;
+		return;
 
 	reserve(length() + n);
 	if (pos < length())
-		std::memmove(slot(pos + n), slot(pos), length() - pos);
-	std::memset(slot(pos), c, n);
+		::memmove(slot(pos + n), slot(pos), length() - pos);
+	::memset(slot(pos), c, n);
 	m_size += n;
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::erase(usize start /*0*/, usize len /*-1*/)
+void String::erase(usize start /*0*/, usize len /*-1*/)
 {
 	if (empty() || len == 0 || start >= length())
-		return *this;
+		return;
 
 	if (start + len > length())
 		len = length() - start;
 	if (start + len < length())
-		std::memmove(slot(start), slot(start + len), length() - len);
+		::memmove(slot(start), slot(start + len), length() - len);
 
 	m_size -= len;
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::replace(usize start, usize len, const String &replacement)
+void String::replace(usize start, usize len, const char *repl, usize replLen)
 {
 	if (empty() || len == 0 || start >= length())
-		return *this;
+		return;
 
 	if (start + len > length())
 		len = length() - start;
 
-	if (replacement.length() != len && start + len < length())
-		std::memmove(slot(start + replacement.length()), slot(start + len), length() - len);
-	std::memcpy(slot(start), replacement.cStr(), replacement.length());
+	usize end = start + len;
+	if (replLen != len && end < length())
+		::memmove(slot(start + replLen), slot(end), length() - end);
+	::memcpy(slot(start), repl, replLen);
 
-	m_size += replacement.length() - len;
+	m_size += replLen - len;
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::replace(const String &search, const String &replacement)
+void String::replace(const String &search, const String &replacement)
 {
-	return *this = String::join(split(search), replacement);
+	auto res = join(split(search), replacement);
+	assign(std::move(res));
 }
 
-String &String::repeat(usize times)
+void String::repeat(usize times)
 {
-	const usize origSize = length();
-	reserve(origSize * times);
+	assert(times != 0);
+	if (times == 1)
+		return;
+
+	const usize originalLength = length();
+	reserve(originalLength * times);
 
 	for (usize i = 0; i < times; ++i) {
-		std::memcpy(slot(length()), slot(0), origSize);
-		m_size += origSize;
+		::memcpy(slot(length()), slot(0), originalLength);
+		m_size += originalLength;
 	}
 
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::reverse()
+void String::reverse()
 {
 	for (usize i = 0; i < length() / 2; ++i)
 		std::swap(at(i), at(length() - i - 1));
-	return *this;
 }
 
-String &String::shuffle()
+void String::shuffle()
 {
 	for (usize i = length() - 1; i > 0; ++i) {
-		usize index = rand() % (i + 1);
+		usize index = std::rand() % (i + 1);
 		std::swap(at(i), at(index));
 	}
-	return *this;
 }
 
-String &String::padRight(usize totalLength, const String &pad)
+void String::padRight(usize totalLength, const char *pad, usize padLength)
 {
-	if (totalLength <= length() || pad.length() == 0)
-		return *this;
+	if (totalLength <= length() || padLength == 0)
+		return;
 
 	reserve(totalLength);
 
-	usize padLength = totalLength - length();
-	for (size_t i = 0; i < padLength; ++i)
-		m_data[m_size + i] = pad[i % pad.length()];
+	usize lengthToPad = totalLength - length();
+	for (size_t i = 0; i < lengthToPad; ++i)
+		m_data[m_size + i] = pad[i % padLength];
 
-	m_size += padLength;
+	m_size += lengthToPad;
 	m_data[size()] = '\0';
-	return *this;
 }
 
-String &String::padLeft(usize totalLength, const String &pad)
+void String::padLeft(usize totalLength, const char *pad, usize padLength)
 {
-	if (totalLength <= length() || pad.length() == 0)
-		return *this;
+	if (totalLength <= length() || padLength == 0)
+		return;
 
 	reserve(totalLength);
 
-	usize padLength = totalLength - length();
-	std::memmove(slot(padLength), slot(0), length());
-	for (size_t i = 0; i < padLength; ++i)
-		m_data[i] = pad[i % pad.length()];
+	usize lengthToPad = totalLength - length();
+	::memmove(slot(lengthToPad), slot(0), length());
+	for (size_t i = 0; i < lengthToPad; ++i)
+		m_data[i] = pad[i % padLength];
 
-	m_size += padLength;
+	m_size += lengthToPad;
 	m_data[size()] = '\0';
-	return *this;
 }
 
-String &String::padCenter(usize totalLength, const String &pad)
+void String::padCenter(usize totalLength, const char *pad, usize padLength)
 {
-	if (totalLength <= length() || pad.length() == 0)
-		return *this;
+	if (totalLength <= length() || padLength == 0)
+		return;
 
 	// Allocate the total length before hand, so the "sub-pads" don't do it
 	reserve(totalLength);
 
-	usize padLength = totalLength - length();
+	usize lengthToPad = totalLength - length();
 	// Pad left first because it will moves less characters
-	padLeft(length() + padLength / 2, pad);
-	padRight(length() + (padLength / 2 + (padLength % 2)), pad);
-
-	return *this;
+	padLeft(length() + lengthToPad / 2, pad, padLength);
+	padRight(length() + (lengthToPad / 2 + (lengthToPad % 2)), pad, padLength);
 }
 
-String &String::trimRight()
+void String::trimRight()
 {
 	if (empty())
-		return *this;
+		return;
 
 	while (isspace(at(length() - 1)))
 		m_size--;
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::trimLeft()
+void String::trimLeft()
 {
 	if (empty())
-		return *this;
+		return;
 
 	usize i = 0;
 	for (; isspace(at(i)); ++i);
 	if (i == 0)
-		return *this;
-	std::memmove(slot(0), slot(i), length() - i);
+		return;
+
+	::memmove(slot(0), slot(i), length() - i);
 	m_size -= i;
 	m_data[length()] = '\0';
-	return *this;
 }
 
-String &String::trim()
+void String::trim()
 {
-	/// Start by right-trimming to minimize the number of characters that
-	/// left-trimming should move
+	// Start by right-trimming to minimize the number of characters that left-trimming should move
 	trimRight();
 	trimLeft();
-	return *this;
 }
 
-String &String::toLower()
+void String::toLower()
 {
 	for (usize i = 0; i < length(); ++i)
 		at(i) = tolower(at(i));
-	return *this;
 }
 
-String &String::toUpper()
+void String::toUpper()
 {
 	for (usize i = 0; i < length(); ++i)
 		at(i) = toupper(at(i));
-	return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -347,7 +334,7 @@ Vector<String> String::chunk(usize chunkLength) const
 	if (empty() || chunkLength == 0)
 		return {};
 
-	// ceil div without math function
+	// ceil division without math function
 	usize chunkCount = length() / chunkLength + (length() % chunkLength);
 
 	Vector<String> chunks;
@@ -358,42 +345,42 @@ Vector<String> String::chunk(usize chunkLength) const
 	return chunks;
 }
 
-Vector<String> String::split(const String &del, bool keepEmpty, usize limit) const
+Vector<String> String::split(const char *delimiter, usize delimiterLength, bool keepEmptySpans, usize limit) const
 {
 	if (empty())
 		return {};
 
+	Vector<String> spans;
+
 	usize pos = 0, lastPos = 0;
-	Vector<String> v;
-	while (v.size() < limit && (pos = find(del, pos)) != nPos) {
-		if (pos - lastPos > 0 || keepEmpty)
-			v.append(substr(lastPos, pos - lastPos));
-		pos += del.length();
+	while (spans.size() < limit && (pos = find(delimiter, delimiterLength, pos)) != nPos) {
+		if (pos - lastPos > 0 || keepEmptySpans)
+			spans.append(substr(lastPos, pos - lastPos));
+		pos += delimiterLength;
 		lastPos = pos;
 	}
-	if (length() - lastPos > 0 || keepEmpty)
-		v.append(substr(lastPos));
-	return v;
+	if (length() - lastPos > 0 || keepEmptySpans)
+		spans.append(substr(lastPos));
+	return spans;
 }
 
-String String::join(const Vector<String> &elements, const String &glue)
+String String::join(const Vector<String> &spans, const char *glue, usize glueLength)
 {
-	if (elements.empty())
+	if (spans.empty())
 		return {};
 
 	usize len = 0;
-	for (usize i = 0; i < elements.size(); ++i)
-		len += elements[i].length();
-	len += glue.length() * elements.size() - 1;
+	for (const auto &span : spans)
+		len += span.length();
+	len += glueLength * (spans.size() - 1);
 
 	String res;
-	res.reserve(len + 1);
-	res += elements[0];
-	for (usize i = 1; i < elements.size(); ++i) {
+	res.reserve(len);
+	res += spans[0];
+	for (usize i = 1; i < spans.size(); ++i) {
 		res += glue;
-		res += elements[i];
+		res += spans[i];
 	}
-
 	return res;
 }
 
@@ -403,22 +390,80 @@ bool String::startsWith(const String &s) const
 {
 	if (s.empty())
 		return true;
+	if (empty() || s.length() > length())
+		return false;
+	return ::strncmp(cStr(), s.cStr(), s.length()) == 0;
+}
+
+bool String::startsWith(const char *s) const
+{
+	usize sl = strlen(s);
+	if (s == nullptr || sl == 0)
+		return true;
+	if (empty() || sl > length())
+		return false;
+	return ::strncmp(cStr(), s, sl) == 0;
+}
+
+bool String::startsWith(char c) const
+{
 	if (empty())
 		return false;
-	if (s.length() > length())
-		return false;
-	return std::memcmp(m_data, s.cStr(), s.length()) == 0;
+	return at(0) == c;
 }
 
 bool String::endsWith(const String &s) const
 {
 	if (s.empty())
 		return true;
+	if (empty() || s.length() > length())
+		return false;
+	return ::strncmp(cStr() + length() - s.length(), s.cStr(), s.length()) == 0;
+}
+
+bool String::endsWith(const char *s) const
+{
+	usize sl = strlen(s);
+	if (s == nullptr || sl == 0)
+		return true;
+	if (empty() || sl > length())
+		return false;
+	return ::strncmp(cStr() + length() - sl, s, sl) == 0;
+}
+
+bool String::endsWith(char c) const
+{
 	if (empty())
 		return false;
-	if (s.length() > length())
-		return false;
-	return std::memcmp(m_data + length() - s.length(), s.cStr(), s.length()) == 0;
+	return at(length() - 1) == c;
+}
+
+// Boyer-Moore-Horspool
+usize String::find(const char *s, usize l, usize start) const
+{
+	static usize table[256] = {0};
+
+	// Basic optimisation
+	if (l == 1)
+		return find(s[0], start);
+
+	// Fill the skip table
+	for (usize i = 0; i < 256; ++i)
+		table[i] = l;
+	for (usize i = 0; i < l - 1; ++i)
+		table[(u8)s[i]] = l - i - 1;
+
+	// Search the string
+	usize pos = start;
+	while (pos + l <= length()) {
+		for (usize i = l - 1; m_data[pos + i] == s[i]; --i) {
+			if (i == 0)
+				return pos;
+		}
+		pos += table[(u8)m_data[pos + l - 1]];
+	}
+
+	return nPos;
 }
 
 usize String::find(char c, usize start) const
@@ -427,6 +472,36 @@ usize String::find(char c, usize start) const
 		if (m_data[i] == c)
 			return i;
 	}
+	return nPos;
+}
+
+usize String::findLast(const char *s, usize l, usize end) const
+{
+	static usize table[256] = {0};
+
+	// Basic optimisation
+	if (l == 1)
+		return findLast(s[0], end);
+
+	if (end >= length())
+		end = length() - 1;
+
+	// Fill the skip table
+	for (usize i = 0; i < 256; ++i)
+		table[i] = l;
+	for (usize i = 1; i < l; ++i)
+		table[(u8)s[i]] = i;
+
+	// Search the string
+	usize pos = end;
+	while (pos > l) {
+		for (usize i = 0; m_data[pos - l + 1 + i] == s[i]; ++i) {
+			if (i == l - 1)
+				return pos - i;
+		}
+		pos -= table[(u8)m_data[pos - l + 1]];
+	}
+
 	return nPos;
 }
 
@@ -440,208 +515,97 @@ usize String::findLast(char c, usize end) const
 	return i;
 }
 
-
-// Boyer-Moore-Horspool
-usize String::find(const String &s, usize start) const
-{
-	static usize table[256] = {0};
-
-	// Basic optimisation
-	if (s.length() == 1)
-		return find(s[0], start);
-
-	// Fill the skip table
-	for (usize i = 0; i < 256; ++i)
-		table[i] = s.length();
-	for (usize i = 0; i < s.length() - 1; ++i)
-		table[(u8)s[i]] = s.length() - i - 1;
-
-	// Search the string
-	usize pos = start, i;
-	while (pos + s.length() <= length()) {
-		for (i = s.length() - 1; m_data[pos + i] == s[i]; --i) {
-			if (i == 0)
-				return pos;
-		}
-		pos += table[(u8)m_data[pos + s.length() - 1]];
-	}
-
-	return nPos;
-}
-
-usize String::findLast(const String &s, usize end) const
-{
-	static usize table[256] = {0};
-
-	// Basic optimisation
-	if (s.length() == 1)
-		return findLast(s[0], end);
-
-	if (end > length())
-		end = length() - 1;
-
-	// Fill the skip table
-	for (usize i = 0; i < 256; ++i)
-		table[i] = s.length();
-	for (usize i = 1; i < s.length(); ++i)
-		table[(u8)s[i]] = i;
-
-	// Search the string
-	usize pos = end, i;
-	while (pos > s.length()) {
-		for (i = 0; m_data[pos - s.length() + 1 + i] == s[i]; ++i) {
-			if (i == s.length() - 1)
-				return pos - i;
-		}
-		pos -= table[(u8)m_data[pos - s.length() + 1]];
-	}
-
-	return nPos;
-}
-
-usize String::findOf(const String &s, usize start) const
+usize String::findOf(const char *s, usize l, usize start) const
 {
 	for (usize i = start; i < length(); ++i) {
-		if (s.find(m_data[i]) != nPos)
-			return i;
+		for (usize j = 0; j < l; ++j) {
+			if (at(i) == s[j])
+				return i;
+		}
 	}
 	return nPos;
 }
 
-usize String::findLastOf(const String &s, usize end) const
+usize String::findLastOf(const char *s, usize l, usize end) const
 {
-	usize i = (end >= length()) ? length() - 1 : end;
-	while (s.find(m_data[i]) == nPos) {
-		if (--i == 0)
-			return nPos;
+	if (end >= length())
+		end = length() - 1;
+
+	for (isize i = end; i >= 0; ++i) {
+		for (usize j = 0; j < l; ++j) {
+			if (at(i) == s[j])
+				return i;
+		}
 	}
-	return i;
+	return nPos;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 
-int String::compare(const String &s) const
-{
-	return compare(s.cStr());
-}
-
-int String::compare(const char *s) const
+int String::compare(const char *s, usize l) const
 {
 	if (null())
-		return s == NULL ? 0 : -1;
-	else if (s == NULL)
+		return (s == nullptr || l == 0) ? 0 : -1;
+	else if (s == nullptr || l == 0)
 		return 1;
-	return strcmp(m_data, s);
+	return strncmp(m_data, s, l);
 }
 
-int String::caseCompare(const String &s) const
-{
-	return caseCompare(s.cStr());
-}
-
-int String::caseCompare(const char *s) const
+int String::caseCompare(const char *s, usize l) const
 {
 	if (null())
-		return s == NULL ? 0 : -1;
-	else if (s == NULL)
+		return (s == nullptr || l == 0) ? 0 : -1;
+	else if (s == nullptr || l == 0)
 		return 1;
-	return strcasecmp(m_data, s);
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-bool String::operator ==(const String &rhs) const
-{
-	if (null())
-		return rhs.null();
-	else if (rhs.null() || length() != rhs.length())
-		return false;
-	return std::memcmp(m_data, rhs.cStr(), length()) == 0;
-}
-
-bool String::operator !=(const String &rhs) const
-{
-	return !(*this == rhs);
-}
-
-bool String::operator <(const String &rhs) const
-{
-	return compare(rhs) < 0;
-}
-
-bool String::operator <=(const String &rhs) const
-{
-	return compare(rhs) <= 0;
-}
-
-bool String::operator >(const String &rhs) const
-{
-	return compare(rhs) > 0;
-}
-
-bool String::operator >=(const String &rhs) const
-{
-	return compare(rhs) >= 0;
+	return strncasecmp(m_data, s, l);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-String operator +(const String &lhs, const String &rhs)
+String String::operator +(const String &rhs)
 {
-	return String(lhs).append(rhs);
+	String s(*this);
+	s.append(rhs);
+	return s;
 }
 
-String operator +(const String &lhs, const char *rhs)
+String String::operator +(const char *rhs)
 {
-	return String(lhs).append(rhs);
+	String s(*this);
+	s.append(rhs);
+	return s;
 }
 
-String operator +(const char *lhs, const String &rhs)
+String String::operator +(char rhs)
 {
-	return String(rhs).append(lhs);
+	String s(*this);
+	s.append(rhs);
+	return s;
 }
 
-String operator +(const String &lhs, char rhs)
+String String::operator *(usize rhs)
 {
-	return String(lhs).append(rhs);
-}
-
-String operator +(char lhs, const String &rhs)
-{
-	return String(rhs).append(lhs);
-}
-
-
-String operator *(const String &lhs, usize rhs)
-{
-	return String(lhs).repeat(rhs);
-}
-
-String operator *(usize lhs, const String & rhs)
-{
-	return String(rhs).repeat(lhs);
-}
-
-
-Vector<String> operator /(const String &lhs, const String &rhs)
-{
-	return lhs.split(rhs);
-}
-
-std::ostream &operator <<(std::ostream &lhs, const String &rhs)
-{
-	if (rhs.null())
-		return lhs << "(nullStr)";
-	lhs.write(rhs.cStr(), rhs.length());
-	return lhs;
+	String s(*this);
+	s.repeat(rhs);
+	return s;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void String::reserve(usize newSize)
+// Writer &operator <<(Writer &os, const String &s)
+// {
+// 	if (s.null())
+// 		return os << "(null)";
+// 	os.write(s.cStr(), s.length());
+// 	return os;
+// }
+
+std::ostream &operator <<(std::ostream &os, const String &s)
 {
-	// Allocate for the null terminator too
-	return Sequence<char>::reserve(newSize + 1);
+	if (s.null())
+		return os << "(null)";
+	os.write(s.cStr(), s.length());
+	return os;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

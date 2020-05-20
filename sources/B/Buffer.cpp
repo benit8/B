@@ -25,7 +25,7 @@ Buffer::Buffer(usize n)
 , m_owner(true)
 {
 	assert(!null());
-	std::memset(data(), 0, size());
+	::memset(data(), 0, size());
 }
 
 Buffer::Buffer(const Buffer &other)
@@ -33,7 +33,7 @@ Buffer::Buffer(const Buffer &other)
 , m_size(other.m_size)
 , m_owner(true)
 {
-	std::memcpy(m_data, other.m_data, other.m_size);
+	::memcpy(m_data, other.m_data, other.m_size);
 }
 
 Buffer::Buffer(Buffer &&other)
@@ -60,7 +60,7 @@ Buffer::~Buffer()
 Buffer Buffer::create(usize n)
 {
 	auto b = adopt(new byte[n], n);
-	std::memset(b.data(), 0, b.size());
+	::memset(b.data(), 0, b.size());
 	return b;
 }
 
@@ -85,7 +85,7 @@ Buffer Buffer::wrap(const byte *s, usize n)
 Buffer Buffer::copy(const byte *s, usize n)
 {
 	Buffer b(n);
-	std::memcpy(b.data(), s, n);
+	::memcpy(b.data(), s, n);
 	return b;
 }
 
@@ -93,12 +93,12 @@ Buffer Buffer::copy(const byte *s, usize n)
 
 void Buffer::fill(byte c)
 {
-	std::memset(data(), c, size());
+	::memset(data(), c, size());
 }
 
 void Buffer::clear()
 {
-	std::memset(data(), 0, size());
+	::memset(data(), 0, size());
 }
 
 Buffer Buffer::slice(usize start, usize length) const

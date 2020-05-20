@@ -1,5 +1,5 @@
 /*
-** B, 2019
+** B, 2020
 ** General header
 */
 
@@ -11,31 +11,28 @@
 #include "B/Types.hpp"
 #include "B/Common.hpp"
 
-#include "B/Array.hpp"
+#include "B/Containers/Array.hpp"
 #include "B/Buffer.hpp"
-#include "B/Map.hpp"
-#include "B/Pair.hpp"
-#include "B/Queue.hpp"
-// #include "B/Set.hpp"
-#include "B/SingleList.hpp"
-#include "B/Stack.hpp"
-// #include "B/UMap.hpp"
-// #include "B/USet.hpp"
-#include "B/Vector.hpp"
+#include "B/Containers/Map.hpp"
+#include "B/Containers/Pair.hpp"
+#include "B/Containers/Queue.hpp"
+// #include "B/Containers/Set.hpp"
+#include "B/Containers/SingleList.hpp"
+#include "B/Containers/Stack.hpp"
+// #include "B/Containers/UMap.hpp"
+// #include "B/Containers/USet.hpp"
+#include "B/Containers/Vector.hpp"
 
 #include "B/String.hpp"
 #include "B/StringView.hpp"
 
-#include "B/FS/File.hpp"
-#include "B/FS/Directory.hpp"
+#include "B/FileSystem/File.hpp"
+#include "B/FileSystem/Directory.hpp"
 
 #include "B/IO/Print.hpp"
-// #include "B/IO/Stream.hpp"
-// #include "B/IO/FileStream.hpp"
-// #include "B/IO/BufferStream.hpp"
 
-#include "B/OS/Pipe.hpp"
-#include "B/OS/Process.hpp"
-// #include "B/OS/Thread.hpp"
-#include "B/OS/ThreadPool.hpp"
-#include "B/OS/Time.hpp"
+#include "B/Platform/Pipe.hpp"
+#include "B/Platform/Process.hpp"
+// #include "B/Platform/Thread.hpp"
+#include "B/Platform/ThreadPool.hpp"
+#include "B/Platform/Time.hpp"

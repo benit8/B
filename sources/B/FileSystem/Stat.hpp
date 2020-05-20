@@ -1,5 +1,5 @@
 /*
-** B, 2019
+** B, 2020
 ** Stat.hpp
 */
 
@@ -7,8 +7,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "B/StringView.hpp"
-#include "B/FS/File.hpp"
+#include "B/String.hpp"
+#include "B/FileSystem/File.hpp"
 
 #include <sys/stat.h>
 
@@ -21,7 +21,7 @@ class Stat
 {
 public:
 	Stat(int fd);
-	Stat(const StringView &filename, bool dereference = true);
+	Stat(const String &filename, bool dereference = true);
 	~Stat() {}
 
 	bool good() const { return m_good; }

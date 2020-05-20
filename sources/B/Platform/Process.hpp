@@ -13,9 +13,9 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Pipe.hpp"
 #include "B/String.hpp"
-#include "B/Vector.hpp"
+#include "B/Containers/Vector.hpp"
+#include "B/Platform/Pipe.hpp"
 
 #include <stdlib.h>
 #include <sys/types.h>

@@ -4,6 +4,7 @@
 */
 
 #include "B/StringView.hpp"
+#include "B/String.hpp"
 #include "B/Types.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,9 +17,9 @@ StringView::StringView()
 , m_len(0)
 {}
 
-StringView::StringView(const StringView &other)
-: m_chars(other.m_chars)
-, m_len(other.m_len)
+StringView::StringView(const String &string)
+: m_chars(string.cStr())
+, m_len(string.length())
 {}
 
 StringView::StringView(const char *str)
@@ -36,6 +37,29 @@ StringView::StringView(const char *str, usize length)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void StringView::trimRight(usize n)
+{
+	if (n >= m_len) {
+		m_len = 0;
+		m_chars = nullptr;
+	}
+	else {
+		m_len -= n;
+	}
+}
+
+void StringView::trimLeft(usize n)
+{
+	if (n >= m_len) {
+		m_len = 0;
+		m_chars = nullptr;
+	}
+	else {
+		m_len -= n;
+		m_chars += n;
+	}
+}
+
 StringView StringView::substr(usize start, usize length) const
 {
 	if (length > m_len)
@@ -45,7 +69,7 @@ StringView StringView::substr(usize start, usize length) const
 	return StringView(m_chars + start, length);
 }
 
-Vector<StringView> StringView::split(const StringView &del, bool keepEmpty, usize limit) const
+Vector<StringView> StringView::split(StringView del, bool keepEmpty, usize limit) const
 {
 	if (empty())
 		return {};
@@ -63,8 +87,13 @@ Vector<StringView> StringView::split(const StringView &del, bool keepEmpty, usiz
 	return v;
 }
 
+String StringView::toString() const
+{
+	return String(m_chars, m_len);
+}
 
-int StringView::compare(const StringView &s) const
+
+int StringView::compare(StringView s) const
 {
 	if (null())
 		return s.null() ? 0 : -1;
@@ -73,7 +102,7 @@ int StringView::compare(const StringView &s) const
 	return strcmp(m_chars, s.m_chars);
 }
 
-bool StringView::startsWith(const StringView &s) const
+bool StringView::startsWith(StringView s) const
 {
 	if (s.empty())
 		return true;
@@ -84,7 +113,7 @@ bool StringView::startsWith(const StringView &s) const
 	return memcmp(m_chars, s.cStr(), s.length()) == 0;
 }
 
-bool StringView::endsWith(const StringView &s) const
+bool StringView::endsWith(StringView s) const
 {
 	if (s.empty())
 		return true;
@@ -115,7 +144,7 @@ usize StringView::findLast(char c, usize end) const
 }
 
 // Boyer-Moore-Horspool
-usize StringView::find(const StringView &s, usize start) const
+usize StringView::find(StringView s, usize start) const
 {
 	static usize table[256] = {0};
 
@@ -142,7 +171,7 @@ usize StringView::find(const StringView &s, usize start) const
 	return nPos;
 }
 
-usize StringView::findLast(const StringView &s, usize end) const
+usize StringView::findLast(StringView s, usize end) const
 {
 	static usize table[256] = {0};
 
@@ -172,7 +201,7 @@ usize StringView::findLast(const StringView &s, usize end) const
 	return nPos;
 }
 
-usize StringView::findOf(const StringView &s, usize start) const
+usize StringView::findOf(StringView s, usize start) const
 {
 	for (usize i = start; i < m_len; ++i) {
 		if (s.find(m_chars[i]) != nPos)
@@ -181,7 +210,7 @@ usize StringView::findOf(const StringView &s, usize start) const
 	return nPos;
 }
 
-usize StringView::findLastOf(const StringView &s, usize end) const
+usize StringView::findLastOf(StringView s, usize end) const
 {
 	usize i = (end >= m_len) ? m_len - 1 : end;
 	while (s.find(m_chars[i]) == nPos) {
@@ -199,49 +228,46 @@ StringView &StringView::operator =(nullptr_t)
 	return *this;
 }
 
-StringView &StringView::operator =(const StringView &other)
+bool StringView::operator ==(StringView rhs) const
 {
-	m_chars = other.m_chars;
-	m_len = other.m_len;
-	return *this;
+	return compare(rhs) == 0;
 }
 
-bool StringView::operator ==(const StringView &rhs) const
+bool StringView::operator !=(StringView rhs) const
 {
-	if (null())
-		return rhs.null();
-	else if (rhs.null() || m_len != rhs.length())
-		return false;
-	return std::memcmp(m_chars, rhs.cStr(), m_len) == 0;
+	return compare(rhs) != 0;
 }
 
-bool StringView::operator !=(const StringView &rhs) const
-{
-	return !(*this == rhs);
-}
-
-bool StringView::operator <(const StringView &rhs) const
+bool StringView::operator <(StringView rhs) const
 {
 	return compare(rhs) < 0;
 }
 
-bool StringView::operator <=(const StringView &rhs) const
+bool StringView::operator <=(StringView rhs) const
 {
 	return compare(rhs) <= 0;
 }
 
-bool StringView::operator >(const StringView &rhs) const
+bool StringView::operator >(StringView rhs) const
 {
 	return compare(rhs) > 0;
 }
 
-bool StringView::operator >=(const StringView &rhs) const
+bool StringView::operator >=(StringView rhs) const
 {
 	return compare(rhs) >= 0;
 }
 
 
-std::ostream &operator <<(std::ostream &os, const StringView &s)
+// Writer &operator <<(Writer &os, StringView s)
+// {
+// 	if (s.null())
+// 		return os << "(nullStrVw)";
+// 	os.write(s.m_chars, s.m_len);
+// 	return os;
+// }
+
+std::ostream &operator <<(std::ostream &os, StringView s)
 {
 	if (s.null())
 		return os << "(nullStrVw)";

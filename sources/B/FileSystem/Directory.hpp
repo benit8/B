@@ -1,5 +1,5 @@
 /*
-** B, 2019
+** B, 2020
 ** Directory.hpp
 */
 
@@ -14,7 +14,7 @@ namespace B {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "B/String.hpp"
-#include "B/FS/File.hpp"
+#include "B/FileSystem/File.hpp"
 
 #include <dirent.h>
 
@@ -32,17 +32,17 @@ public:
 		Entry(struct dirent *e);
 		Entry &operator =(struct dirent *e);
 
-		String name {};
-		File::Type type { File::Unknown };
-		ino_t inode { 0 };
-		off_t offset { 0 };
+		String name;
+		File::Type type = File::Type::Unknown;
+		ino_t inode = 0;
+		off_t offset = 0;
 	};
 
 	static std::function<bool(const Entry &)> defaultScanFilter;
 	static std::function<int(const Entry &, const Entry &)> defaultScanCompare;
 
 public:
-	Directory(const StringView &name);
+	Directory(const String &name);
 	Directory(int fd);
 	~Directory();
 
