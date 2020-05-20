@@ -10,7 +10,12 @@ CC	=	g++
 
 NAME	=	tests
 
-SRCS	=	tests.cpp
+SRCS	=	B/Directory/scan.cpp		\
+		B/Vector/assign.cpp		\
+		B/Vector/capacity.cpp		\
+		B/Vector/elAccess.cpp		\
+		B/Vector/modifiers.cpp		\
+		B/Vector/operations.cpp		\
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -20,9 +25,9 @@ CXXFLAGS	+=	-std=c++17
 CXXFLAGS	+=	-I../sources
 CXXFLAGS	+=	-W -Wall -Wextra
 CXXFLAGS	+=	-g3
-CXXFLAGS	+=	-nodefaultlibs
 
 LDFLAGS		+=	-L../.build/ -lB
+LDFLAGS		+=	-lcriterion
 
 ################################################################################
 
@@ -32,18 +37,15 @@ $(NAME): $(OBJS)
 	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
 
 clean:
-	$(RM) $(OBJS) $(DEPS)
+	$(RM) $(OBJS)
 
 fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
 
-raw: raw.o
-	$(CC) -o raw raw.o $(LDFLAGS)
-
 dump:
 	@ echo "CXXFLAGS: [$(CXXFLAGS)]"
 	@ echo "LDFLAGS: [$(LDFLAGS)]"
 
-.PHONY: all $(NAME) clean fclean re raw dump
+.PHONY: all $(NAME) clean fclean re dump
