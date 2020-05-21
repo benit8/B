@@ -113,12 +113,16 @@ usize FileReader::read(void *data, usize size)
 
 bool FileReader::seek(SeekMode whence, isize pos)
 {
-	return lseek(m_fd, pos, (int)whence) != -1;
+	if (::lseek(m_fd, pos, (int)whence) < 0)
+		return false;
+	m_eof = false;
+	m_peeked.reset();
+	return true;
 }
 
-usize FileReader::tell() const
+usize FileReader::tell()
 {
-	return lseek(m_fd, 0, SEEK_CUR);
+	return ::lseek(m_fd, 0, SEEK_CUR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

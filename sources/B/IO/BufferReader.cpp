@@ -5,8 +5,6 @@
 
 #include "B/IO/Reader.hpp"
 
-#include <unistd.h>
-
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B
@@ -62,26 +60,26 @@ usize BufferReader::read(void *data, usize size)
 bool BufferReader::seek(SeekMode whence, isize pos)
 {
 	switch (whence) {
-		case SeekMode::Start:
-			if (pos < 0 || (usize)pos > m_buffer.size())
-				return false;
-			m_offset = pos;
-			break;
-		case SeekMode::Current:
-			if ((isize)m_offset + pos < 0 || m_offset + pos > m_buffer.size())
-				return false;
-			m_offset += pos;
-			break;
-		case SeekMode::End:
-			if (pos > 0 || (usize)-pos > m_buffer.size())
-				return false;
-			m_offset = m_buffer.size() - pos;
-			break;
+	case SeekMode::Start:
+		if (pos < 0 || (usize)pos > m_buffer.size())
+			return false;
+		m_offset = pos;
+		break;
+	case SeekMode::Current:
+		if ((isize)m_offset + pos < 0 || m_offset + pos > m_buffer.size())
+			return false;
+		m_offset += pos;
+		break;
+	case SeekMode::End:
+		if (pos > 0 || (usize)-pos > m_buffer.size())
+			return false;
+		m_offset = m_buffer.size() - pos;
+		break;
 	}
 	return true;
 }
 
-usize BufferReader::tell() const
+usize BufferReader::tell()
 {
 	return m_offset;
 }

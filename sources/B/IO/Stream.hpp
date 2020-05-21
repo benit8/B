@@ -21,7 +21,7 @@ public:
 
 	virtual bool eof() const = 0;
 	virtual bool seek(SeekMode, isize pos) = 0;
-	virtual usize tell() const = 0;
+	virtual usize tell() = 0;
 
 protected:
 	Stream() = default;

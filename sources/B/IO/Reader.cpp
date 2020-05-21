@@ -34,17 +34,16 @@ BufferReader Reader::fromString(StringView buffer)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Reader &Reader::operator >>(bool &value)
-{
-	value = get() > 0; // EOF and \0 count as false
-	return *this;
-}
-
 Reader &Reader::operator >>(String &value)
 {
-	value.clear();
+	value.erase();
+
+	while (iscntrl(peek()))
+		get();
+
 	for (int c = get(); c >= 0 && !isspace(c); c = get())
 		value.append(c);
+
 	return *this;
 }
 

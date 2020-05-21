@@ -592,13 +592,13 @@ String String::operator *(usize rhs)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// Writer &operator <<(Writer &os, const String &s)
-// {
-// 	if (s.null())
-// 		return os << "(null)";
-// 	os.write(s.cStr(), s.length());
-// 	return os;
-// }
+Writer &operator <<(Writer &os, const String &s)
+{
+	if (s.null())
+		return os << "(null)";
+	os.write(s.cStr(), s.length());
+	return os;
+}
 
 std::ostream &operator <<(std::ostream &os, const String &s)
 {

@@ -16,6 +16,7 @@ namespace B {
 #include "B/StringView.hpp"
 #include "B/Containers/Sequence.hpp"
 #include "B/Containers/Vector.hpp"
+#include "B/IO/Writer.hpp"
 
 #include <iostream>
 #include <string>
@@ -64,14 +65,14 @@ public:
 		insert(p, format(fmt, args...));
 	}
 
-	void append(const String &s)        { return insert(size(), s); }
-	void append(const char *s)          { return insert(size(), s); }
-	void append(const char *s, usize l) { return insert(size(), s, l); }
-	void append(char c, usize n = 1)    { return insert(size(), c, n); }
+	void append(const String &s)        { return insert(length(), s); }
+	void append(const char *s)          { return insert(length(), s); }
+	void append(const char *s, usize l) { return insert(length(), s, l); }
+	void append(char c, usize n = 1)    { return insert(length(), c, n); }
 	template <typename... Args>
 	void appendf(const char *fmt, const Args&... args)
 	{
-		insert(size(), format(fmt, args...));
+		insert(length(), format(fmt, args...));
 	}
 
 	void prepend(const String &s)        { return insert(0, s); }
@@ -197,7 +198,7 @@ public:
 	Vector<String> operator /(const String &rhs) const { return split(rhs); }
 	Vector<String> operator /(const char *rhs)   const { return split(rhs); }
 
-	// friend Writer &operator <<(Writer &lhs, const String &rhs);
+	friend Writer &operator <<(Writer &lhs, const String &rhs);
 	friend std::ostream &operator <<(std::ostream &lhs, const String &rhs);
 
 	static const usize nPos = -1;

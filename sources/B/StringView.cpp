@@ -259,13 +259,13 @@ bool StringView::operator >=(StringView rhs) const
 }
 
 
-// Writer &operator <<(Writer &os, StringView s)
-// {
-// 	if (s.null())
-// 		return os << "(nullStrVw)";
-// 	os.write(s.m_chars, s.m_len);
-// 	return os;
-// }
+Writer &operator <<(Writer &os, StringView s)
+{
+	if (s.null())
+		return os << "(nullStrVw)";
+	os.write(s.m_chars, s.m_len);
+	return os;
+}
 
 std::ostream &operator <<(std::ostream &os, StringView s)
 {

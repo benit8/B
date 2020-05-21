@@ -15,6 +15,7 @@ namespace B {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "B/Containers/Vector.hpp"
+#include "B/IO/Writer.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +60,7 @@ public:
 	bool operator >(StringView rhs) const;
 	bool operator >=(StringView rhs) const;
 
-	// friend Writer &operator <<(Writer &, StringView);
+	friend Writer &operator <<(Writer &, StringView);
 	friend std::ostream &operator <<(std::ostream &, StringView);
 
 	static const usize nPos = -1;

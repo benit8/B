@@ -62,7 +62,7 @@ public:
 		AllExec    = UserExec | GroupExec | OtherExec,
 		AllFull    = UserFull | GroupFull | OtherFull,
 
-		FileDefault = UserFull | GroupRead | GroupWrite | OtherRead,
+		FileDefault = AllRead | UserWrite | GroupWrite,
 		DirDefault = FileDefault | AllExec,
 	};
 };

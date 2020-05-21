@@ -50,15 +50,19 @@ public:
 		return read(buffer.data(), buffer.size()) == buffer.size();
 	}
 
-	template <typename T, std::enable_if_t<std::is_fundamental<T>::value>>
-	Reader &operator >>(T &value)
-	{
-		value = T();
-		read(&value, sizeof(value));
-		return *this;
-	}
-
-	Reader &operator >>(bool &);
+	Reader &operator >>(bool &b) { b = get() > 0; return *this; }
+	Reader &operator >>(char &c) { c = get(); return *this; }
+	Reader &operator >>(i8  &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(i16 &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(i32 &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(i64 &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(u8  &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(u16 &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(u32 &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(u64 &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(f32  &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(f64  &n) { read(&n, sizeof(n)); return *this; }
+	Reader &operator >>(f128 &n) { read(&n, sizeof(n)); return *this; }
 	Reader &operator >>(String &);
 
 protected:
@@ -81,12 +85,12 @@ public:
 	int get() override;
 	usize read(void *data, usize length) override;
 	bool seek(SeekMode whence, isize pos) override;
-	usize tell() const override;
+	usize tell() override;
 
 private:
 	int m_fd = -1;
 	OpenMode m_flags = OpenMode::NotOpen;
-	bool m_eof = true;
+	bool m_eof = false;
 	std::optional<byte> m_peeked;
 };
 
@@ -104,7 +108,7 @@ public:
 	int get() override;
 	usize read(void *data, usize length) override;
 	bool seek(SeekMode whence, isize pos) override;
-	usize tell() const override;
+	usize tell() override;
 
 private:
 	Buffer m_buffer;
