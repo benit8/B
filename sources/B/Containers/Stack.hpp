@@ -26,7 +26,7 @@ class Stack : public Sequence<T>
 {
 public:
 	Stack()
-	: Container()
+	: Sequence<T>()
 	{}
 
 	T &top() { return this->at(this->size() - 1); }

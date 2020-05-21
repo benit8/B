@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 cmake_policy(SET CMP0076 NEW)
 
 project(B VERSION 0.1.0 LANGUAGES CXX)
-add_library(B SHARED)
+add_library(B)
 
 target_compile_features(B
 PRIVATE
@@ -51,6 +51,9 @@ PUBLIC
 	sources/B/FileSystem/File.hpp
 	sources/B/FileSystem/Stat.hpp
 	sources/B/IO/Print.hpp
+	sources/B/IO/Reader.hpp
+	sources/B/IO/Stream.hpp
+	sources/B/IO/Writer.hpp
 	sources/B/Platform/Pipe.hpp
 	sources/B/Platform/Process.hpp
 	sources/B/Platform/Time.hpp
@@ -65,6 +68,12 @@ PRIVATE
 	sources/B/Containers/Vector.inl
 	sources/B/FileSystem/Directory.cpp
 	sources/B/FileSystem/Stat.cpp
+	sources/B/IO/Reader.cpp
+	sources/B/IO/FileReader.cpp
+	sources/B/IO/BufferReader.cpp
+	sources/B/IO/Writer.cpp
+	sources/B/IO/FileWriter.cpp
+	sources/B/IO/BufferWriter.cpp
 	sources/B/Platform/Pipe.cpp
 	sources/B/Platform/Process.cpp
 	sources/B/Platform/Time.cpp

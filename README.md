@@ -1,21 +1,26 @@
 # B
-My own C++ standard library, because I want
+My own C++ standard library, for learning purposes
 
 ## Features
 
 #### Base
 - [x] Types
+- [x] Traits
 - [x] String
 - [x] StringView
+- [x] Enum operators
+- [ ] Numeric limits
+- [ ] Option parser
 
 #### Data structures
 - [x] Array (fixed-size)
-- [x] Buffer (fixed-size)
+- [x] Buffer
 - [ ] CircularBuffer *TDB*
 - [ ] Graph *TDB*
 - [ ] SingleList *TDB*
 - [ ] CircularList *TDB*
 - [ ] DoubleList *TDB*
+- [ ] HashMap
 - [x] Map
 - [x] Pair
 - [x] Queue
@@ -28,9 +33,8 @@ My own C++ standard library, because I want
 
 #### IO
 - [x] Printing (template printf-like)
-- [ ] Stream *WIP*
-- [ ] FileStream *WIP*
-- [ ] BufferStream *WIP*
+- [x] FileReader, FileWriter
+- [x] BufferReader, BufferWriter
 
 #### Filesystem
 - [x] Directory
@@ -39,7 +43,7 @@ My own C++ standard library, because I want
 - [x] Stat
 
 #### System
-- [ ] Process *TDB*
+- [x] Process
 - [ ] Thread *TDB*
 - [x] ThreadPool
 - [x] Time

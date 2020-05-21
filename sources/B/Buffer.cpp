@@ -39,7 +39,7 @@ Buffer::Buffer(const Buffer &other)
 Buffer::Buffer(Buffer &&other)
 : m_data(std::move(other.m_data))
 , m_size(other.m_size)
-, m_owner(true)
+, m_owner(other.m_owner)
 {
 	other.m_data = nullptr;
 	other.m_size = 0;
@@ -48,11 +48,7 @@ Buffer::Buffer(Buffer &&other)
 
 Buffer::~Buffer()
 {
-	if (m_owner && !null()) {
-		delete[] m_data;
-		m_data = nullptr;
-	}
-	m_size = 0;
+	reset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -91,14 +87,23 @@ Buffer Buffer::copy(const byte *s, usize n)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Buffer::fill(byte c)
+void Buffer::reset()
 {
-	::memset(data(), c, size());
+	if (m_owner && !null()) {
+		delete[] m_data;
+		m_data = nullptr;
+	}
+	m_size = 0;
 }
 
 void Buffer::clear()
 {
 	::memset(data(), 0, size());
+}
+
+void Buffer::fill(byte c)
+{
+	::memset(data(), c, size());
 }
 
 Buffer Buffer::slice(usize start, usize length) const
@@ -116,6 +121,32 @@ usize Buffer::find(byte c) const
 		if (data()[i] == c)
 			return i;
 	return -1;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Buffer &Buffer::operator =(const Buffer &rhs)
+{
+	reset();
+
+	m_data = new byte[rhs.m_size];
+	m_size = rhs.m_size;
+	m_owner = true;
+	::memcpy(m_data, rhs.m_data, rhs.m_size);
+	return *this;
+}
+
+Buffer &Buffer::operator =(Buffer &&rhs)
+{
+	reset();
+
+	m_data = std::move(rhs.m_data);
+	m_size = rhs.m_size;
+	m_owner = rhs.m_owner;
+	rhs.m_data = nullptr;
+	rhs.m_size = 0;
+	rhs.m_owner = false;
+	return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -25,6 +25,8 @@ template <typename T>
 class Container
 {
 public:
+	virtual ~Container() = default;
+
 	virtual usize size() const = 0;
 	virtual bool empty() const = 0;
 	virtual void clear() = 0;

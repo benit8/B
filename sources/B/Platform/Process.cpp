@@ -51,10 +51,10 @@ bool Process::create(const Vector<String> &args, Process::Flags flags)
 
 
 		char **cArgs = buildCStringArray(args);
-		if (flags & EmptyEnv)
-			exit(::execve(cArgs[0], cArgs, environ));
-		else
+		if ((flags & Flags::EmptyEnv) == Flags::EmptyEnv)
 			exit(::execvp(cArgs[0], cArgs));
+		else
+			exit(::execve(cArgs[0], cArgs, environ));
 		freeCStringArray(cArgs);
 	}
 	else {

@@ -26,13 +26,13 @@ class Queue : public Sequence<T>
 {
 public:
 	Queue()
-	: Container()
+	: Sequence<T>()
 	{}
 
-	T &front() { return at(m_start); }
-	const T &front() const { return at(m_start); }
-	T &back() { return at(m_start - size() - 1); }
-	const T &back() const { return at(m_start - size() - 1); }
+	T &front() { return this->at(m_start); }
+	const T &front() const { return this->at(m_start); }
+	T &back() { return this->at(m_start - this->size() - 1); }
+	const T &back() const { return this->at(m_start - this->size() - 1); }
 
 	void push(const T &value)
 	{
@@ -57,7 +57,7 @@ public:
 	}
 
 	template <typename... Args>
-	void emplace(Args&&... args);
+	void emplace(Args&&... args)
 	{
 		push(T(std::forward<Args>(args)...));
 	}

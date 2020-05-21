@@ -41,6 +41,7 @@ public:
 	bool null() const { return data() == nullptr; }
 	bool empty() const override { return null() || size() == 0; }
 
+	void reset();
 	void clear() override;
 	void fill(byte c);
 	Buffer slice(usize start = 0, usize length = -1) const;
@@ -48,6 +49,9 @@ public:
 
 	const byte &operator [](usize i) const { return m_data[i]; }
 	byte &operator [](usize i) { return m_data[i]; }
+
+	Buffer &operator =(const Buffer &);
+	Buffer &operator =(Buffer &&);
 
 private:
 	byte *m_data = nullptr;

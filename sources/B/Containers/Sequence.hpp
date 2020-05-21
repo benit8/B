@@ -158,16 +158,21 @@ protected:
 	}
 
 public:
-	static const usize max = -1;
-	static const usize maxSize = max / sizeof(T);
-	static const usize minimumSize = 8;
-	static const usize growthFactor = 2;
+	static const usize max;
+	static const usize maxSize;
+	static const usize minimumSize;
+	static const usize growthFactor;
 
 protected:
 	T *m_data = nullptr;
 	usize m_capacity = 0;
 	usize m_size = 0;
 };
+
+template <typename T> const usize Sequence<T>::max = -1;
+template <typename T> const usize Sequence<T>::maxSize = max / sizeof(T);
+template <typename T> const usize Sequence<T>::minimumSize = 8;
+template <typename T> const usize Sequence<T>::growthFactor = 2;
 
 ////////////////////////////////////////////////////////////////////////////////
 

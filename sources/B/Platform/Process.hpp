@@ -13,6 +13,7 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/EnumOperators.hpp"
 #include "B/String.hpp"
 #include "B/Containers/Vector.hpp"
 #include "B/Platform/Pipe.hpp"
@@ -30,17 +31,17 @@ namespace B
 class Process
 {
 public:
-	enum Flags
+	enum class Flags : unsigned
 	{
 		None     = 0,
 		EmptyEnv = 0x1,
 	};
 
 public:
-	explicit Process(const Vector<String> &args, Process::Flags flags = None);
+	explicit Process(const Vector<String> &args, Flags flags = Flags::None);
 	~Process();
 
-	bool create(const Vector<String> &args, Process::Flags flags = None);
+	bool create(const Vector<String> &args, Flags flags = Flags::None);
 	bool join();
 	void stop();
 	void kill();
@@ -62,6 +63,8 @@ private:
 	Pipe m_inPipe, m_outPipe, m_errPipe;
 	int m_exitCode = -1;
 };
+
+ENABLE_ENUM_OPERATORS(Process::Flags);
 
 }
 
