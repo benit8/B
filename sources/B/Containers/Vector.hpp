@@ -40,6 +40,7 @@ public:
 	Vector(const T *buffer, usize size);
 	explicit Vector(usize size, const T &val = T());
 	Vector(std::initializer_list<T> il);
+	~Vector() = default;
 
 	Iterator begin();
 	Iterator end();

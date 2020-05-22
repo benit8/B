@@ -32,6 +32,8 @@ PUBLIC
 	sources/B/Buffer.hpp
 	sources/B/Common.hpp
 	sources/B/EnumOperators.hpp
+	sources/B/NumericLimits.hpp
+	sources/B/OptionParser.hpp
 	sources/B/String.hpp
 	sources/B/StringView.hpp
 	sources/B/Traits.hpp
@@ -61,6 +63,7 @@ PUBLIC
 
 PRIVATE
 	sources/B/Buffer.cpp
+	sources/B/OptionParser.cpp
 	sources/B/String.cpp
 	sources/B/StringView.cpp
 	sources/B/Containers/Map.inl

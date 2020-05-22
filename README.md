@@ -9,41 +9,41 @@ My own C++ standard library, for learning purposes
 - [x] String
 - [x] StringView
 - [x] Enum operators
-- [ ] Numeric limits
-- [ ] Option parser
+- [x] Numeric limits
+- [x] Option parser
 
 #### Data structures
 - [x] Array (fixed-size)
 - [x] Buffer
-- [ ] CircularBuffer *TDB*
-- [ ] Graph *TDB*
-- [ ] SingleList *TDB*
-- [ ] CircularList *TDB*
-- [ ] DoubleList *TDB*
+- [ ] CircularBuffer
+- [ ] Graph
+- [x] SingleList
+- [ ] CircularList
+- [ ] DoubleList
 - [ ] HashMap
 - [x] Map
 - [x] Pair
 - [x] Queue
-- [ ] Set *TDB*
+- [ ] Set
 - [x] Stack
-- [ ] Tree *TDB*
-- [x] UMap (unordered) *TDB*
-- [x] USet (unordered) *TDB*
+- [ ] Tree
+- [x] UMap (unordered)
+- [x] USet (unordered)
 - [x] Vector
 
 #### IO
 - [x] Printing (template printf-like)
-- [x] FileReader, FileWriter
-- [x] BufferReader, BufferWriter
+- [x] File reader/writer
+- [x] Buffer reader/writer
 
 #### Filesystem
 - [x] Directory
 - [x] File
-- [ ] Path *TDB*
+- [ ] Path
 - [x] Stat
 
 #### System
 - [x] Process
-- [ ] Thread *TDB*
+- [ ] Thread
 - [x] ThreadPool
 - [x] Time

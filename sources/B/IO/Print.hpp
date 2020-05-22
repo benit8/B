@@ -34,7 +34,7 @@ void parseFormat(std::ostream&, const char *&, const Args&...);
 static const struct flagEntry
 {
 	const char *letters;
-	std::ios_base& (*flag)(std::ios_base&);
+	std::ios_base &(*flag)(std::ios_base&);
 }
 flagTable[] = {
 	{"XOE", std::uppercase},

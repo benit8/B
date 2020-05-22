@@ -35,16 +35,59 @@ struct Traits<char> : public GenericTraits<char>
 };
 
 template<>
+struct Traits<short> : public GenericTraits<short>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
+template<>
 struct Traits<int> : public GenericTraits<int>
 {
 	static constexpr bool isTrivial() { return true; }
 };
 
 template<>
-struct Traits<unsigned> : public GenericTraits<unsigned>
+struct Traits<long> : public GenericTraits<long>
 {
 	static constexpr bool isTrivial() { return true; }
 };
+
+template<>
+struct Traits<long long> : public GenericTraits<long long>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
+template<>
+struct Traits<unsigned char> : public GenericTraits<unsigned char>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
+template<>
+struct Traits<unsigned short> : public GenericTraits<unsigned short>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
+template<>
+struct Traits<unsigned int> : public GenericTraits<unsigned int>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
+template<>
+struct Traits<unsigned long> : public GenericTraits<unsigned long>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
+template<>
+struct Traits<unsigned long long> : public GenericTraits<unsigned long long>
+{
+	static constexpr bool isTrivial() { return true; }
+};
+
 
 template<typename T>
 struct Traits<T*> : public GenericTraits<T*>

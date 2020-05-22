@@ -21,8 +21,6 @@ namespace B {
 #include "B/StringView.hpp"
 #include "B/IO/Stream.hpp"
 
-#include <type_traits>
-
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B

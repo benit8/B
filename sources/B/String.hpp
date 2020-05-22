@@ -38,14 +38,18 @@ public:
 	String(const char *str);
 	String(const char *str, usize length);
 	String(char c, usize n);
-	~String();
+	~String() = default;
 
 	const char *cStr() const { return data(); }
 	usize length() const { return size(); }
 
 	char &at(usize i);
+	char &first() { return at(0); }
+	char &last() { return at(length() - 1); }
 	char &operator [](usize i) { return data()[i]; }
 	const char &at(usize i) const;
+	const char &first() const { return at(0); }
+	const char &last() const { return at(length() - 1); }
 	const char &operator [](usize i) const { return data()[i]; }
 
 	void assign(String &&s);

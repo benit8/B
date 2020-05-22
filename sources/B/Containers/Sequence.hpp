@@ -15,6 +15,7 @@ namespace B {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "B/Common.hpp"
+#include "B/Traits.hpp"
 #include "B/Containers/Container.hpp"
 #include "B/IO/Print.hpp"
 
@@ -60,7 +61,7 @@ public:
 	virtual void clear() override
 	{
 		if (!null()) {
-			if constexpr (!std::is_trivial<T>::value) {
+			if constexpr (!Traits<T>::isTrivial()) {
 				for (usize i = 0; i < size(); ++i)
 					slot(i)->~T();
 			}
@@ -71,7 +72,7 @@ public:
 	virtual void reset()
 	{
 		if (!null()) {
-			if constexpr (!std::is_trivial<T>::value) {
+			if constexpr (!Traits<T>::isTrivial()) {
 				for (usize i = 0; i < size(); ++i)
 					slot(i)->~T();
 			}

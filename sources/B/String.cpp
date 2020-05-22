@@ -45,11 +45,6 @@ String::String(char c, usize n)
 	fill(c, n);
 }
 
-String::~String()
-{
-	reset();
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 char &String::at(usize i)
