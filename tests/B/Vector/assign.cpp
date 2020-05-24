@@ -1,82 +1,117 @@
-TEST("Vector::Vector()", []
+/*
+** B tests, 2020
+** Vector / assign.cpp
+*/
+
+#include "B/Containers/Vector.hpp"
+#include <criterion/criterion.h>
+
+using B::Vector;
+
+////////////////////////////////////////////////////////////////////////////////
+
+Test(Vector, EmptyConstructor)
 {
-	Vector<TYPE> v;
-	assert(v.size() == 0);
-	assert(v.capacity() >= Vector<TYPE>::minimumSize);
-	assert(v.data() != nullptr);
-});
+	Vector<uint> v;
 
-TEST("Vector::Vector(size_t [< minimumSize])", []
+	cr_expect_eq(v.size(), 0);
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+
+	cr_assert_not_null(v.data());
+}
+
+Test(Vector, SizeConstructor_LessThanMinimumSize)
 {
-	Vector<TYPE> v(4);
-	assert(v.capacity() >= Vector<TYPE>::minimumSize && v.capacity() >= 4);
-	assert(v.data() != nullptr);
-	assert(v.size() == 4);
-});
+	Vector<uint> v(4);
 
-TEST("Vector::Vector(size_t [> minimumSize])", []
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_expect_not_null(v.data());
+
+	cr_assert_geq(v.capacity(), 4);
+	cr_assert_eq(v.size(), 4);
+}
+
+Test(Vector, SizeConstructor_MoreThanMinimumSize)
 {
-	Vector<TYPE> v(14);
-	assert(v.capacity() >= Vector<TYPE>::minimumSize && v.capacity() >= 14);
-	assert(v.data() != nullptr);
-	assert(v.size() == 14);
-});
+	Vector<uint> v(14);
 
-TEST("Vector::Vector(size_t, const T &)", []
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_expect_not_null(v.data());
+
+	cr_assert_geq(v.capacity(), 14);
+	cr_assert_eq(v.size(), 14);
+}
+
+Test(Vector, FillConstructor)
 {
-	Vector<TYPE> v(4, 100);
-	assert(v.capacity() >= Vector<TYPE>::minimumSize && v.capacity() >= 4);
-	assert(v.data() != nullptr);
-	assert(v.size() == 4);
+	Vector<uint> v(4, 100);
 
-	assert((v[0] == v[1]) && (v[1] == v[2]) && (v[2] == v[3]) && (v[3] == 100));
-});
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_expect_not_null(v.data());
 
-TEST("Vector::Vector(const Vector &)", []
+	cr_assert_geq(v.capacity(), 4);
+	cr_assert_eq(v.size(), 4);
+
+	cr_assert((v[0] == v[1])
+	       && (v[1] == v[2])
+	       && (v[2] == v[3])
+	       && (v[3] == 100));
+}
+
+Test(Vector, CopyConstructor)
 {
-	Vector<TYPE> v1(6, 200);
-	Vector<TYPE> v2(v1);
-	assert(v2.capacity() >= v1.capacity());
-	assert(v2.data() != nullptr);
-	assert(v2.size() == v1.size());
+	Vector<uint> v1(6, 200);
+	Vector<uint> v2(v1);
 
-	assert((v2[0] == v2[1]) && (v2[1] == v2[2]) && (v2[2] == v2[3]) && (v2[3] == v2[4]) && (v2[4] == v2[5]) && (v2[5] == 200));
-});
+	cr_assert_geq(v2.capacity(), v1.capacity());
+	cr_assert_not_null(v2.data());
+	cr_assert_geq(v2.size(), v1.size());
 
-TEST("Vector::Vector(Vector &&)", []
+	cr_assert((v2[0] == v2[1])
+	       && (v2[1] == v2[2])
+	       && (v2[2] == v2[3])
+	       && (v2[3] == v2[4])
+	       && (v2[4] == v2[5])
+	       && (v2[5] == 200));
+}
+
+Test(Vector, MoveConstructor)
 {
-	Vector<TYPE> v1(5, 300);
-	Vector<TYPE> v2(std::move(v1));
+	Vector<uint> v1(5, 300);
+	Vector<uint> v2(std::move(v1));
 
-	assert(v2.capacity() >= Vector<TYPE>::minimumSize && v2.capacity() >= 5);
-	assert(v2.data() != nullptr);
-	assert(v2.size() == 5);
-	assert((v2[0] == v2[1]) && (v2[1] == v2[2]) && (v2[2] == v2[3]) && (v2[3] == v2[4]) && (v2[4] == 300));
+	cr_assert_geq(v2.capacity(), Vector<uint>::minimumSize);
+	cr_assert_geq(v2.capacity(), 5);
+	cr_assert_not_null(v2.data());
+	cr_assert_eq(v2.size(), 5);
 
-	// capacity freeing is up to the implementation
-	// assert(v1.capacity() == 0);
-	// assert(v1.data() == nullptr);
-	assert(v1.size() == 0);
-});
+	cr_assert((v2[0] == v2[1])
+	       && (v2[1] == v2[2])
+	       && (v2[2] == v2[3])
+	       && (v2[3] == v2[4])
+	       && (v2[4] == 300));
 
-TEST("Vector::Vector(std::initializer_list)", []
+	cr_expect_eq(v1.capacity(), 0);
+	cr_expect_eq(v1.size(), 0);
+	cr_expect_null(v1.data());
+}
+
+Test(Vector, InitializerListConstructor)
 {
-	Vector<TYPE> v({7, 6, 5, 4, 3, 2, 1});
+	Vector<uint> v({7, 6, 5, 4, 3, 2, 1});
 
-	assert(v.capacity() >= Vector<TYPE>::minimumSize && v.capacity() >= 7);
-	assert(v.data() != nullptr);
-	assert(v.size() == 7);
-});
+	cr_assert_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_assert_geq(v.capacity(), 7);
+	cr_assert_not_null(v.data());
+	cr_assert_eq(v.size(), 7);
+}
 
-TEST("Vector::~Vector()", []
+Test(Vector, Destructor)
 {
-	Vector<TYPE> v({1, 2, 3, 4, 5});
-	assert(v.size() == 5);
-	assert(v.capacity() >= v.size());
-	assert(v.data() != nullptr);
+	Vector<uint> v({1, 2, 3, 4, 5});
+	v.~Vector<uint>();
 
-	v.~Vector<TYPE>();
-	assert(v.size() == 0);
-	assert(v.capacity() == 0);
-	assert(v.data() == nullptr);
-});
+	cr_assert_eq(v.size(), 0);
+	cr_assert_eq(v.capacity(), 0);
+	cr_assert_null(v.data());
+}

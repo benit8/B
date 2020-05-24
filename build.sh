@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-buildDir=".build"
+buildDir="build"
 
 if [ ! -d "$buildDir" ]; then
 	mkdir "$buildDir"

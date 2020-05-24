@@ -13,7 +13,7 @@ NAME	=	tests
 SRCS	=	B/Directory/scan.cpp		\
 		B/Vector/assign.cpp		\
 		B/Vector/capacity.cpp		\
-		B/Vector/elAccess.cpp		\
+		B/Vector/elementAccess.cpp	\
 		B/Vector/modifiers.cpp		\
 		B/Vector/operations.cpp		\
 
@@ -26,7 +26,7 @@ CXXFLAGS	+=	-I../sources
 CXXFLAGS	+=	-W -Wall -Wextra
 CXXFLAGS	+=	-g3
 
-LDFLAGS		+=	-L../.build/ -lB
+LDFLAGS		+=	-L../build/ -lB
 LDFLAGS		+=	-lcriterion
 
 ################################################################################

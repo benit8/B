@@ -1,6 +1,8 @@
 # B
 My own C++ standard library, for learning purposes
 
+Includes unit tests, which require [Criterion](https://github.com/Snaipe/Criterion)
+
 ## Features
 
 #### Base
