@@ -33,6 +33,7 @@ SingleList<T>::SingleList(IT first, IT last)
 template <typename T>
 SingleList<T>::SingleList(std::initializer_list<T> il)
 {
+	assign(il.begin(), il.end());
 }
 
 template <typename T>

@@ -60,22 +60,15 @@ public:
 
 	virtual void clear() override
 	{
-		if (!null()) {
-			if constexpr (!Traits<T>::isTrivial()) {
-				for (usize i = 0; i < size(); ++i)
-					slot(i)->~T();
-			}
-		}
+		if (!null())
+			Type<T>::destruct(data(), size());
 		m_size = 0;
 	}
 
 	virtual void reset()
 	{
 		if (!null()) {
-			if constexpr (!Traits<T>::isTrivial()) {
-				for (usize i = 0; i < size(); ++i)
-					slot(i)->~T();
-			}
+			Type<T>::destruct(data(), size());
 			delete[] m_data;
 			m_data = nullptr;
 		}
@@ -105,6 +98,8 @@ public:
 			reserve(newSize);
 		if (newSize > size())
 			Type<T>::set(slot(size()), filler, newSize - size());
+		else // newSize < size()
+			Type<T>::destruct(slot(newSize), size() - newSize);
 		m_size = newSize;
 	}
 

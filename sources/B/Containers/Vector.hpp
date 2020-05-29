@@ -101,6 +101,7 @@ public:
 	Vector &operator =(const Vector &other) { assign(other); return *this; }
 	Vector &operator =(Vector &&other) { assign(std::move(other)); return *this; }
 	Vector &operator =(std::initializer_list<T> il) { assign(il); return *this; }
+
 	Vector &operator +=(const T &val) { append(val); return *this; }
 	Vector &operator +=(T &&val) { append(std::move(val)); return *this; }
 	Vector &operator +=(const Vector &other) { append(other); return *this; }
