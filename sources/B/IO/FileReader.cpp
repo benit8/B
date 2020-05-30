@@ -14,24 +14,24 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-FileReader::FileReader(int fd)
+FileReader::FileReader(int fd, OpenMode mode)
 {
-	int flags = fcntl(fd, F_GETFL);
-	if ((flags & O_RDONLY) == 0 && (flags & O_RDWR) == 0)
+	int fdMode = fcntl(fd, F_GETFL);
+	if ((fdMode & O_RDONLY) == 0 && (fdMode & O_RDWR) == 0)
 		throw std::runtime_error(format("FileReader::FileReader(%d): FD is not readable", fd));
 	else {
 		m_fd = fd;
-		m_flags = (OpenMode)flags;
+		m_mode = (OpenMode)fdMode | mode;
 	}
 }
 
-FileReader::FileReader(const String &filename, OpenMode flags)
+FileReader::FileReader(const String &filename, OpenMode mode)
 {
-	m_fd = ::open(filename.cStr(), int(flags & OpenMode::StandardFlags));
+	m_fd = ::open(filename.cStr(), int(mode & OpenMode::StandardFlags));
 	if (m_fd == -1)
-		throw std::runtime_error(format("FileReader::FileReader(%s, %o): open() failed", filename, (int)flags));
+		throw std::runtime_error(format("FileReader::FileReader(%s, %o): open() failed", filename, (int)mode));
 	else {
-		m_flags = flags;
+		m_mode = mode;
 	}
 }
 

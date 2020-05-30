@@ -51,6 +51,7 @@ PUBLIC
 	sources/B/FileSystem/Directory.hpp
 	sources/B/FileSystem/File.hpp
 	sources/B/FileSystem/Stat.hpp
+	sources/B/IO/Parser.hpp
 	sources/B/IO/Print.hpp
 	sources/B/IO/Reader.hpp
 	sources/B/IO/Stream.hpp
@@ -70,12 +71,12 @@ PRIVATE
 	sources/B/Containers/Vector.inl
 	sources/B/FileSystem/Directory.cpp
 	sources/B/FileSystem/Stat.cpp
-	sources/B/IO/Reader.cpp
-	sources/B/IO/FileReader.cpp
 	sources/B/IO/BufferReader.cpp
-	sources/B/IO/Writer.cpp
-	sources/B/IO/FileWriter.cpp
 	sources/B/IO/BufferWriter.cpp
+	sources/B/IO/FileReader.cpp
+	sources/B/IO/FileWriter.cpp
+	sources/B/IO/Reader.cpp
+	sources/B/IO/Writer.cpp
 	sources/B/Platform/Pipe.cpp
 	sources/B/Platform/Process.cpp
 	sources/B/Platform/Time.cpp

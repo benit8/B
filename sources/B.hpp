@@ -29,6 +29,7 @@
 #include "B/IO/Print.hpp"
 #include "B/IO/Reader.hpp"
 #include "B/IO/Writer.hpp"
+#include "B/IO/Parser.hpp"
 
 #include "B/Platform/Pipe.hpp"
 #include "B/Platform/Process.hpp"

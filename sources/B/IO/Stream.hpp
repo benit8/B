@@ -23,8 +23,14 @@ public:
 	virtual bool seek(SeekMode, isize pos) = 0;
 	virtual usize tell() = 0;
 
+	OpenMode mode() const { return m_mode; }
+	bool binary() const { return BitmaskEnum(m_mode).anyOf(OpenMode::Binary); }
+
 protected:
 	Stream() = default;
+
+protected:
+	OpenMode m_mode = OpenMode::NotOpen;
 };
 
 }

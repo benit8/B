@@ -12,14 +12,20 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-BufferReader::BufferReader(const Buffer &buffer)
+BufferReader::BufferReader(const Buffer &buffer, bool binary)
 : m_buffer(buffer)
-{}
+{
+	if (binary)
+		m_mode |= OpenMode::Binary;
+}
 
-BufferReader::BufferReader(StringView str)
+BufferReader::BufferReader(StringView str, bool binary)
 {
 	auto b = Buffer::wrap((const byte *)str.cStr(), str.length());
 	m_buffer = std::move(b);
+
+	if (binary)
+		m_mode |= OpenMode::Binary;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

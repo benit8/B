@@ -16,7 +16,7 @@ Test(Vector, AssignCopy)
 	Vector<uint> v2;
 
 	v2.assign(v1);
-	cr_assert(v1 == v2);
+	cr_assert_eq(v1, v2);
 }
 
 Test(Vector, AssignMove)
@@ -25,7 +25,8 @@ Test(Vector, AssignMove)
 	Vector<uint> v2;
 
 	v2.assign(std::move(v1));
-	cr_assert(v2.size() == 4 && v1.empty());
+	cr_assert_eq(v2.size(), 4);
+	cr_assert(v1.empty());
 }
 
 Test(Vector, AssignFill)
@@ -33,7 +34,9 @@ Test(Vector, AssignFill)
 	Vector<uint> v({1, 5, 2, 9});
 
 	v.assign(2, 10);
-	cr_assert(v.size() == 2 && v[0] == v[1] && v[1] == 10);
+	cr_assert_eq(v.size(), 2);
+	cr_assert_eq(v[0], 10);
+	cr_assert_eq(v[0], v[1]);
 }
 
 Test(Vector, AssignInitializerList)
