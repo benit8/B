@@ -85,5 +85,5 @@ Test(Parser, Floats)
 	EXPECTF(B::parse<double>("0.123"), 0.123);
 	EXPECTF(B::parse<double>("-456.12"), -456.12);
 	EXPECTF(B::parse<double>("0.600000"), 0.600000);
-	EXPECTF(B::parse<double>("0.720000"), 0.720000);
+	EXPECTF(B::parse<double>("-0.720000"), -0.720000);
 }

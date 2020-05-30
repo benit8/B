@@ -169,7 +169,7 @@ Reader &Reader::operator >>(f32 &n)
 	if (binary())
 		read(&n, sizeof(n));
 	else
-		n = parse<f32>(*this, 0);
+		n = parse<f32>(*this);
 	return *this;
 }
 
@@ -178,7 +178,7 @@ Reader &Reader::operator >>(f64 &n)
 	if (binary())
 		read(&n, sizeof(n));
 	else
-		n = parse<f64>(*this, 0);
+		n = parse<f64>(*this);
 	return *this;
 }
 
@@ -187,7 +187,7 @@ Reader &Reader::operator >>(f128 &n)
 	if (binary())
 		read(&n, sizeof(n));
 	else
-		n = parse<f128>(*this, 0);
+		n = parse<f128>(*this);
 	return *this;
 }
 
