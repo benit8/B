@@ -15,6 +15,7 @@ namespace B
 BufferReader::BufferReader(const Buffer &buffer, bool binary)
 : m_buffer(buffer)
 {
+	m_mode = OpenMode::ReadOnly;
 	if (binary)
 		m_mode |= OpenMode::Binary;
 }
@@ -23,6 +24,7 @@ BufferReader::BufferReader(StringView str, bool binary)
 {
 	auto b = Buffer::wrap((const byte *)str.cStr(), str.length());
 	m_buffer = std::move(b);
+	m_mode = OpenMode::ReadOnly;
 
 	if (binary)
 		m_mode |= OpenMode::Binary;
