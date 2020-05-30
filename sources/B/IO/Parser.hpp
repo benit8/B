@@ -44,19 +44,49 @@ T parse(Reader &rd, unsigned short base = 10)
 		rd.ignore();
 	}
 
+	// Helpers
+	auto parseDigit = [&] (char c) -> int {
+		int d = 0;
+		/**/ if (isdigit(c)) d = c - '0';
+		else if (islower(c)) d = c - ('a' - 10);
+		else if (isupper(c)) d = c - ('A' - 10);
+		else return -1;
+		return d >= base ? -1 : d;
+	};
+
 	// Parse base
-	if (base == 0) {
+	switch (base) {
+	case 0: // Auto determine if 0
 		if (!rd.peek('0'))
 			base = 10;
 		else {
 			rd.ignore();
-			if (tolower(rd.peek()) != 'x')
-				base = 8;
-			else {
+			if (tolower(rd.peek()) == 'x') {
 				base = 16;
 				rd.ignore();
 			}
+			else if (tolower(rd.peek()) == 'b') {
+				base = 2;
+				rd.ignore();
+			}
+			else {
+				base = 8;
+			}
 		}
+		break;
+	case 2: [[fallthrough]];
+	case 16:
+		// Skip base prefixes if they're here
+		if (rd.peek('0')) {
+			rd.ignore();
+			if (tolower(rd.peek()) == (base == 2 ? 'b' : 'x'))
+				rd.ignore();
+			else if (parseDigit(rd.peek()) < 0)
+				return T();
+		}
+		break;
+	default:
+		break;
 	}
 	/// TODO: parse exponents
 	// char exponentChar = base == 10 ? 'e' : 'p';
@@ -69,22 +99,13 @@ T parse(Reader &rd, unsigned short base = 10)
 	else
 		maxAfterCutoff = (positive ? Traits<T>::max() : Traits<T>::lowest()) % base;
 
-	// Helpers
-	auto parseDigit = [base] (char c) -> int {
-		int d = 0;
-		/**/ if (isdigit(c)) d = c - '0';
-		else if (islower(c)) d = c - ('a' - 10);
-		else if (isupper(c)) d = c - ('A' - 10);
-		else return -1;
-		return static_cast<T>(d) >= base ? -1 : d;
-	};
-
 	auto canAppendDigit = [&] (int digit) -> bool {
 		if (positive ? (num < cutoff) : (num > cutoff)) // is below cutoff?
 			return true;
 		return num == cutoff && digit <= maxAfterCutoff;
 	};
 
+	// Parsing
 	bool pastDecimal = false;
 	int exponent = 0;
 	for (;;) {
@@ -112,25 +133,24 @@ T parse(Reader &rd, unsigned short base = 10)
 	// 	rd.ignore();
 	// }
 
+	// Treat decimal part, if applies
 	if constexpr (Traits<T>::isDecimal()) {
 		if (num == 0 || exponent <= Traits<T>::minExponent())
 			return positive ? 0.0 : -0.0;
 		else if (exponent >= Traits<T>::maxExponent())
 			return positive ? __builtin_huge_val() : -__builtin_huge_val();
 
-		T value = static_cast<T>(num);
 		if (exponent < 0) {
 			for (int i = 0; i < -exponent; ++i)
-				value /= base;
+				num /= base;
 		}
 		else if (exponent > 0) {
 			for (int i = 0; i < exponent; ++i)
-				value *= base;
+				num *= base;
 		}
-		return value;
 	}
 
-	return static_cast<T>(num);
+	return num;
 }
 
 }

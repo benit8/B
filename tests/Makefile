@@ -10,7 +10,8 @@ CC	=	g++
 
 NAME	=	tests
 
-SRCS	=	B/Directory/scan.cpp		\
+SRCS	=	B/Parser.cpp			\
+		B/Directory/scan.cpp		\
 		B/Vector/assign.cpp		\
 		B/Vector/capacity.cpp		\
 		B/Vector/elementAccess.cpp	\
