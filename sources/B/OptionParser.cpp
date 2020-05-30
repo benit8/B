@@ -4,7 +4,7 @@
 */
 
 #include "B/OptionParser.hpp"
-#include "B/NumericLimits.hpp"
+#include "B/Traits.hpp"
 
 #include <cassert>
 #include <getopt.h>
@@ -276,7 +276,7 @@ void OptionParser::addArgument(Vector<String> &values, const char *help, const c
 		help,
 		name,
 		required ? 1 : 0,
-		NumericLimits<int>::max(),
+		Traits<int>::max(),
 		[&values] (const char *s) {
 			values.append(s);
 			return true;

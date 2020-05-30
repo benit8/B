@@ -32,7 +32,6 @@ PUBLIC
 	sources/B/Buffer.hpp
 	sources/B/Common.hpp
 	sources/B/EnumOperators.hpp
-	sources/B/NumericLimits.hpp
 	sources/B/OptionParser.hpp
 	sources/B/String.hpp
 	sources/B/StringView.hpp

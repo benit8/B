@@ -11,7 +11,6 @@ Includes unit tests, which require [Criterion](https://github.com/Snaipe/Criteri
 - [x] String
 - [x] StringView
 - [x] Enum operators
-- [x] Numeric limits
 - [x] Option parser
 
 #### Data structures
