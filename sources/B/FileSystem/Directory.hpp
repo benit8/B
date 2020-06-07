@@ -28,22 +28,36 @@ class Directory
 public:
 	struct Entry
 	{
-		Entry();
-		Entry(struct dirent *e);
-		Entry &operator =(struct dirent *e);
-
 		String name;
 		File::Type type = File::Type::Unknown;
 		ino_t inode = 0;
 		off_t offset = 0;
+
+		Entry() = default;
+
+		explicit Entry(struct dirent *e)
+		: name(e->d_name)
+		, type(static_cast<File::Type>(e->d_type))
+		, inode(e->d_ino)
+		, offset(e->d_off)
+		{}
+
+		Entry &operator =(struct dirent *e)
+		{
+			name.assign(e->d_name);
+			type = static_cast<File::Type>(e->d_type);
+			inode = e->d_ino;
+			offset = e->d_off;
+			return *this;
+		}
 	};
 
-	static std::function<bool(const Entry &)> defaultScanFilter;
-	static std::function<int(const Entry &, const Entry &)> defaultScanCompare;
+	using Filter = std::function<bool(const Entry &)>;
+	using Comparator = std::function<int(const Entry &, const Entry &)>;
 
 public:
-	Directory(const String &name);
-	Directory(int fd);
+	explicit Directory(const String &name);
+	explicit Directory(int fd);
 	~Directory();
 
 	bool readEntry(Entry &entry);
@@ -52,9 +66,10 @@ public:
 	long tell();
 	int fd();
 
-	static Vector<Entry> scan(const StringView &dir,
-	                          std::function<bool(const Entry &)> filter = defaultScanFilter,
-	                          std::function<int(const Entry &, const Entry &)> compar = defaultScanCompare);
+	static Filter defaultScanFilter;
+	static Filter hiddenScanFilter;
+	static Comparator defaultScanCompare;
+	static Vector<Entry> scan(const String &dir, Filter filter = defaultScanFilter, Comparator compar = defaultScanCompare);
 
 private:
 	DIR *m_dirp = NULL;

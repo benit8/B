@@ -12,25 +12,6 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Directory::Entry::Entry()
-{}
-
-Directory::Entry::Entry(struct dirent *e)
-{
-	*this = e;
-}
-
-Directory::Entry &Directory::Entry::operator =(struct dirent *e)
-{
-	this->name = String(&e->d_name[0]);
-	this->type = static_cast<File::Type>(e->d_type);
-	this->inode = e->d_ino;
-	this->offset = e->d_off;
-	return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 Directory::Directory(const String &name)
 {
 	m_dirp = opendir(name.cStr());
@@ -80,10 +61,10 @@ int Directory::fd()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Vector<Directory::Entry> Directory::scan(const StringView &dir, std::function<bool(const Entry &)> filter, std::function<int(const Entry &, const Entry &)> compar)
+Vector<Directory::Entry> Directory::scan(const String &dirName, Directory::Filter filter, Directory::Comparator compar)
 {
 	struct dirent **ents;
-	int n = scandir(dir.cStr(), &ents, NULL, NULL);
+	int n = scandir(dirName.cStr(), &ents, NULL, NULL);
 	if (n < 0)
 		return {};
 
@@ -101,12 +82,17 @@ Vector<Directory::Entry> Directory::scan(const StringView &dir, std::function<bo
 	return entries;
 }
 
-std::function<bool(const Directory::Entry &)> Directory::defaultScanFilter = [] (const Directory::Entry &)
+Directory::Filter Directory::defaultScanFilter = [] (const Directory::Entry &e)
+{
+	return e.name[0] != '.';
+};
+
+Directory::Filter Directory::hiddenScanFilter = [] (const Directory::Entry &)
 {
 	return true;
 };
 
-std::function<int(const Directory::Entry &, const Directory::Entry &)> Directory::defaultScanCompare = [] (const Directory::Entry &a, const Directory::Entry &b)
+Directory::Comparator Directory::defaultScanCompare = [] (const Directory::Entry &a, const Directory::Entry &b)
 {
 	return a.name.compare(b.name);
 };
