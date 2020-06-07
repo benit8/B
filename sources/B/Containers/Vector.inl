@@ -365,17 +365,15 @@ void Vector<T>::filter(std::function<bool(const T &val)> callback)
 template <typename T>
 void Vector<T>::sort()
 {
-	static auto cmp = [](const T &a, const T &b) -> int {
-		return a < b ? -1 : (a == b ? 0 : 1);
-	};
-
-	this->sort(cmp);
+	this->sort([] (const T &a, const T &b) {
+		return a < b;
+	});
 }
 
 template <typename T>
-void Vector<T>::sort(std::function<int(const T&, const T&)> cmp)
+void Vector<T>::sort(std::function<bool(const T&, const T&)> cmp)
 {
-	std::function<void(usize, usize)> partition = [&](usize start, usize end)
+	std::function<void(usize, usize)> partition = [&] (usize start, usize end)
 	{
 		if (start >= end)
 			return;
@@ -383,9 +381,8 @@ void Vector<T>::sort(std::function<int(const T&, const T&)> cmp)
 		usize size = end - start + 1;
 		if (size <= 1)
 			return;
-
 		else if (size == 2) {
-			if (cmp(this->m_data[end], this->m_data[start]) < 0)
+			if (cmp(this->m_data[end], this->m_data[start]))
 				std::swap(this->m_data[start], this->m_data[end]);
 			return;
 		}
@@ -393,8 +390,8 @@ void Vector<T>::sort(std::function<int(const T&, const T&)> cmp)
 		usize i, j, p = start + size / 2;
 		auto pivot = this->m_data[p];
 		for (i = start, j = end; ; ++i, --j) {
-			while (cmp(this->m_data[i], pivot) < 0) ++i;
-			while (cmp(pivot, this->m_data[j]) < 0) --j;
+			while (cmp(this->m_data[i], pivot)) ++i;
+			while (cmp(pivot, this->m_data[j])) --j;
 
 			if (i >= j)
 				break;
@@ -435,7 +432,7 @@ void Vector<T>::reverse()
 }
 
 template <typename T>
-usize Vector<T>::find(const T &val, usize pos)
+usize Vector<T>::find(const T &val, usize pos) const
 {
 	if (pos >= this->size())
 		return Sequence<T>::max;
@@ -448,7 +445,7 @@ usize Vector<T>::find(const T &val, usize pos)
 }
 
 template <typename T>
-usize Vector<T>::find(std::function<bool(const T &)> callback, usize pos)
+usize Vector<T>::find(std::function<bool(const T &)> callback, usize pos) const
 {
 	if (pos >= this->size())
 		return Sequence<T>::max;
@@ -461,7 +458,7 @@ usize Vector<T>::find(std::function<bool(const T &)> callback, usize pos)
 }
 
 template <typename T>
-usize Vector<T>::findLast(const T &val, usize pos)
+usize Vector<T>::findLast(const T &val, usize pos) const
 {
 	if (pos >= this->size())
 		pos = this->size() - 1;
@@ -478,7 +475,7 @@ usize Vector<T>::findLast(const T &val, usize pos)
 }
 
 template <typename T>
-usize Vector<T>::findLast(std::function<bool(const T &)> callback, usize pos)
+usize Vector<T>::findLast(std::function<bool(const T &)> callback, usize pos) const
 {
 	if (pos >= this->size())
 		pos = this->size() - 1;
@@ -497,7 +494,7 @@ usize Vector<T>::findLast(std::function<bool(const T &)> callback, usize pos)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-bool Vector<T>::operator ==(const Vector<T> &other)
+bool Vector<T>::operator ==(const Vector<T> &other) const
 {
 	if (this->size() != other.size())
 		return false;
@@ -509,7 +506,7 @@ bool Vector<T>::operator ==(const Vector<T> &other)
 }
 
 template <typename T>
-bool Vector<T>::operator ==(std::initializer_list<T> il)
+bool Vector<T>::operator ==(std::initializer_list<T> il) const
 {
 	if (this->size() != il.size())
 		return false;
@@ -521,13 +518,13 @@ bool Vector<T>::operator ==(std::initializer_list<T> il)
 }
 
 template <typename T>
-bool Vector<T>::operator !=(const Vector<T> &other)
+bool Vector<T>::operator !=(const Vector<T> &other) const
 {
 	return !(*this == other);
 }
 
 template <typename T>
-bool Vector<T>::operator !=(std::initializer_list<T> il)
+bool Vector<T>::operator !=(std::initializer_list<T> il) const
 {
 	return !(*this == il);
 }

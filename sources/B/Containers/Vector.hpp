@@ -87,15 +87,15 @@ public:
 	void apply(std::function<void(T &)> f);
 	void filter(std::function<bool(const T &)> f);
 	void sort();
-	void sort(std::function<int(const T&, const T&)> cmp);
+	void sort(std::function<bool(const T&, const T&)> cmp);
 	void swap(Vector &other);
 	void shuffle();
 	void reverse();
 
-	usize find(const T &val, usize pos = 0);
-	usize find(std::function<bool(const T &)> f, usize pos = 0);
-	usize findLast(const T &val, usize pos = Sequence<T>::max);
-	usize findLast(std::function<bool(const T &)> f, usize pos = Sequence<T>::max);
+	usize find(const T &val, usize pos = 0) const;
+	usize find(std::function<bool(const T &)> f, usize pos = 0) const;
+	usize findLast(const T &val, usize pos = Sequence<T>::max) const;
+	usize findLast(std::function<bool(const T &)> f, usize pos = Sequence<T>::max) const;
 
 
 	Vector &operator =(const Vector &other) { assign(other); return *this; }
@@ -111,10 +111,10 @@ public:
 	T &operator [](usize i) { return data()[i]; }
 	const T &operator [](usize i) const { return data()[i]; }
 
-	bool operator ==(const Vector &other);
-	bool operator ==(std::initializer_list<T> il);
-	bool operator !=(const Vector &other);
-	bool operator !=(std::initializer_list<T> il);
+	bool operator ==(const Vector &other) const;
+	bool operator ==(std::initializer_list<T> il) const;
+	bool operator !=(const Vector &other) const;
+	bool operator !=(std::initializer_list<T> il) const;
 
 private:
 	friend Iterator;

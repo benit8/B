@@ -44,12 +44,11 @@ Test(Vector, AssignInitializerList)
 	Vector<uint> v(5, 10);
 
 	v.assign({1, 5, 9, 7});
-	cr_assert(v.size() == 4 &&
-		v[0] == 1 &&
-		v[1] == 5 &&
-		v[2] == 9 &&
-		v[3] == 7
-	);
+	cr_assert_eq(v.size(), 4);
+	cr_assert(v[0] == 1 &&
+	          v[1] == 5 &&
+	          v[2] == 9 &&
+	          v[3] == 7);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,17 +59,18 @@ Test(Vector, AppendElementCopy)
 	cr_assert(v.empty());
 
 	v.append(uint(4));
-	cr_assert(v.size() == 1);
-	cr_assert(v[0] == 4);
+	cr_assert_eq(v.size(), 1);
+	cr_assert_eq(v[0], 4);
 
 	v.append(2, 7);
-	cr_assert(v.size() == 8);
-	cr_assert(v[0] == 4 && v[7] == 2);
+	cr_assert_eq(v.size(), 8);
+	cr_assert_eq(v[0], 4);
+	cr_assert_eq(v[7], 2);
 
 	v.append(uint(8));
-	cr_assert(v.size() == 9);
-	cr_assert(v.capacity() >= 9);
-	cr_assert(v[8] == 8);
+	cr_assert_eq(v.size(), 9);
+	cr_assert_geq(v.capacity(), 9);
+	cr_assert_eq(v[8], 8);
 }
 
 Test(Vector, AppendElementMove)
@@ -79,8 +79,8 @@ Test(Vector, AppendElementMove)
 	uint i = 5;
 	v.append(std::move(i));
 
-	cr_assert(v.size() == 4);
-	cr_assert(v[3] == 5);
+	cr_assert_eq(v.size(), 4);
+	cr_assert_eq(v[3], 5);
 }
 
 Test(Vector, AppendVectorCopy)
@@ -90,8 +90,8 @@ Test(Vector, AppendVectorCopy)
 
 	v1.append(v2);
 
-	cr_assert(v1 == Vector<uint>({4, 5, 6, 1, 2, 3}));
-	cr_assert(v2 == Vector<uint>({1, 2, 3}));
+	cr_assert_eq(v1, Vector<uint>({4, 5, 6, 1, 2, 3}));
+	cr_assert_eq(v2, Vector<uint>({1, 2, 3}));
 }
 
 Test(Vector, AppendVectorMove)
@@ -101,7 +101,7 @@ Test(Vector, AppendVectorMove)
 
 	v1.append(std::move(v2));
 
-	cr_assert(v1 == Vector<uint>({4, 5, 6, 1, 2, 3}));
+	cr_assert_eq(v1, Vector<uint>({4, 5, 6, 1, 2, 3}));
 	cr_assert(v2.empty());
 }
 
@@ -111,7 +111,7 @@ Test(Vector, AppendInitializerList)
 
 	v1.append({1, 2, 3});
 
-	cr_assert(v1 == Vector<uint>({4, 5, 6, 1, 2, 3}));
+	cr_assert_eq(v1, Vector<uint>({4, 5, 6, 1, 2, 3}));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -122,17 +122,18 @@ Test(Vector, PrependElementCopy)
 	cr_assert(v.empty());
 
 	v.prepend(uint(4));
-	cr_assert(v.size() == 1);
-	cr_assert(v[0] == 4);
+	cr_assert_eq(v.size(), 1);
+	cr_assert_eq(v[0], 4);
 
 	v.prepend(2, 7);
-	cr_assert(v.size() == 8);
-	cr_assert(v[0] == 2 && v[7] == 4);
+	cr_assert_eq(v.size(), 8);
+	cr_assert_eq(v[0], 2);
+	cr_assert_eq(v[7], 4);
 
 	v.prepend(uint(8));
-	cr_assert(v.size() == 9);
-	cr_assert(v.capacity() >= 9);
-	cr_assert(v[0] == 8);
+	cr_assert_eq(v.size(), 9);
+	cr_assert_geq(v.capacity(), 9);
+	cr_assert_eq(v[0], 8);
 }
 
 Test(Vector, PrependElementMove)
@@ -141,8 +142,8 @@ Test(Vector, PrependElementMove)
 	uint i = 5;
 	v.prepend(std::move(i));
 
-	cr_assert(v.size() == 4);
-	cr_assert(v[0] == 5);
+	cr_assert_eq(v.size(), 4);
+	cr_assert_eq(v[0], 5);
 }
 
 Test(Vector, PrependVectorCopy)
@@ -152,8 +153,8 @@ Test(Vector, PrependVectorCopy)
 
 	v1.prepend(v2);
 
-	cr_assert(v1 == Vector<uint>({1, 2, 3, 4, 5, 6}));
-	cr_assert(v2 == Vector<uint>({1, 2, 3}));
+	cr_assert_eq(v1, Vector<uint>({1, 2, 3, 4, 5, 6}));
+	cr_assert_eq(v2, Vector<uint>({1, 2, 3}));
 }
 
 Test(Vector, PrependVectorMove)
@@ -163,7 +164,7 @@ Test(Vector, PrependVectorMove)
 
 	v1.prepend(std::move(v2));
 
-	cr_assert(v1 == Vector<uint>({1, 2, 3, 4, 5, 6}));
+	cr_assert_eq(v1, Vector<uint>({1, 2, 3, 4, 5, 6}));
 	cr_assert(v2.empty());
 }
 
@@ -173,7 +174,7 @@ Test(Vector, PrependInitializerList)
 
 	v1.prepend({1, 2, 3});
 
-	cr_assert(v1 == Vector<uint>({1, 2, 3, 4, 5, 6}));
+	cr_assert_eq(v1, Vector<uint>({1, 2, 3, 4, 5, 6}));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -183,37 +184,37 @@ Test(Vector, InsertElementCopy)
 	// One element, begin
 	Vector<uint> v1({5, 8, 9, 3, 1});
 	v1.insert(0, uint(0));
-	cr_assert(v1 == Vector<uint>({0, 5, 8, 9, 3, 1}));
+	cr_assert_eq(v1, Vector<uint>({0, 5, 8, 9, 3, 1}));
 
 	// One element, end
 	Vector<uint> v2({5, 8, 9, 3, 1});
 	v2.insert(5, uint(0));
-	cr_assert(v2 == Vector<uint>({5, 8, 9, 3, 1, 0}));
+	cr_assert_eq(v2, Vector<uint>({5, 8, 9, 3, 1, 0}));
 
 	// One element, anywhere
 	Vector<uint> v3({5, 8, 9, 3, 1});
 	v3.insert(2, uint(0));
-	cr_assert(v3 == Vector<uint>({5, 8, 0, 9, 3, 1}));
+	cr_assert_eq(v3, Vector<uint>({5, 8, 0, 9, 3, 1}));
 
 	// Multiple elements, begin
 	Vector<uint> v4({5, 8, 9, 3, 1});
 	v4.insert(0, 0, 5);
-	cr_assert(v4 == Vector<uint>({0, 0, 0, 0, 0, 5, 8, 9, 3, 1}));
+	cr_assert_eq(v4, Vector<uint>({0, 0, 0, 0, 0, 5, 8, 9, 3, 1}));
 
 	// Multiple elements, end
 	Vector<uint> v5({5, 8, 9, 3, 1});
 	v5.insert(5, 0, 5);
-	cr_assert(v5 == Vector<uint>({5, 8, 9, 3, 1, 0, 0, 0, 0, 0}));
+	cr_assert_eq(v5, Vector<uint>({5, 8, 9, 3, 1, 0, 0, 0, 0, 0}));
 
 	// Multiple elements, anywhere
 	Vector<uint> v6({5, 8, 9, 3, 1});
 	v6.insert(2, 0, 5);
-	cr_assert(v6 == Vector<uint>({5, 8, 0, 0, 0, 0, 0, 9, 3, 1}));
+	cr_assert_eq(v6, Vector<uint>({5, 8, 0, 0, 0, 0, 0, 9, 3, 1}));
 
 	// Out of range
 	Vector<uint> v7({5, 8, 9, 3, 1});
 	v7.insert(16, uint(0));
-	cr_assert(v7 == Vector<uint>({5, 8, 9, 3, 1}));
+	cr_assert_eq(v7, Vector<uint>({5, 8, 9, 3, 1}));
 }
 
 Test(Vector, InsertElementMove)
@@ -228,9 +229,9 @@ Test(Vector, InsertVectorCopy)
 
 	v1.insert(2, v2);
 
-	cr_assert(v1.size() == 10);
-	cr_assert(v2.size() == 5);
-	cr_assert(v1 == Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
+	cr_assert_eq(v1.size(), 10);
+	cr_assert_eq(v2.size(), 5);
+	cr_assert_eq(v1, Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
 }
 
 Test(Vector, InsertVectorMove)
@@ -240,9 +241,9 @@ Test(Vector, InsertVectorMove)
 
 	v1.insert(2, std::move(v2));
 
-	cr_assert(v1.size() == 10);
-	cr_assert(v2.size() == 0);
-	cr_assert(v1 == Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
+	cr_assert_eq(v1.size(), 10);
+	cr_assert_eq(v2.size(), 0);
+	cr_assert_eq(v1, Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
 }
 
 Test(Vector, InsertInitializerList)
@@ -251,8 +252,8 @@ Test(Vector, InsertInitializerList)
 
 	v1.insert(2, {5, 6, 7, 8, 9});
 
-	cr_assert(v1.size() == 10);
-	cr_assert(v1 == Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
+	cr_assert_eq(v1.size(), 10);
+	cr_assert_eq(v1, Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -285,9 +286,13 @@ Test(Vector, EmplaceBack)
 Test(Vector, Clear)
 {
 	Vector<uint> v({1, 2, 3, 4, 5});
-	cr_assert(v.capacity() >= Vector<uint>::minimumSize && v.size() == 5);
+	cr_assert_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_assert_eq(v.size(), 5);
+
 	v.clear();
-	cr_assert(v.capacity() >= Vector<uint>::minimumSize && v.size() == 0);
+
+	cr_assert_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_assert_eq(v.size(), 0);
 }
 
 Test(Vector, Erase)
@@ -295,33 +300,33 @@ Test(Vector, Erase)
 	// Simple erase
 	Vector<uint> v1({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 	v1.erase(0);
-	cr_assert(v1 == Vector<uint>({2, 3, 4, 5, 6, 7, 8, 9, 10}));
+	cr_assert_eq(v1, Vector<uint>({2, 3, 4, 5, 6, 7, 8, 9, 10}));
 
 	// Erase length
 	Vector<uint> v2({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 	v2.erase(6, 4);
-	cr_assert(v2 == Vector<uint>({1, 2, 3, 4, 5, 6}));
+	cr_assert_eq(v2, Vector<uint>({1, 2, 3, 4, 5, 6}));
 
 	// Erase length, not at the end (test memmove())
 	Vector<uint> v3({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 	v3.erase(2, 4);
-	cr_assert(v3 == Vector<uint>({1, 2, 7, 8, 9, 10}));
+	cr_assert_eq(v3, Vector<uint>({1, 2, 7, 8, 9, 10}));
 
 	// Erase too much
 	Vector<uint> v4({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 	v4.erase(5, 16);
-	cr_assert(v4 == Vector<uint>({1, 2, 3, 4, 5}));
+	cr_assert_eq(v4, Vector<uint>({1, 2, 3, 4, 5}));
 }
 
 Test(Vector, Filter)
 {
 	Vector<uint> v({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 
-	v.filter([](const uint &a) {
+	v.filter([] (const uint &a) {
 		return a & 1;
 	});
 
-	cr_assert(v == Vector<uint>({1, 3, 5, 7, 9}));
+	cr_assert_eq(v, Vector<uint>({1, 3, 5, 7, 9}));
 }
 
 Test(Vector, Sort)
@@ -331,10 +336,7 @@ Test(Vector, Sort)
 	v.sort();
 
 	for (size_t i = 1; i < v.size(); ++i) {
-		if (v[i - 1] > v[i]) {
-			std::cerr << v << std::endl;
-			cr_assert(!"Vector not sorted");
-		}
+		cr_expect_leq(v[i - 1], v[i]);
 	}
 }
 
@@ -342,27 +344,25 @@ Test(Vector, SortWithComparator)
 {
 	Vector<uint> v({3, 7, 1, 6, 2, 5, 8, 10, 9, 4});
 
-	v.sort([] (const uint &a, const uint &b) -> int {
-		bool ao = a & 1;
-		bool bo = b & 1;
-
-		if (ao && !bo) return -1;
-		if (!ao && bo) return 1;
-		return a < b ? -1 : (a == b ? 0 : 1);
+	v.sort([] (const uint &a, const uint &b) -> bool {
+		if ((a & 1) != (b & 1))
+			return a & 1;
+		return a < b;
 	});
 
-	cr_assert(v == Vector<uint>({1, 3, 5, 7, 9, 2, 4, 6, 8, 10}));
+	cr_assert_eq(v, Vector<uint>({1, 3, 5, 7, 9, 2, 4, 6, 8, 10}));
 }
 
 Test(Vector, Swap)
 {
 	Vector<uint> v1({0, 2, 4, 6, 8}), v2({1, 3, 5, 7, 9}), v1_(v1), v2_(v2);
-	cr_assert(v1 == v1_ && v2 == v2_);
+	cr_assert_eq(v1, v1_);
+	cr_assert_eq(v2, v2_);
 
 	v1.swap(v2);
 
-	cr_assert(v2 == v1_);
-	cr_assert(v1 == v2_);
+	cr_assert_eq(v2, v1_);
+	cr_assert_eq(v1, v2_);
 }
 
 Test(Vector, Shuffle)
@@ -372,7 +372,7 @@ Test(Vector, Shuffle)
 
 	v.shuffle();
 
-	cr_assert(v != w);
+	cr_assert_neq(v, w);
 }
 
 Test(Vector, Reverse)
@@ -381,5 +381,5 @@ Test(Vector, Reverse)
 
 	v.reverse();
 
-	cr_assert(v == Vector<uint>({9, 8, 7, 6, 5, 4, 3, 2, 1, 0}));
+	cr_assert_eq(v, Vector<uint>({9, 8, 7, 6, 5, 4, 3, 2, 1, 0}));
 }
