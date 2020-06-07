@@ -3,30 +3,39 @@
 ## CMakeLists.txt
 ##
 
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
-cmake_policy(SET CMP0076 NEW)
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(B VERSION 0.1.0 LANGUAGES CXX)
-add_library(B)
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
+	cmake_policy(SET CMP0076 NEW)
+endif()
 
-target_compile_features(B
-PRIVATE
-	cxx_std_17
+project(
+	"B"
+	VERSION 0.1.0
+	LANGUAGES CXX
 )
 
-target_compile_options(B
-PRIVATE
+add_library(${PROJECT_NAME})
+
+target_compile_features(${PROJECT_NAME}
+PUBLIC
+	cxx_std_20
+)
+
+target_compile_options(${PROJECT_NAME}
+PUBLIC
 	-fPIC
-	-W -Wall -Wextra
+	-Wall -Wextra
+PRIVATE
 	-g3
 )
 
-target_include_directories(B
+target_include_directories(${PROJECT_NAME}
 PUBLIC
 	./sources
 )
 
-target_sources(B
+target_sources(${PROJECT_NAME}
 PUBLIC
 	sources/B.hpp
 	sources/B/Buffer.hpp
@@ -81,3 +90,5 @@ PRIVATE
 	sources/B/Platform/Process.cpp
 	sources/B/Platform/Time.cpp
 )
+
+add_subdirectory(tests)
