@@ -1,5 +1,5 @@
 ##
-## Blib Tests, 2020
+## B Tests, 2020
 ## CMakeLists.txt
 ##
 
@@ -34,13 +34,14 @@ PUBLIC
 
 target_sources(${PROJECT_NAME}
 PUBLIC
-	B/Parser.cpp
-	B/Directory/scan.cpp
-	B/Vector/assign.cpp
-	B/Vector/capacity.cpp
-	B/Vector/elementAccess.cpp
-	B/Vector/modifiers.cpp
-	B/Vector/operations.cpp
+	sources/Directory.cpp
+	sources/Parser.cpp
+
+	sources/Vector/Assign.cpp
+	sources/Vector/Capacity.cpp
+	sources/Vector/ElementAccess.cpp
+	sources/Vector/Modifiers.cpp
+	sources/Vector/Operations.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

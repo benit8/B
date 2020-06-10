@@ -1,6 +1,6 @@
 /*
 ** B tests, 2020
-** Vector / modifiers.cpp
+** Vector / Modifiers.cpp
 */
 
 #include "B/Containers/Vector.hpp"

@@ -1,6 +1,6 @@
 /*
 ** B tests, 2020
-** Vector / elementAccess.cpp
+** Vector / ElementAccess.cpp
 */
 
 #include "B/Containers/Vector.hpp"

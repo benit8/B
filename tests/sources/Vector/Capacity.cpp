@@ -1,6 +1,6 @@
 /*
 ** B tests, 2020
-** Vector / capacity.cpp
+** Vector / Capacity.cpp
 */
 
 #include "B/Containers/Vector.hpp"
