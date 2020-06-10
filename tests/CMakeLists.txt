@@ -37,12 +37,7 @@ PUBLIC
 	sources/Directory.cpp
 	sources/Parser.cpp
 	sources/SingleList.cpp
-
-	sources/Vector/Assign.cpp
-	sources/Vector/Capacity.cpp
-	sources/Vector/ElementAccess.cpp
-	sources/Vector/Modifiers.cpp
-	sources/Vector/Operations.cpp
+	sources/Vector.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

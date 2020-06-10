@@ -285,24 +285,21 @@ template <typename T>
 template <typename... Args>
 void Vector<T>::emplace(usize pos, Args&&... args)
 {
-	T val(std::forward<Args>(args)...);
-	this->insert(pos, std::move(val));
+	this->insert(pos, T(std::forward<Args>(args)...));
 }
 
 template <typename T>
 template <typename... Args>
 void Vector<T>::emplaceFront(Args&&... args)
 {
-	T val(std::forward<Args>(args)...);
-	this->prepend(std::move(val));
+	this->prepend(T(std::forward<Args>(args)...));
 }
 
 template <typename T>
 template <typename... Args>
 void Vector<T>::emplaceBack(Args&&... args)
 {
-	T val(std::forward<Args>(args)...);
-	this->append(std::move(val));
+	this->append(T(std::forward<Args>(args)...));
 }
 
 template <typename T>
@@ -329,9 +326,7 @@ void Vector<T>::erase(usize pos, usize len)
 template <typename T>
 void Vector<T>::shift()
 {
-	// T value = std::move(this->front());
 	this->erase(0, 1);
-	// return value;
 }
 
 template <typename T>

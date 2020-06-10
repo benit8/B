@@ -1,6 +1,6 @@
 /*
 ** B tests, 2020
-** Vector / Modifiers.cpp
+** Vector / Assign.cpp
 */
 
 #include "B/Containers/Vector.hpp"
@@ -9,6 +9,318 @@
 using B::Vector;
 
 ////////////////////////////////////////////////////////////////////////////////
+
+Test(Vector, EmptyConstructor)
+{
+	Vector<uint> v;
+
+	cr_expect_eq(v.size(), 0);
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+
+	cr_assert_not_null(v.data());
+}
+
+Test(Vector, SizeConstructor_LessThanMinimumSize)
+{
+	Vector<uint> v(4);
+
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_expect_not_null(v.data());
+
+	cr_assert_geq(v.capacity(), 4);
+	cr_assert_eq(v.size(), 4);
+}
+
+Test(Vector, SizeConstructor_MoreThanMinimumSize)
+{
+	Vector<uint> v(14);
+
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_expect_not_null(v.data());
+
+	cr_assert_geq(v.capacity(), 14);
+	cr_assert_eq(v.size(), 14);
+}
+
+Test(Vector, FillConstructor)
+{
+	Vector<uint> v(4, 100);
+
+	cr_expect_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_expect_not_null(v.data());
+
+	cr_assert_geq(v.capacity(), 4);
+	cr_assert_eq(v.size(), 4);
+
+	cr_assert((v[0] == v[1])
+	       && (v[1] == v[2])
+	       && (v[2] == v[3])
+	       && (v[3] == 100));
+}
+
+Test(Vector, CopyConstructor)
+{
+	Vector<uint> v1(6, 200);
+	Vector<uint> v2(v1);
+
+	cr_assert_geq(v2.capacity(), v1.capacity());
+	cr_assert_not_null(v2.data());
+	cr_assert_geq(v2.size(), v1.size());
+
+	cr_assert((v2[0] == v2[1])
+	       && (v2[1] == v2[2])
+	       && (v2[2] == v2[3])
+	       && (v2[3] == v2[4])
+	       && (v2[4] == v2[5])
+	       && (v2[5] == 200));
+}
+
+Test(Vector, MoveConstructor)
+{
+	Vector<uint> v1(5, 300);
+	Vector<uint> v2(std::move(v1));
+
+	cr_assert_geq(v2.capacity(), Vector<uint>::minimumSize);
+	cr_assert_geq(v2.capacity(), 5);
+	cr_assert_not_null(v2.data());
+	cr_assert_eq(v2.size(), 5);
+
+	cr_assert((v2[0] == v2[1])
+	       && (v2[1] == v2[2])
+	       && (v2[2] == v2[3])
+	       && (v2[3] == v2[4])
+	       && (v2[4] == 300));
+
+	cr_expect_eq(v1.capacity(), 0);
+	cr_expect_eq(v1.size(), 0);
+	cr_expect_null(v1.data());
+}
+
+Test(Vector, InitializerListConstructor)
+{
+	Vector<uint> v({7, 6, 5, 4, 3, 2, 1});
+
+	cr_assert_geq(v.capacity(), Vector<uint>::minimumSize);
+	cr_assert_geq(v.capacity(), 7);
+	cr_assert_not_null(v.data());
+	cr_assert_eq(v.size(), 7);
+}
+
+Test(Vector, Destructor)
+{
+	Vector<uint> v({1, 2, 3, 4, 5});
+	v.~Vector<uint>();
+
+	cr_assert_eq(v.size(), 0);
+	cr_assert_eq(v.capacity(), 0);
+	cr_assert_null(v.data());
+}
+
+/// Capacity ///////////////////////////////////////////////////////////////////
+
+Test(Vector, Empty)
+{
+	Vector<uint> v1;
+	cr_assert(v1.empty());
+
+	Vector<uint> v2(3, 10);
+	cr_assert_not(v2.empty());
+}
+
+Test(Vector, Contains)
+{
+	Vector<uint> v({1, 3, 5, 7, 9});
+
+	cr_assert(v.contains(3));
+	cr_assert_not(v.contains(2));
+}
+
+Test(Vector, Resize)
+{
+	Vector<uint> arr;
+	Vector<uint> cpy(arr);
+
+	// remains unchanged when requested size is the same as current size
+	arr.resize(0);
+	cr_assert_eq(arr.size(), cpy.size());
+	cr_assert_eq(arr.capacity(), cpy.capacity());
+
+	// expand size but not capacity
+	arr.resize(3, 5);
+	cr_assert_gt(arr.size(), cpy.size());
+	cr_assert_geq(arr.capacity(), cpy.capacity());
+	cr_assert_geq(arr.capacity(), Vector<uint>::minimumSize);
+
+	// expand size and capacity
+	arr.resize(10, 3);
+	cr_assert_eq(arr.size(), 10);
+	cr_assert_geq(arr.capacity(), 10);
+
+	// reduce size
+	arr.resize(2);
+	cr_assert_eq(arr.size(), 2);
+	cr_assert_geq(arr.capacity(), 10);
+}
+
+Test(Vector, Reserve)
+{
+	Vector<uint> v;
+
+	v.reserve(20);
+	cr_assert_geq(v.capacity(), 20);
+
+	v.reserve(10); // does nothing
+	cr_assert_geq(v.capacity(), 20);
+}
+
+Test(Vector, Shrink)
+{
+	Vector<uint> v(10, 100);
+
+	v.shrink();
+	cr_assert_eq(v.size(), 10);
+	cr_assert_eq(v.capacity(), 10);
+}
+
+/// Element Access /////////////////////////////////////////////////////////////
+
+Test(Vector, At_const)
+{
+	Vector<uint> v({7, 5, 6, 1, 6, 9, 4, 3});
+	cr_assert_eq(v.at(0), 7);
+	cr_assert_eq(v.at(1), 5);
+	cr_assert_eq(v.at(2), 6);
+	cr_assert_eq(v.at(3), 1);
+	cr_assert_eq(v.at(4), 6);
+	cr_assert_eq(v.at(5), 9);
+	cr_assert_eq(v.at(6), 4);
+	cr_assert_eq(v.at(7), 3);
+
+	cr_assert_throw(v.at(8), std::out_of_range);
+}
+
+Test(Vector, At)
+{
+	Vector<uint> v(8);
+
+	v.at(3) = 1;
+	cr_assert_eq(v[3], 1);
+}
+
+Test(Vector, Front_const)
+{
+	Vector<uint> v({7, 5, 6, 1, 6, 9, 4, 3});
+
+	cr_assert_eq(v.front(), 7);
+	cr_assert_eq(v.front(), v.at(0));
+}
+
+Test(Vector, Front)
+{
+	Vector<uint> v({7, 5, 6, 1, 6, 9, 4, 3});
+
+	v.front() = 10;
+	cr_assert_eq(v.at(0), 10);
+}
+
+Test(Vector, Back_const)
+{
+	Vector<uint> v({7, 5, 6, 1, 6, 9, 4, 3});
+
+	cr_assert_eq(v.back(), 3);
+	cr_assert_eq(v.back(), v.at(v.size() - 1));
+}
+
+Test(Vector, Back)
+{
+	Vector<uint> v({7, 5, 6, 1, 6, 9, 4, 3});
+
+	v.back() = 10;
+	cr_assert_eq(v.at(v.size() - 1), 10);
+}
+
+Test(Vector, Data_const)
+{
+	Vector<uint> v({7, 5, 6, 1, 9, 4, 3});
+	cr_assert_not_null((const uint *)v.data());
+
+	v.~Vector<uint>();
+	cr_assert_null((const uint *)v.data());
+}
+
+Test(Vector, Data)
+{
+	Vector<uint> v({7, 5, 6, 1, 9, 4, 3});
+
+	uint *a = v.data();
+	a[2] = 10;
+
+	cr_assert_eq(v.at(2), 10);
+}
+
+Test(Vector, FindElement)
+{
+	Vector<uint> v = {1,0,1,1,0,1,0,0,1,1,1,0,0,0,1,0,1,1,1,0,0};
+	Vector<size_t> pos = {0,2,3,5,8,9,10,14,16,17,18};
+
+	size_t i = 0;
+	for (size_t p = 0; (p = v.find(1, p)) != Vector<uint>::max; ++p) {
+		cr_expect_eq(p, pos[i++]);
+	}
+
+	cr_assert_eq(i, pos.size());
+}
+
+Test(Vector, FindWithPredicate)
+{
+	Vector<uint> v = {2,29,21,10,30,14,20,25,6,7,3,24,17,9,11,19,1,15,8,26,5,12,22,16,18,28,4,23,27,13};
+	Vector<size_t> pos = {1,2,7,9,10,12,13,14,15,16,17,20,27,28,29};
+
+	auto f = [] (uint t) -> bool {
+		return t & 1;
+	};
+
+	size_t i = 0;
+	for (size_t p = 0; (p = v.find(f, p)) != Vector<uint>::max; ++p) {
+		cr_expect_eq(p, pos[i++]);
+	}
+
+	cr_assert_eq(i, pos.size());
+}
+
+Test(Vector, FindLastElement)
+{
+	Vector<uint> v = {1,0,1,1,0,1,0,0,1,1,1,0,0,0,1,0,1,1,1,0,0};
+	Vector<size_t> pos = {18,17,16,14,10,9,8,5,3,2,0};
+
+	size_t i = 0;
+	for (size_t p = v.size() - 1; (p = v.findLast(1, p)) != Vector<uint>::max; --p) {
+		cr_expect_eq(p, pos[i++]);
+		if (p == 0)
+			break;
+	}
+
+	cr_assert_eq(i, pos.size());
+}
+
+Test(Vector, FindLastWithPredicate)
+{
+	Vector<uint> v = {2,29,21,10,30,14,20,25,6,7,3,24,17,9,11,19,1,15,8,26,5,12,22,16,18,28,4,23,27,13};
+	Vector<size_t> pos = {29,28,27,20,17,16,15,14,13,12,10,9,7,2,1};
+
+	auto f = [] (uint t) -> bool {
+		return t & 1;
+	};
+
+	size_t i = 0;
+	for (size_t p = v.size() - 1; (p = v.findLast(f, p)) != Vector<uint>::max; --p) {
+		cr_expect_eq(p, pos[i++]);
+	}
+
+	cr_assert_eq(i, pos.size());
+}
+
+/// Modifiers //////////////////////////////////////////////////////////////////
 
 Test(Vector, AssignCopy)
 {
@@ -50,8 +362,6 @@ Test(Vector, AssignInitializerList)
 	          v[2] == 9 &&
 	          v[3] == 7);
 }
-
-////////////////////////////////////////////////////////////////////////////////
 
 Test(Vector, AppendElementCopy)
 {
@@ -114,8 +424,6 @@ Test(Vector, AppendInitializerList)
 	cr_assert_eq(v1, Vector<uint>({4, 5, 6, 1, 2, 3}));
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 Test(Vector, PrependElementCopy)
 {
 	Vector<uint> v;
@@ -176,8 +484,6 @@ Test(Vector, PrependInitializerList)
 
 	cr_assert_eq(v1, Vector<uint>({1, 2, 3, 4, 5, 6}));
 }
-
-////////////////////////////////////////////////////////////////////////////////
 
 Test(Vector, InsertElementCopy)
 {
@@ -256,8 +562,6 @@ Test(Vector, InsertInitializerList)
 	cr_assert_eq(v1, Vector<uint>({0, 1, 5, 6, 7, 8, 9, 2, 3, 4}));
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 Test(Vector, Emplace)
 {
 	cr_skip("REDO");
@@ -280,8 +584,6 @@ Test(Vector, EmplaceBack)
 {
 	cr_skip("TODO");
 }
-
-////////////////////////////////////////////////////////////////////////////////
 
 Test(Vector, Clear)
 {
