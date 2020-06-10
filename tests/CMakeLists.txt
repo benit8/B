@@ -36,6 +36,7 @@ target_sources(${PROJECT_NAME}
 PUBLIC
 	sources/Directory.cpp
 	sources/Parser.cpp
+	sources/SingleList.cpp
 
 	sources/Vector/Assign.cpp
 	sources/Vector/Capacity.cpp
