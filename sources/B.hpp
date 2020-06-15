@@ -9,6 +9,7 @@
 
 #include "B/Types.hpp"
 #include "B/Common.hpp"
+#include "B/Memory.hpp"
 
 #include "B/Buffer.hpp"
 #include "B/OptionParser.hpp"

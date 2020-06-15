@@ -15,7 +15,7 @@ namespace B {
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "B/Common.hpp"
-#include "B/Traits.hpp"
+#include "B/Memory.hpp"
 #include "B/Containers/Container.hpp"
 #include "B/IO/Print.hpp"
 
@@ -61,14 +61,14 @@ public:
 	virtual void clear() override
 	{
 		if (!null())
-			Type<T>::destruct(data(), size());
+			Memory<T>::destruct(data(), size());
 		m_size = 0;
 	}
 
 	virtual void reset()
 	{
 		if (!null()) {
-			Type<T>::destruct(data(), size());
+			Memory<T>::destruct(data(), size());
 			delete[] m_data;
 			m_data = nullptr;
 		}
@@ -83,7 +83,7 @@ public:
 		T *newData = new T[newSize];
 		assert(newData != nullptr);
 		if (!null()) {
-			Type<T>::move(newData, data(), size());
+			Memory<T>::move(newData, data(), size());
 			delete[] m_data;
 		}
 		m_data = newData;
@@ -97,9 +97,9 @@ public:
 		if (newSize > capacity())
 			reserve(newSize);
 		if (newSize > size())
-			Type<T>::set(slot(size()), filler, newSize - size());
+			Memory<T>::set(slot(size()), filler, newSize - size());
 		else // newSize < size()
-			Type<T>::destruct(slot(newSize), size() - newSize);
+			Memory<T>::destruct(slot(newSize), size() - newSize);
 		m_size = newSize;
 	}
 
@@ -108,18 +108,14 @@ public:
 		if (empty() || size() == capacity())
 			return;
 		T *newData = new T[size()];
-		Type<T>::move(newData, m_data, size());
+		Memory<T>::move(newData, m_data, size());
 		delete[] m_data;
 		m_data = newData;
 		m_capacity = size();
 	}
 
 protected:
-	Sequence()
-	: m_data(nullptr)
-	, m_capacity(0)
-	, m_size(0)
-	{}
+	Sequence() = default;
 
 	T *slot(usize i)
 	{

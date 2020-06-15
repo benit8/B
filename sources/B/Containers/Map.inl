@@ -88,7 +88,7 @@ bool Map<Key, Value>::insert(const Key &key, const Value &value)
 	usize pos = it.index();
 	this->reserve(this->size() + 1);
 	if (!this->empty() && pos < this->size())
-		Type<Pair<Key, Value>>::move(this->slot(pos + 1), this->slot(pos), this->size() - pos);
+		Memory<Pair<Key, Value>>::move(this->slot(pos + 1), this->slot(pos), this->size() - pos);
 	new (this->slot(pos)) Pair<Key, Value>(key, value);
 	this->m_size++;
 	return true;
@@ -103,7 +103,7 @@ bool Map<Key, Value>::erase(const Key &key)
 
 	usize pos = it.index();
 	this->slot(pos)->~Pair<Key, Value>();
-	Type<Pair<Key, Value>>::move(this->slot(pos), this->slot(pos + 1), this->size() - pos - 1);
+	Memory<Pair<Key, Value>>::move(this->slot(pos), this->slot(pos + 1), this->size() - pos - 1);
 	this->m_size--;
 	return true;
 }
@@ -161,7 +161,7 @@ bool Map<Key, Value>::insert(usize pos, const Key &key, const Value &value)
 {
 	this->reserve(this->size() + 1);
 	if (pos < this->size())
-		Type<Pair<Key, Value>>::move(this->slot(pos + 1), this->slot(pos), this->size() - pos);
+		Memory<Pair<Key, Value>>::move(this->slot(pos + 1), this->slot(pos), this->size() - pos);
 	new (this->slot(pos)) Pair<Key, Value>(key, value);
 	this->m_size++;
 	return true;

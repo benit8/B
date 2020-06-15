@@ -41,6 +41,7 @@ PUBLIC
 	sources/B/Buffer.hpp
 	sources/B/Common.hpp
 	sources/B/EnumOperators.hpp
+	sources/B/Memory.hpp
 	sources/B/OptionParser.hpp
 	sources/B/String.hpp
 	sources/B/StringView.hpp
@@ -85,6 +86,7 @@ PRIVATE
 	sources/B/IO/FileReader.cpp
 	sources/B/IO/FileWriter.cpp
 	sources/B/IO/Reader.cpp
+	sources/B/IO/StringWriter.cpp
 	sources/B/IO/Writer.cpp
 	sources/B/Platform/Pipe.cpp
 	sources/B/Platform/Process.cpp

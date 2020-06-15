@@ -14,6 +14,7 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Memory.hpp"
 #include "B/Containers/Associative.hpp"
 #include "B/Containers/Iterators.hpp"
 #include "B/Containers/Pair.hpp"

@@ -78,12 +78,15 @@ public:
 
 	void close();
 
+	// Stream
 	bool eof() const override;
+	bool seek(SeekMode whence, isize pos) override;
+	usize tell() override;
+
+	// Reader
 	int peek() override;
 	int get() override;
 	usize read(void *data, usize length) override;
-	bool seek(SeekMode whence, isize pos) override;
-	usize tell() override;
 
 private:
 	int m_fd = -1;
@@ -100,12 +103,15 @@ public:
 	BufferReader(StringView buffer, bool binary = false);
 	~BufferReader() = default;
 
+	// Stream
 	bool eof() const override;
+	bool seek(SeekMode whence, isize pos) override;
+	usize tell() override;
+
+	// Reader
 	int peek() override;
 	int get() override;
 	usize read(void *data, usize length) override;
-	bool seek(SeekMode whence, isize pos) override;
-	usize tell() override;
 
 private:
 	Buffer m_buffer;

@@ -14,6 +14,7 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Memory.hpp"
 #include "B/Containers/Sequence.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +39,7 @@ public:
 	{
 		if (m_start + this->size() == this->capacity()) {
 			if (m_start > 0) {
-				Type<T>::move(this->slot(0), this->slot(m_start), this->size());
+				Memory<T>::move(this->slot(0), this->slot(m_start), this->size());
 				m_start = 0;
 			}
 			else { // m_start is 0
@@ -79,7 +80,7 @@ public:
 	{
 		this->clear();
 		this->reserve(rhs.size());
-		Type<T>::copy(this->slot(0), rhs.slot(0), rhs.size());
+		Memory<T>::copy(this->slot(0), rhs.slot(0), rhs.size());
 		this->m_size = rhs.m_size;
 		return *this;
 	}

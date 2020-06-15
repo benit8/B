@@ -90,7 +90,7 @@ template <typename T>
 void Vector<T>::assign(const Vector<T> &other)
 {
 	this->reserve(other.size());
-	Type<T>::copy(this->slot(0), other.data(), other.size());
+	Memory<T>::copy(this->slot(0), other.data(), other.size());
 	this->m_size = other.size();
 }
 
@@ -121,7 +121,7 @@ template <typename T>
 void Vector<T>::assign(const T *buffer, usize size)
 {
 	this->reserve(size);
-	Type<T>::copy(this->slot(0), buffer, size);
+	Memory<T>::copy(this->slot(0), buffer, size);
 	this->m_size = size;
 }
 
@@ -131,7 +131,7 @@ void Vector<T>::assign(std::initializer_list<T> il)
 	this->reserve(il.size());
 	this->m_size = 0;
 	for (auto i : il)
-		Type<T>::copy(this->slot(this->m_size++), &i, 1);
+		Memory<T>::copy(this->slot(this->m_size++), &i, 1);
 }
 
 template <typename T>
@@ -162,7 +162,7 @@ void Vector<T>::append(const Vector<T> &other)
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
 
-	Type<T>::copy(this->slot(this->size()), other.data(), n);
+	Memory<T>::copy(this->slot(this->size()), other.data(), n);
 	this->m_size += n;
 }
 
@@ -173,7 +173,7 @@ void Vector<T>::append(Vector<T> &&other)
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
 
-	Type<T>::move(this->slot(this->size()), other.data(), n);
+	Memory<T>::move(this->slot(this->size()), other.data(), n);
 	this->m_size += n;
 
 	other.clear();
@@ -187,7 +187,7 @@ void Vector<T>::append(std::initializer_list<T> il)
 		this->reserve(this->size() + n);
 
 	for (auto i : il)
-		Type<T>::copy(this->slot(this->m_size++), &i, 1);
+		Memory<T>::copy(this->slot(this->m_size++), &i, 1);
 }
 
 template <typename T>
@@ -201,7 +201,7 @@ void Vector<T>::insert(usize pos, const T &val, usize n)
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
 
-	Type<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
+	Memory<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
 	for (usize i = 0; i < n; ++i)
 		new (this->slot(pos + i)) T(val);
 
@@ -219,7 +219,7 @@ void Vector<T>::insert(usize pos, T &&val)
 	if (this->size() + 1 > this->capacity())
 		this->reserve(this->size() + 1);
 
-	Type<T>::move(this->slot(pos + 1), this->slot(pos), this->size() - pos);
+	Memory<T>::move(this->slot(pos + 1), this->slot(pos), this->size() - pos);
 	new (this->slot(pos)) T(std::move(val));
 
 	this->m_size++;
@@ -237,8 +237,8 @@ void Vector<T>::insert(usize pos, const Vector &other)
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
 
-	Type<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
-	Type<T>::copy(this->slot(pos), other.data(), n);
+	Memory<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
+	Memory<T>::copy(this->slot(pos), other.data(), n);
 
 	this->m_size += n;
 }
@@ -255,8 +255,8 @@ void Vector<T>::insert(usize pos, Vector &&other)
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
 
-	Type<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
-	Type<T>::move(this->slot(pos), other.data(), n);
+	Memory<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
+	Memory<T>::move(this->slot(pos), other.data(), n);
 
 	this->m_size += n;
 	other.clear();
@@ -274,7 +274,7 @@ void Vector<T>::insert(usize pos, std::initializer_list<T> il)
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
 
-	Type<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
+	Memory<T>::move(this->slot(pos + n), this->slot(pos), this->size() - pos);
 	for (usize i = 0; i < n; ++i)
 		new (this->slot(i + pos)) T(*(il.begin() + i));
 
@@ -318,7 +318,7 @@ void Vector<T>::erase(usize pos, usize len)
 
 	/// Move right part of mem, if range is not at the end
 	if (pos + len < this->size())
-		Type<T>::move(this->slot(pos), this->slot(pos + len), this->size() - len);
+		Memory<T>::move(this->slot(pos), this->slot(pos + len), this->size() - len);
 
 	this->m_size -= len;
 }

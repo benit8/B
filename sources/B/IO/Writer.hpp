@@ -11,6 +11,7 @@ namespace B {
 	class Writer;
 	class FileWriter;
 	class BufferWriter;
+	class StringWriter;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,28 +39,26 @@ public:
 	static FileWriter toFd(int fd);
 	static FileWriter toFile(const String &filename, OpenMode = OpenMode::WriteOnly | OpenMode::Create, File::Perms mode = File::Perms::FileDefault);
 	static BufferWriter toBuffer(Buffer &);
+	static StringWriter toString(String &);
 
 	virtual bool put(int c) = 0;
 	virtual usize write(const void *data, usize size) = 0;
 
-	bool write(const Buffer &buffer)
-	{
-		return write(buffer.data(), buffer.size()) == buffer.size();
-	}
+	bool write(const Buffer &buffer);
 
-	Writer &operator <<(bool b) { put(b ? 1 : 0); return *this; }
-	Writer &operator <<(char c) { put(c); return *this; }
-	Writer &operator <<(i8  n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(i16 n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(i32 n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(i64 n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(u8  n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(u16 n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(u32 n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(u64 n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(f32  n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(f64  n) { write(&n, sizeof(n)); return *this; }
-	Writer &operator <<(f128 n) { write(&n, sizeof(n)); return *this; }
+	Writer &operator <<(bool b);
+	Writer &operator <<(char c);
+	Writer &operator <<(i8  n);
+	Writer &operator <<(i16 n);
+	Writer &operator <<(i32 n);
+	Writer &operator <<(i64 n);
+	Writer &operator <<(u8  n);
+	Writer &operator <<(u16 n);
+	Writer &operator <<(u32 n);
+	Writer &operator <<(u64 n);
+	Writer &operator <<(f32  n);
+	Writer &operator <<(f64  n);
+	Writer &operator <<(f128 n);
 	Writer &operator <<(const char *);
 
 protected:
@@ -113,5 +112,28 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+
+class StringWriter : public Writer
+{
+public:
+	StringWriter(String &str);
+	~StringWriter() = default;
+
+	bool eof() const override;
+	bool put(int c) override;
+	usize write(const void *data, usize length) override;
+	bool seek(SeekMode whence, isize pos) override;
+	usize tell() override;
+
+private:
+	String &m_string;
+	usize m_offset = 0;
+	bool m_eof = false;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+extern FileWriter StdOut;
+extern FileWriter StdErr;
 
 }

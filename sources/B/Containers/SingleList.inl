@@ -132,7 +132,7 @@ void SingleList<T>::pop()
 }
 
 template <typename T>
-SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, const T &value)
+typename SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, const T &value)
 {
 	assert(!it.isEnd());
 
@@ -143,7 +143,7 @@ SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, c
 }
 
 template <typename T>
-SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, T &&value)
+typename SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, T &&value)
 {
 	assert(!it.isEnd());
 
@@ -339,14 +339,14 @@ void SingleList<T>::sort(F comparator)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-SingleList<T>::Iterator SingleList<T>::find(const T &value)
+typename SingleList<T>::Iterator SingleList<T>::find(const T &value)
 {
 	return find([&](auto &other) { return value == other; });
 }
 
 template <typename T>
 template <typename F>
-SingleList<T>::Iterator SingleList<T>::find(F finder)
+typename SingleList<T>::Iterator SingleList<T>::find(F finder)
 {
 	Node *prev = nullptr;
 	for (Node *curr = m_head; curr != nullptr; curr = curr->next) {
@@ -358,19 +358,19 @@ SingleList<T>::Iterator SingleList<T>::find(F finder)
 }
 
 template <typename T>
-const SingleList<T>::Iterator SingleList<T>::find(const T &value) const
+typename SingleList<T>::ConstIterator SingleList<T>::find(const T &value) const
 {
 	return find([&](auto &other) { return value == other; });
 }
 
 template <typename T>
 template <typename F>
-const SingleList<T>::Iterator SingleList<T>::find(F finder) const
+typename SingleList<T>::ConstIterator SingleList<T>::find(F finder) const
 {
 	Node *prev = nullptr;
 	for (Node *curr = m_head; curr != nullptr; curr = curr->next) {
 		if (finder(curr->value))
-			return Iterator(curr, prev);
+			return ConstIterator(curr, prev);
 		prev = curr;
 	}
 	return end();

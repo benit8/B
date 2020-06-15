@@ -14,11 +14,12 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Memory.hpp"
 #include "B/Containers/Iterators.hpp"
 #include "B/Containers/Sequence.hpp"
 
-#include <initializer_list> // initializer_list
-#include <functional>       // function
+#include <initializer_list>
+#include <functional>
 #include <iostream>         // ostream
 
 ////////////////////////////////////////////////////////////////////////////////

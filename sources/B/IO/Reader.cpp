@@ -48,7 +48,7 @@ void Reader::ignoreUntil(int c, usize n)
 
 bool Reader::peek(int c)
 {
-	return peek() == (int)c;
+	return peek() == c;
 }
 
 bool Reader::read(Buffer &buffer)
