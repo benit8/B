@@ -44,8 +44,8 @@ public:
 		return this->slot(index)->value;
 	}
 
-	V &operator [](const K &key) { return at(key); }
-	const V &operator [](const K &key) const { return at(key); }
+	// V &operator [](const K &key) { return at(key); }
+	// const V &operator [](const K &key) const { return at(key); }
 
 	virtual bool contains(const K &key) const = 0;
 	virtual bool insert(const K &key, const V &value) = 0;
