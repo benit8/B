@@ -48,7 +48,10 @@ bool Writer::write(const Buffer &buffer)
 
 Writer &Writer::operator <<(bool b)
 {
-	put(b ? 1 : 0);
+	if (binary())
+		put(b ? 1 : 0);
+	else
+		put(b ? '1' : '0');
 	return *this;
 }
 
@@ -58,7 +61,7 @@ Writer &Writer::operator <<(char c)
 	return *this;
 }
 
-Writer &Writer::operator <<(i8  n)
+Writer &Writer::operator <<(i8 n)
 {
 	write(&n, sizeof(n));
 	return *this;
@@ -82,7 +85,7 @@ Writer &Writer::operator <<(i64 n)
 	return *this;
 }
 
-Writer &Writer::operator <<(u8  n)
+Writer &Writer::operator <<(u8 n)
 {
 	write(&n, sizeof(n));
 	return *this;
@@ -106,13 +109,13 @@ Writer &Writer::operator <<(u64 n)
 	return *this;
 }
 
-Writer &Writer::operator <<(f32  n)
+Writer &Writer::operator <<(f32 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(f64  n)
+Writer &Writer::operator <<(f64 n)
 {
 	write(&n, sizeof(n));
 	return *this;
