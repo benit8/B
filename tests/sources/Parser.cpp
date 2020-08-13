@@ -8,10 +8,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-using ft = B::Traits<double>;
+using ft = B::NumericTraits<double>;
 
 #define EXPECT(A, B)  do { auto n = (A); cr_expect_eq(n, B, #A ": expected %d, got %d", B, n); } while (0)
-#define EXPECTF(A, B) do { auto n = (A); cr_expect_float_eq(n, B, ft::epsilon(), #A ": expected %f, got %f", B, n); } while (0)
+#define EXPECTF(A, B) do { auto n = (A); cr_expect_float_eq(n, B, ft::epsilon, #A ": expected %f, got %f", B, n); } while (0)
 
 ////////////////////////////////////////////////////////////////////////////////
 

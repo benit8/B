@@ -73,7 +73,7 @@ bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
 
 		const char *arg = opt->requiresArgument ? optarg : nullptr;
 		if (!opt->acceptor(arg)) {
-			eprint("Invalid value for option %$\n", argv[optind - 1]);
+			tfm::format(std::cerr, "Invalid value for option %s\n", argv[optind - 1]);
 			printHelpAndExit();
 			return false;
 		}
@@ -110,7 +110,7 @@ bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
 		for (int j = 0; j < argsValuesCount[i]; j++) {
 			const char *value = argv[optind++];
 			if (!m_args[i].acceptor(value)) {
-				eprint("Invalid value for argument %$\n", m_args[i].name);
+				tfm::format(std::cerr, "Invalid value for argument %s\n", m_args[i].name);
 				printHelpAndExit();
 				return false;
 			}
@@ -135,50 +135,50 @@ void OptionParser::printHelp(const char *programName)
 			name.append('-');
 			name.append(opt.shortName);
 			if (opt.longName)
-				name.appendf(", --%$", opt.longName);
+				name.appendf(", --%s", opt.longName);
 		}
 		else {
 			assert(opt.longName != nullptr);
-			name.appendf("    --%$", opt.longName);
+			name.appendf("    --%s", opt.longName);
 		}
 		if (opt.valueName)
-			name.appendf("=%$", opt.valueName);
+			name.appendf("=%s", opt.valueName);
 		return name;
 	};
 
 
-	print("Usage:\n\t%$", programName);
+	tfm::printf("Usage:\n\t%s", programName);
 	for (auto &arg : m_args) {
 		bool required = arg.minValues > 0;
 		bool repeated = arg.maxValues > 1;
 
 		if (required && repeated)
-			print(" %$...", arg.name);
+			tfm::printf(" %s...", arg.name);
 		else if (required && !repeated)
-			print(" %$", arg.name);
+			tfm::printf(" %s", arg.name);
 		else if (!required && repeated)
-			print(" [%$...]", arg.name);
+			tfm::printf(" [%s...]", arg.name);
 		else if (!required && !repeated)
-			print(" [%$]", arg.name);
+			tfm::printf(" [%s]", arg.name);
 	}
 
 	if (m_args.size())
-		print("\n\nArguments:\n");
+		tfm::printf("\n\nArguments:\n");
 	for (auto &arg : m_args) {
 		String name = arg.name;
 		name.padRight(30);
-		print("\t%$ %$\n", name, arg.help);
+		tfm::printf("\t%s %s\n", name, arg.help);
 	}
 
 	if (m_options.size())
-		print("\nOptions:\n");
+		tfm::printf("\nOptions:\n");
 	for (auto &opt : m_options) {
 		auto name = prettyOptionName(opt);
 		name.padRight(30);
-		print("%$", name);
+		tfm::printf("%s", name);
 		if (name.last() != ' ')
-			print("\n\t                             ");
-		print("%$\n", opt.help);
+			tfm::printf("\n\t                             ");
+		tfm::printf("%s\n", opt.help);
 	}
 }
 
@@ -276,7 +276,7 @@ void OptionParser::addArgument(Vector<String> &values, const char *help, const c
 		help,
 		name,
 		required ? 1 : 0,
-		Traits<int>::max(),
+		NumericTraits<int>::max,
 		[&values] (const char *s) {
 			values.append(s);
 			return true;

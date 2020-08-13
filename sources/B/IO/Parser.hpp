@@ -92,12 +92,12 @@ T parse(Reader &rd, unsigned short base = 10)
 	// char exponentChar = base == 10 ? 'e' : 'p';
 
 	// Compute cutoffs
-	T cutoff = (positive ? Traits<T>::max() : Traits<T>::lowest()) / base;
+	T cutoff = (positive ? NumericTraits<T>::max : NumericTraits<T>::lowest) / base;
 	int maxAfterCutoff = 0;
-	if constexpr (Traits<T>::isDecimal())
-		maxAfterCutoff = fmod(positive ? Traits<T>::max() : Traits<T>::lowest(), base);
+	if constexpr (IsFloat<T>())
+		maxAfterCutoff = fmod(positive ? NumericTraits<T>::max : NumericTraits<T>::lowest, base);
 	else
-		maxAfterCutoff = (positive ? Traits<T>::max() : Traits<T>::lowest()) % base;
+		maxAfterCutoff = (positive ? NumericTraits<T>::max : NumericTraits<T>::lowest) % base;
 
 	auto canAppendDigit = [&] (int digit) -> bool {
 		if (positive ? (num < cutoff) : (num > cutoff)) // is below cutoff?
@@ -109,7 +109,7 @@ T parse(Reader &rd, unsigned short base = 10)
 	bool pastDecimal = false;
 	int exponent = 0;
 	for (;;) {
-		if (!pastDecimal && rd.peek('.') && Traits<T>::isDecimal()) {
+		if (!pastDecimal && rd.peek('.') && IsFloat<T>()) {
 			pastDecimal = true;
 			rd.ignore();
 			continue;
@@ -134,10 +134,10 @@ T parse(Reader &rd, unsigned short base = 10)
 	// }
 
 	// Treat decimal part, if applies
-	if constexpr (Traits<T>::isDecimal()) {
-		if (num == 0 || exponent <= Traits<T>::minExponent())
+	if constexpr (IsFloat<T>()) {
+		if (num == 0 || exponent <= NumericTraits<T>::minExponent)
 			return positive ? 0.0 : -0.0;
-		else if (exponent >= Traits<T>::maxExponent())
+		else if (exponent >= NumericTraits<T>::maxExponent)
 			return positive ? __builtin_huge_val() : -__builtin_huge_val();
 
 		if (exponent < 0) {

@@ -31,7 +31,7 @@ public:
 		if (destination == source)
 			return;
 
-		if constexpr (Traits<T>::isTrivial())
+		if constexpr (IsFundamental<T>())
 			::memmove(destination, source, count * sizeof(T));
 		else {
 			if (destination < source) {
@@ -57,7 +57,7 @@ public:
 		if (destination == source)
 			return;
 
-		if constexpr (Traits<T>::isTrivial())
+		if constexpr (IsFundamental<T>())
 			::memmove(destination, source, count * sizeof(T));
 		else {
 			if (destination < source) {
@@ -75,7 +75,7 @@ public:
 	{
 		assert(destination);
 
-		if constexpr (Traits<T>::isTrivial())
+		if constexpr (IsFundamental<T>())
 			::memset(destination, value, count * sizeof(T));
 		else {
 			for (usize i = 0; i < count; ++i)
@@ -91,7 +91,7 @@ public:
 		if (a == b)
 			return true;
 
-		if constexpr (Traits<T>::isTrivial())
+		if constexpr (IsFundamental<T>())
 			return ::memcmp(a, b, count * sizeof(T)) == 0;
 
 		for (usize i = 0; i < count; ++i) {
@@ -105,7 +105,7 @@ public:
 	{
 		assert(data);
 
-		if constexpr (Traits<T>::isTrivial())
+		if constexpr (IsFundamental<T>())
 			return;
 
 		for (usize i = 0; i < count; ++i)
