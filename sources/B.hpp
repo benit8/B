@@ -12,7 +12,9 @@
 #include "B/Memory.hpp"
 
 #include "B/Buffer.hpp"
+#include "B/Optional.hpp"
 #include "B/OptionParser.hpp"
+#include "B/Result.hpp"
 #include "B/String.hpp"
 #include "B/StringView.hpp"
 

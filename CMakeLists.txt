@@ -43,7 +43,9 @@ PUBLIC
 	sources/B/Common.hpp
 	sources/B/EnumOperators.hpp
 	sources/B/Memory.hpp
+	sources/B/Optional.hpp
 	sources/B/OptionParser.hpp
+	sources/B/Result.hpp
 	sources/B/String.hpp
 	sources/B/StringView.hpp
 	sources/B/Traits.hpp
