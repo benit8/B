@@ -17,7 +17,8 @@ namespace B {
 #include "B/Common.hpp"
 #include "B/Memory.hpp"
 #include "B/Containers/Container.hpp"
-#include "B/IO/Print.hpp"
+// #include "B/IO/Print.hpp"
+#include "tinyformat.hpp"
 
 #include <stdexcept>
 
@@ -47,14 +48,14 @@ public:
 	virtual T &at(usize i)
 	{
 		if (i >= size())
-			throw std::out_of_range(format("Sequence::at(): i(%$) >= size(%$)", i, size()));
+			throw std::out_of_range(tfm::format("Sequence::at(): i(%zu) >= size(%zu)", i, size()));
 		return data()[i];
 	}
 
 	virtual const T &at(usize i) const
 	{
 		if (i >= size())
-			throw std::out_of_range(format("Sequence::at(): i(%$) >= size(%$)", i, size()));
+			throw std::out_of_range(tfm::format("Sequence::at(): i(%zu) >= size(%zu)", i, size()));
 		return data()[i];
 	}
 
@@ -120,14 +121,14 @@ protected:
 	T *slot(usize i)
 	{
 		if (i >= capacity())
-			throw std::out_of_range(format("Sequence::slot(): i(%$) >= capacity(%$)", i, capacity()));
+			throw std::out_of_range(tfm::format("Sequence::slot(): i(%zu) >= capacity(%zu)", i, capacity()));
 		return &m_data[i];
 	}
 
 	const T *slot(usize i) const
 	{
 		if (i >= capacity())
-			throw std::out_of_range(format("Sequence::slot(): i(%$) >= capacity(%$)", i, capacity()));
+			throw std::out_of_range(tfm::format("Sequence::slot(): i(%zu) >= capacity(%zu)", i, capacity()));
 		return &m_data[i];
 	}
 
@@ -143,7 +144,7 @@ protected:
 		if (size < minimumSize)
 			return minimumSize;
 		if (size > maxSize)
-			throw std::length_error(format("Cannot allocate for more than %$ elements.", maxSize));
+			throw std::length_error(tfm::format("Cannot allocate for more than %zu elements.", maxSize));
 		if (size >= maxSize / 2)
 			return maxSize;
 		return roundUp(B::max(capacity() * growthFactor, size));

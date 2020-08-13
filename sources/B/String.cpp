@@ -50,14 +50,14 @@ String::String(char c, usize n)
 char &String::at(usize i)
 {
 	if (i >= length())
-		throw std::out_of_range(format("String::at(): i(%$) >= length(%$)", i, length()));
+		throw std::out_of_range(tfm::format("String::at(): i(%zu) >= length(%zu)", i, length()));
 	return data()[i];
 }
 
 const char &String::at(usize i) const
 {
 	if (i >= length())
-		throw std::out_of_range(format("String::at(): i(%$) >= length(%$)", i, length()));
+		throw std::out_of_range(tfm::format("String::at(): i(%zu) >= length(%zu)", i, length()));
 	return data()[i];
 }
 

@@ -4,6 +4,7 @@
 */
 
 #include "B/IO/Reader.hpp"
+#include "tinyformat.hpp"
 
 #include <unistd.h>
 
@@ -18,7 +19,7 @@ FileReader::FileReader(int fd, OpenMode mode)
 {
 	int fdMode = fcntl(fd, F_GETFL);
 	if ((fdMode & O_RDONLY) == 0 && (fdMode & O_RDWR) == 0)
-		throw std::runtime_error(format("FileReader::FileReader(%d): FD is not readable", fd));
+		throw std::runtime_error(tfm::format("FileReader::FileReader(%d): FD is not readable", fd));
 	else {
 		m_fd = fd;
 		m_mode = (OpenMode)fdMode | mode;
@@ -29,7 +30,7 @@ FileReader::FileReader(const String &filename, OpenMode mode)
 {
 	m_fd = ::open(filename.cStr(), int(mode & OpenMode::StandardFlags));
 	if (m_fd == -1)
-		throw std::runtime_error(format("FileReader::FileReader(%s, %o): open() failed", filename, (int)mode));
+		throw std::runtime_error(tfm::format("FileReader::FileReader(%s, %o): open() failed", filename, (int)mode));
 	else {
 		m_mode = mode;
 	}
@@ -101,7 +102,7 @@ usize FileReader::read(void *data, usize size)
 
 	isize r = ::read(m_fd, datap, size);
 	if (r < 0) {
-		eprint("FileReader::read(): %m");
+		tfm::format(std::cerr, "FileReader::read(): %s", strerror(errno));
 		return 0;
 	}
 

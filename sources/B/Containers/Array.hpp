@@ -17,7 +17,8 @@ namespace B {
 #include "B/Types.hpp"
 #include "B/Containers/Iterators.hpp"
 #include "B/Containers/Vector.hpp"
-#include "B/IO/Print.hpp"
+// #include "B/IO/Print.hpp"
+#include "tinyformat.hpp"
 
 #include <stdexcept>
 #include <initializer_list>
@@ -51,7 +52,7 @@ public:
 	T &at(usize i)
 	{
 		if (i >= S)
-			throw std::runtime_error(format("Array::at: i(%$) >= size(%$)", i, S));
+			throw std::runtime_error(tfm::format("Array::at: i(%zu) >= size(%zu)", i, S));
 		return data()[i];
 	}
 
@@ -61,7 +62,7 @@ public:
 	const T &at(usize i) const
 	{
 		if (i >= S)
-			throw std::runtime_error(format("Array::at: i(%$) >= size(%$)", i, S));
+			throw std::runtime_error(tfm::format("Array::at: i(%zu) >= size(%zu)", i, S));
 		return data()[i];
 	}
 

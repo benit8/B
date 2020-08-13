@@ -17,6 +17,7 @@ namespace B {
 #include "B/Containers/Sequence.hpp"
 #include "B/Containers/Vector.hpp"
 #include "B/IO/Writer.hpp"
+#include "tinyformat.hpp"
 
 #include <iostream>
 #include <string>
@@ -66,7 +67,7 @@ public:
 	template <typename... Args>
 	void insertf(usize p, const char *fmt, const Args&... args)
 	{
-		insert(p, format(fmt, args...));
+		insert(p, tfm::format(fmt, args...));
 	}
 
 	void append(const String &s)        { return insert(length(), s); }
@@ -76,7 +77,7 @@ public:
 	template <typename... Args>
 	void appendf(const char *fmt, const Args&... args)
 	{
-		insert(length(), format(fmt, args...));
+		insert(length(), tfm::format(fmt, args...));
 	}
 
 	void prepend(const String &s)        { return insert(0, s); }
@@ -86,7 +87,7 @@ public:
 	template <typename... Args>
 	void prependf(const char *fmt, const Args&... args)
 	{
-		insert(0, format(fmt, args...));
+		insert(0, tfm::format(fmt, args...));
 	}
 
 	void erase(usize start = 0, usize length = -1);

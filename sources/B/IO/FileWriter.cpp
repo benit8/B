@@ -4,6 +4,7 @@
 */
 
 #include "B/IO/Writer.hpp"
+#include "tinyformat.hpp"
 
 #include <unistd.h>
 
@@ -18,7 +19,7 @@ FileWriter::FileWriter(int fd)
 {
 	int flags = fcntl(fd, F_GETFL);
 	if ((flags & O_WRONLY) == 0 && (flags & O_RDWR) == 0)
-		throw std::runtime_error(format("FileWriter::FileWriter(%d): FD is not writable", fd));
+		throw std::runtime_error(tfm::format("FileWriter::FileWriter(%d): FD is not writable", fd));
 	else {
 		m_fd = fd;
 		m_flags = (OpenMode)flags;
@@ -29,7 +30,7 @@ FileWriter::FileWriter(const String &filename, OpenMode flags, File::Perms mode)
 {
 	m_fd = ::open(filename.cStr(), int(flags & OpenMode::StandardFlags), (mode_t)mode);
 	if (m_fd == -1)
-		throw std::runtime_error(format("FileWriter::FileWriter(%$, %o, %o): open() failed", filename, (int)flags, (mode_t)mode));
+		throw std::runtime_error(tfm::format("FileWriter::FileWriter(%s, %o, %o): open() failed", filename, (int)flags, (mode_t)mode));
 	else {
 		m_flags = flags;
 	}
@@ -56,7 +57,7 @@ void FileWriter::flush()
 
 	isize written = ::write(m_fd, m_buffer.data(), m_offset);
 	if (written < 0) {
-		eprint("FileWriter::flush(): write() failed: %m\n");
+		tfm::format(std::cerr, "FileWriter::flush(): write() failed: %s\n", strerror(errno));
 		return;
 	}
 	if (written == 0)

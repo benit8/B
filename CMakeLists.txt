@@ -33,6 +33,7 @@ PRIVATE
 target_include_directories(${PROJECT_NAME}
 PUBLIC
 	./sources
+	./extern
 )
 
 target_sources(${PROJECT_NAME}
@@ -70,6 +71,7 @@ PUBLIC
 	sources/B/Platform/Process.hpp
 	sources/B/Platform/Time.hpp
 	sources/B/Platform/ThreadPool.hpp
+	extern/tinyformat.hpp
 
 PRIVATE
 	sources/B/Buffer.cpp
