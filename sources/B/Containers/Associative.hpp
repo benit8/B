@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace B {
-	template <typename K, typename V>
+	template <typename Key, typename Value>
 	class Associative;
 }
 
@@ -24,19 +24,19 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename K, typename V>
-class Associative : public Sequence<Pair<K, V>>
+template <typename Key, typename Value>
+class Associative : public Sequence<Pair<Key, Value>>
 {
 public:
-	virtual V& at(const K& key)
+	virtual Value& at(const Key& key)
 	{
 		usize index = -1;
 		if (!this->search(key, index))
-			this->insertAt(index, key, V());
+			this->insertAt(index, key, Value());
 		return this->slot(index)->value;
 	}
 
-	virtual const V& at(const K& key) const
+	virtual const Value& at(const Key& key) const
 	{
 		usize index = -1;
 		if (!this->search(key, index))
@@ -44,16 +44,16 @@ public:
 		return this->slot(index)->value;
 	}
 
-	// V& operator [](const K& key) { return at(key); }
-	// const V& operator [](const K& key) const { return at(key); }
+	// Value& operator [](const Key& key) { return at(key); }
+	// const Value& operator [](const Key& key) const { return at(key); }
 
-	virtual bool contains(const K& key) const = 0;
-	virtual bool insert(const K& key, const V& value) = 0;
-	virtual bool erase(const K& key) = 0;
+	virtual bool contains(const Key& key) const = 0;
+	virtual bool insert(const Key& key, const Value& value) = 0;
+	virtual bool erase(const Key& key) = 0;
 
 protected:
-	virtual bool search(const K& search, usize& index) const = 0;
-	virtual bool insertAt(usize pos, const K& key, const V& value) = 0;
+	virtual bool search(const Key& search, usize& index) const = 0;
+	virtual bool insertAt(usize pos, const Key& key, const Value& value) = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
