@@ -19,10 +19,10 @@ struct Pair
 	Value value;
 
 	Pair() = default;
-	Pair(const Pair &other) = default;
-	Pair(Pair &&other) = default;
+	Pair(const Pair& other) = default;
+	Pair(Pair&& other) = default;
 
-	Pair(const Key &k, const Value &v)
+	Pair(const Key& k, const Value& v)
 	: key(k)
 	, value(v)
 	{}

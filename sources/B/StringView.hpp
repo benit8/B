@@ -26,11 +26,11 @@ class StringView
 {
 public:
 	StringView();
-	StringView(const String &other);
-	StringView(const char *str);
-	StringView(const char *str, usize length);
+	StringView(const String& other);
+	StringView(const char* str);
+	StringView(const char* str, usize length);
 
-	const char *cStr() const { return m_chars; }
+	const char* cStr() const { return m_chars; }
 	usize length() const { return m_len; }
 	bool null() const { return m_chars == nullptr; }
 	bool empty() const { return null() || m_len == 0; }
@@ -60,13 +60,13 @@ public:
 	bool operator >(StringView rhs) const;
 	bool operator >=(StringView rhs) const;
 
-	friend Writer &operator <<(Writer &, StringView);
-	friend std::ostream &operator <<(std::ostream &, StringView);
+	friend Writer& operator <<(Writer&, StringView);
+	friend std::ostream& operator <<(std::ostream&, StringView);
 
 	static const usize nPos = -1;
 
 private:
-	const char *m_chars = nullptr;
+	const char* m_chars = nullptr;
 	usize m_len = 0;
 };
 

@@ -27,26 +27,26 @@ class alignas(T) Optional
 public:
 	Optional() = default;
 
-	Optional(const T &value)
+	Optional(const T& value)
 	: m_hasValue(true)
 	{
 		new (&m_storage) T(value);
 	}
 
 	template <typename U>
-	Optional(const U &value)
+	Optional(const U& value)
 	: m_hasValue(true)
 	{
 		new (&m_storage) T(value);
 	}
 
-	Optional(T &&value)
+	Optional(T&& value)
 	: m_hasValue(true)
 	{
 		new (&m_storage) T(std::move(value));
 	}
 
-	Optional(Optional &&other)
+	Optional(Optional&& other)
 	: m_hasValue(other.m_hasValue)
 	{
 		if (other.m_hasValue) {
@@ -63,19 +63,19 @@ public:
 
 	bool hasValue() const { return m_hasValue; }
 
-	T &value()
+	T& value()
 	{
 		assert(m_hasValue);
 		return *reinterpret_cast<T*>(&m_storage);
 	}
 
-	const T &value() const
+	const T& value() const
 	{
 		assert(m_hasValue);
 		return *reinterpret_cast<const T*>(&m_storage);
 	}
 
-	T &valueOr(const T &otherwise) const
+	T &valueOr(const T& otherwise) const
 	{
 		return m_hasValue ? value() : otherwise;
 	}
@@ -99,7 +99,7 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	Optional &operator =(const Optional &other)
+	Optional& operator =(const Optional& other)
 	{
 		if (this != &other) {
 			clear();
@@ -110,7 +110,7 @@ public:
 		return *this;
 	}
 
-	Optional &operator =(Optional &&other)
+	Optional& operator =(Optional&& other)
 	{
 		if (this == &other) {
 			clear();

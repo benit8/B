@@ -30,12 +30,12 @@ public:
 	: Sequence<T>()
 	{}
 
-	T &front() { return this->at(m_start); }
-	const T &front() const { return this->at(m_start); }
-	T &back() { return this->at(m_start - this->size() - 1); }
-	const T &back() const { return this->at(m_start - this->size() - 1); }
+	T& front() { return this->at(m_start); }
+	const T& front() const { return this->at(m_start); }
+	T& back() { return this->at(m_start - this->size() - 1); }
+	const T& back() const { return this->at(m_start - this->size() - 1); }
 
-	void push(const T &value)
+	void push(const T& value)
 	{
 		if (m_start + this->size() == this->capacity()) {
 			if (m_start > 0) {
@@ -51,7 +51,7 @@ public:
 		this->m_size++;
 	}
 
-	void push(T &&value)
+	void push(T&& value)
 	{
 		T t(std::move(value));
 		push(t);
@@ -76,7 +76,7 @@ public:
 			m_start = 0;
 	}
 
-	Queue &operator =(const Queue &rhs)
+	Queue& operator =(const Queue& rhs)
 	{
 		this->clear();
 		this->reserve(rhs.size());
@@ -85,7 +85,7 @@ public:
 		return *this;
 	}
 
-	Queue &operator =(Queue &&rhs)
+	Queue& operator =(Queue&& rhs)
 	{
 		this->reset();
 		this->m_data = std::move(rhs.m_data);
@@ -107,7 +107,7 @@ private:
 	// index isn't 0, we memmove the queue contents to the left. If it equals 0,
 	// then there's no more space in the queue and we reallocate.
 
-	friend std::ostream &operator <<(std::ostream &os, const Queue<T> &q)
+	friend std::ostream& operator <<(std::ostream& os, const Queue<T>& q)
 	{
 		os << "Queue<" << typeid(T).name() << ">(" << q.size() << '/' << q.capacity() << ") ";
 		if (q.null())

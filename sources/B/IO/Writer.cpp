@@ -22,31 +22,31 @@ FileWriter Writer::toFd(int fd)
 	return FileWriter(fd);
 }
 
-FileWriter Writer::toFile(const String &filename, OpenMode flags, File::Perms mode)
+FileWriter Writer::toFile(const String& filename, OpenMode flags, File::Perms mode)
 {
 	return FileWriter(filename, flags, mode);
 }
 
-BufferWriter Writer::toBuffer(Buffer &buffer)
+BufferWriter Writer::toBuffer(Buffer& buffer)
 {
 	return BufferWriter(buffer);
 }
 
-StringWriter Writer::toString(String &string)
+StringWriter Writer::toString(String& string)
 {
 	return StringWriter(string);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Writer::write(const Buffer &buffer)
+bool Writer::write(const Buffer& buffer)
 {
 	return write(buffer.data(), buffer.size()) == buffer.size();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Writer &Writer::operator <<(bool b)
+Writer& Writer::operator <<(bool b)
 {
 	if (binary())
 		put(b ? 1 : 0);
@@ -55,79 +55,79 @@ Writer &Writer::operator <<(bool b)
 	return *this;
 }
 
-Writer &Writer::operator <<(char c)
+Writer& Writer::operator <<(char c)
 {
 	put(c);
 	return *this;
 }
 
-Writer &Writer::operator <<(i8 n)
+Writer& Writer::operator <<(i8 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(i16 n)
+Writer& Writer::operator <<(i16 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(i32 n)
+Writer& Writer::operator <<(i32 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(i64 n)
+Writer& Writer::operator <<(i64 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(u8 n)
+Writer& Writer::operator <<(u8 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(u16 n)
+Writer& Writer::operator <<(u16 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(u32 n)
+Writer& Writer::operator <<(u32 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(u64 n)
+Writer& Writer::operator <<(u64 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(f32 n)
+Writer& Writer::operator <<(f32 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(f64 n)
+Writer& Writer::operator <<(f64 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(f128 n)
+Writer& Writer::operator <<(f128 n)
 {
 	write(&n, sizeof(n));
 	return *this;
 }
 
-Writer &Writer::operator <<(const char *value)
+Writer& Writer::operator <<(const char* value)
 {
 	for (usize i = 0; value[i] != '\0'; ++i)
 		put(value[i]);

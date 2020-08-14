@@ -26,7 +26,7 @@ FileWriter::FileWriter(int fd)
 	}
 }
 
-FileWriter::FileWriter(const String &filename, OpenMode flags, File::Perms mode)
+FileWriter::FileWriter(const String& filename, OpenMode flags, File::Perms mode)
 {
 	m_fd = ::open(filename.cStr(), int(flags & OpenMode::StandardFlags), (mode_t)mode);
 	if (m_fd == -1)
@@ -87,12 +87,12 @@ bool FileWriter::put(int c)
 	return !eof();
 }
 
-usize FileWriter::write(const void *data, usize size)
+usize FileWriter::write(const void* data, usize size)
 {
 	if (eof())
 		return 0;
 
-	auto datap = static_cast<const byte *>(data);
+	auto datap = static_cast<const byte*>(data);
 	for (usize i = 0; i < size; ++i) {
 		if (!put(datap[i]))
 			return i;

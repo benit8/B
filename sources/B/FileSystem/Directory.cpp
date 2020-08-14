@@ -12,7 +12,7 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Directory::Directory(const String &name)
+Directory::Directory(const String& name)
 {
 	m_dirp = opendir(name.cStr());
 }
@@ -29,9 +29,9 @@ Directory::~Directory()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Directory::readEntry(Directory::Entry &entry)
+bool Directory::readEntry(Directory::Entry& entry)
 {
-	struct dirent *ent = readdir(m_dirp);
+	struct dirent* ent = readdir(m_dirp);
 	if (ent == NULL)
 		return false;
 
@@ -61,9 +61,9 @@ int Directory::fd()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Vector<Directory::Entry> Directory::scan(const String &dirName, Directory::Filter filter, Directory::Comparator compar)
+Vector<Directory::Entry> Directory::scan(const String& dirName, Directory::Filter filter, Directory::Comparator compar)
 {
-	struct dirent **ents;
+	struct dirent** ents;
 	int n = scandir(dirName.cStr(), &ents, NULL, NULL);
 	if (n < 0)
 		return {};
@@ -82,17 +82,17 @@ Vector<Directory::Entry> Directory::scan(const String &dirName, Directory::Filte
 	return entries;
 }
 
-Directory::Filter Directory::defaultScanFilter = [] (const Directory::Entry &e)
+Directory::Filter Directory::defaultScanFilter = [] (const Directory::Entry& e)
 {
 	return e.name[0] != '.';
 };
 
-Directory::Filter Directory::hiddenScanFilter = [] (const Directory::Entry &)
+Directory::Filter Directory::hiddenScanFilter = [] (const Directory::Entry&)
 {
 	return true;
 };
 
-Directory::Comparator Directory::defaultScanCompare = [] (const Directory::Entry &a, const Directory::Entry &b)
+Directory::Comparator Directory::defaultScanCompare = [] (const Directory::Entry& a, const Directory::Entry& b)
 {
 	return a.name.compare(b.name);
 };

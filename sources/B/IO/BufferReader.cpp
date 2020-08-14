@@ -12,7 +12,7 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-BufferReader::BufferReader(const Buffer &buffer, bool binary)
+BufferReader::BufferReader(const Buffer& buffer, bool binary)
 : m_buffer(buffer)
 {
 	m_mode = OpenMode::ReadOnly;
@@ -22,7 +22,7 @@ BufferReader::BufferReader(const Buffer &buffer, bool binary)
 
 BufferReader::BufferReader(StringView str, bool binary)
 {
-	auto b = Buffer::wrap((const byte *)str.cStr(), str.length());
+	auto b = Buffer::wrap((const byte*)str.cStr(), str.length());
 	m_buffer = std::move(b);
 	m_mode = OpenMode::ReadOnly;
 
@@ -51,12 +51,12 @@ int BufferReader::get()
 	return m_buffer[m_offset++];
 }
 
-usize BufferReader::read(void *data, usize size)
+usize BufferReader::read(void* data, usize size)
 {
 	if (eof())
 		return 0;
 
-	auto datap = static_cast<byte *>(data);
+	auto datap = static_cast<byte*>(data);
 	usize sizeToRead = min(size, m_buffer.size() - m_offset);
 
 	for (usize i = 0; i < sizeToRead; ++i)

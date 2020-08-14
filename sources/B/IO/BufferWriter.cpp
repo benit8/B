@@ -12,7 +12,7 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-BufferWriter::BufferWriter(Buffer &buffer)
+BufferWriter::BufferWriter(Buffer& buffer)
 : m_buffer(buffer)
 {}
 
@@ -32,9 +32,9 @@ bool BufferWriter::put(int c)
 	return true;
 }
 
-usize BufferWriter::write(const void *data, usize size)
+usize BufferWriter::write(const void* data, usize size)
 {
-	auto datap = static_cast<const byte *>(data);
+	auto datap = static_cast<const byte*>(data);
 	usize written = 0;
 
 	while (put(datap[written++]) && written < size);

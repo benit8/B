@@ -12,7 +12,7 @@ using B::SingleList;
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-static inline bool checkListContent(const SingleList<T> &list, std::initializer_list<T> content)
+static inline bool checkListContent(const SingleList<T>& list, std::initializer_list<T> content)
 {
 	auto it1 = list.begin();
 	auto it2 = content.begin();

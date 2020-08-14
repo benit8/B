@@ -34,14 +34,14 @@ template <typename T>
 class AtomicQueue
 {
 public:
-	bool push(T const &value) {
+	bool push(const T& value) {
 		std::unique_lock<std::mutex> lock(m_mutex);
 		m_q.push(value);
 		return true;
 	}
 
 	// Deletes the retrieved element, do not use for non integral types
-	bool pop(T &v) {
+	bool pop(T& v) {
 		std::unique_lock<std::mutex> lock(m_mutex);
 		if (m_q.empty())
 			return false;
@@ -97,7 +97,7 @@ public:
 		return m_nWaiting;
 	}
 
-	std::thread &getThread(usize i) const {
+	std::thread& getThread(usize i) const {
 		return *m_threads[i];
 	}
 
@@ -140,7 +140,7 @@ public:
 	// Empty the queue
 	void clearQueue()
 	{
-		std::function<void(int id)> *_f;
+		std::function<void(int id)>* _f;
 		while (m_q.pop(_f))
 			delete _f;
 	}
@@ -148,7 +148,7 @@ public:
 	// Pops a functional wrapper to the original function
 	std::function<void(int)> pop()
 	{
-		std::function<void(int id)> *_f = nullptr;
+		std::function<void(int id)>* _f = nullptr;
 		m_q.pop(_f);
 		std::unique_ptr<std::function<void(int id)>> func(_f); // At return, delete the function even if an exception occurred
 		std::function<void(int)> f;
@@ -197,7 +197,7 @@ public:
 	}
 
 	template<typename F, typename... Rest>
-	auto push(F &&f, Rest&&... rest) -> std::future<decltype(f(0, rest...))>
+	auto push(F&& f, Rest&&... rest) -> std::future<decltype(f(0, rest...))>
 	{
 		auto pck = std::make_shared<std::packaged_task<decltype(f(0, rest...))(int)>>(
 			std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Rest>(rest)...)
@@ -214,7 +214,7 @@ public:
 	// Run the user's function that expects argument `int id` of the running thread. returned value is templatized
 	// Operator returns std::future, where the user can get the result and rethrow the catched exceptions
 	template<typename F>
-	auto push(F &&f) -> std::future<decltype(f(0))>
+	auto push(F&& f) -> std::future<decltype(f(0))>
 	{
 		auto pck = std::make_shared<std::packaged_task<decltype(f(0))(int)>>(std::forward<F>(f));
 		auto _f = new std::function<void(int id)>([pck](int id) {
@@ -228,10 +228,10 @@ public:
 
 
 private:
-	ThreadPool(const ThreadPool &);
-	ThreadPool(ThreadPool &&);
-	ThreadPool & operator=(const ThreadPool &);
-	ThreadPool & operator=(ThreadPool &&);
+	ThreadPool(const ThreadPool&);
+	ThreadPool(ThreadPool&&);
+	ThreadPool& operator=(const ThreadPool&);
+	ThreadPool& operator=(ThreadPool&&);
 
 	void setThread(int i)
 	{
@@ -239,7 +239,7 @@ private:
 		std::shared_ptr<std::atomic<bool>> flag(m_flags[i]);
 
 		auto f = [this, i, flag/* a copy of the shared ptr to the flag */]() {
-			std::atomic<bool> &_flag = *flag;
+			std::atomic<bool>& _flag = *flag;
 			std::function<void(int id)> *_f;
 			bool isPop = m_q.pop(_f);
 			while (true) {
@@ -271,7 +271,7 @@ private:
 private:
 	std::vector<std::unique_ptr<std::thread>> m_threads;
 	std::vector<std::shared_ptr<std::atomic<bool>>> m_flags;
-	detail::AtomicQueue<std::function<void(int id)> *> m_q;
+	detail::AtomicQueue<std::function<void(int id)>*> m_q;
 	std::atomic<usize> m_nWaiting;
 	std::atomic<bool> m_done;
 	std::atomic<bool> m_stopped;

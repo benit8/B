@@ -18,7 +18,7 @@ Map<Key, Value>::Map()
 }
 
 template <typename Key, typename Value>
-Map<Key, Value>::Map(const Map &other)
+Map<Key, Value>::Map(const Map& other)
 {
 	this->reserve(other.size());
 	for (auto it = other.begin(); !it.isEnd(); ++it)
@@ -26,7 +26,7 @@ Map<Key, Value>::Map(const Map &other)
 }
 
 template <typename Key, typename Value>
-Map<Key, Value>::Map(Map &&other)
+Map<Key, Value>::Map(Map&& other)
 {
 	this->m_data = std::move(other.m_data);
 	this->m_capacity = std::move(other.m_capacity);
@@ -72,14 +72,14 @@ typename Map<Key, Value>::ConstIterator Map<Key, Value>::end() const
 ////////////////////////////////////////////////////////////
 
 template <typename Key, typename Value>
-bool Map<Key, Value>::contains(const Key &key) const
+bool Map<Key, Value>::contains(const Key& key) const
 {
 	auto it = find(key);
 	return !it.isEnd();
 }
 
 template <typename Key, typename Value>
-bool Map<Key, Value>::insert(const Key &key, const Value &value)
+bool Map<Key, Value>::insert(const Key& key, const Value& value)
 {
 	auto it = find(key);
 	if (!it.isEnd())
@@ -95,7 +95,7 @@ bool Map<Key, Value>::insert(const Key &key, const Value &value)
 }
 
 template <typename Key, typename Value>
-bool Map<Key, Value>::erase(const Key &key)
+bool Map<Key, Value>::erase(const Key& key)
 {
 	auto it = find(key);
 	if (it.isEnd())
@@ -109,14 +109,14 @@ bool Map<Key, Value>::erase(const Key &key)
 }
 
 template <typename Key, typename Value>
-typename Map<Key, Value>::Iterator Map<Key, Value>::find(const Key &key)
+typename Map<Key, Value>::Iterator Map<Key, Value>::find(const Key& key)
 {
 	usize index = -1;
 	return Iterator(*this, search(key, index) ? index : this->size());
 }
 
 template <typename Key, typename Value>
-typename Map<Key, Value>::ConstIterator Map<Key, Value>::find(const Key &key) const
+typename Map<Key, Value>::ConstIterator Map<Key, Value>::find(const Key& key) const
 {
 	usize index = -1;
 	return ConstIterator(*this, search(key, index) ? index : this->size());
@@ -125,7 +125,7 @@ typename Map<Key, Value>::ConstIterator Map<Key, Value>::find(const Key &key) co
 ////////////////////////////////////////////////////////////
 
 template <typename Key, typename Value>
-bool Map<Key, Value>::search(const Key &search, usize &index) const
+bool Map<Key, Value>::search(const Key& search, usize& index) const
 {
 	// Quick 'n easy checks
 	if (this->empty() || search < this->slot(0)->key) {
@@ -157,7 +157,7 @@ bool Map<Key, Value>::search(const Key &search, usize &index) const
 }
 
 template <typename Key, typename Value>
-bool Map<Key, Value>::insert(usize pos, const Key &key, const Value &value)
+bool Map<Key, Value>::insert(usize pos, const Key& key, const Value& value)
 {
 	this->reserve(this->size() + 1);
 	if (pos < this->size())
@@ -170,7 +170,7 @@ bool Map<Key, Value>::insert(usize pos, const Key &key, const Value &value)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename Key, typename Value>
-std::ostream &operator <<(std::ostream &os, const Map<Key, Value> &m)
+std::ostream& operator <<(std::ostream& os, const Map<Key, Value>& m)
 {
 	os << "Map<" << typeid(Key).name() << ", " << typeid(Value).name() << ">(" << m.size() << '/' << m.capacity() << ") ";
 	if (m.null())

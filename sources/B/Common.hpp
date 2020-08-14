@@ -44,31 +44,31 @@ enum class SeekMode : int
 ////////////////////////////////////////////////////////////////////////////////
 
 template<typename T1, typename T2>
-inline constexpr auto min(const T1 &a, const T2 &b)
+inline constexpr auto min(const T1& a, const T2& b)
 {
 	return (a < b) ? a : b;
 }
 
 template<typename T1, typename T2>
-inline constexpr auto max(const T1 &a, const T2 &b)
+inline constexpr auto max(const T1& a, const T2& b)
 {
 	return (a > b) ? a : b;
 }
 
 template<typename T1, typename T2, typename... Ts>
-inline constexpr auto min(const T1 &a, const T2 &b, const Ts&... z)
+inline constexpr auto min(const T1& a, const T2& b, const Ts&... z)
 {
 	return min(a, min(b, z...));
 }
 
 template<typename T1, typename T2, typename... Ts>
-inline constexpr auto max(const T1 &a, const T2 &b, const Ts&... z)
+inline constexpr auto max(const T1& a, const T2& b, const Ts&... z)
 {
 	return max(a, max(b, z...));
 }
 
 template<typename T1, typename T2, typename T3>
-inline constexpr auto clamp(const T1 &value, const T2 &mini, const T3 &maxi)
+inline constexpr auto clamp(const T1& value, const T2& mini, const T3& maxi)
 {
 	return max(mini, min(value, maxi));
 }

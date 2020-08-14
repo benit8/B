@@ -242,17 +242,17 @@ Test(Vector, Back)
 Test(Vector, Data_const)
 {
 	Vector<uint> v({7, 5, 6, 1, 9, 4, 3});
-	cr_assert_not_null((const uint *)v.data());
+	cr_assert_not_null((const uint*)v.data());
 
 	v.~Vector<uint>();
-	cr_assert_null((const uint *)v.data());
+	cr_assert_null((const uint*)v.data());
 }
 
 Test(Vector, Data)
 {
 	Vector<uint> v({7, 5, 6, 1, 9, 4, 3});
 
-	uint *a = v.data();
+	uint* a = v.data();
 	a[2] = 10;
 
 	cr_assert_eq(v.at(2), 10);
@@ -624,7 +624,7 @@ Test(Vector, Filter)
 {
 	Vector<uint> v({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 
-	v.filter([] (const uint &a) {
+	v.filter([] (const uint& a) {
 		return a & 1;
 	});
 
@@ -646,7 +646,7 @@ Test(Vector, SortWithComparator)
 {
 	Vector<uint> v({3, 7, 1, 6, 2, 5, 8, 10, 9, 4});
 
-	v.sort([] (const uint &a, const uint &b) -> bool {
+	v.sort([] (const uint& a, const uint& b) -> bool {
 		if ((a & 1) != (b & 1))
 			return a & 1;
 		return a < b;

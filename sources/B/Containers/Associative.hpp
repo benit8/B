@@ -28,7 +28,7 @@ template <typename K, typename V>
 class Associative : public Sequence<Pair<K, V>>
 {
 public:
-	virtual V &at(const K &key)
+	virtual V& at(const K& key)
 	{
 		usize index = -1;
 		if (!this->search(key, index))
@@ -36,7 +36,7 @@ public:
 		return this->slot(index)->value;
 	}
 
-	virtual const V &at(const K &key) const
+	virtual const V& at(const K& key) const
 	{
 		usize index = -1;
 		if (!this->search(key, index))
@@ -44,16 +44,16 @@ public:
 		return this->slot(index)->value;
 	}
 
-	// V &operator [](const K &key) { return at(key); }
-	// const V &operator [](const K &key) const { return at(key); }
+	// V& operator [](const K& key) { return at(key); }
+	// const V& operator [](const K& key) const { return at(key); }
 
-	virtual bool contains(const K &key) const = 0;
-	virtual bool insert(const K &key, const V &value) = 0;
-	virtual bool erase(const K &key) = 0;
+	virtual bool contains(const K& key) const = 0;
+	virtual bool insert(const K& key, const V& value) = 0;
+	virtual bool erase(const K& key) = 0;
 
 protected:
-	virtual bool search(const K &search, usize &index) const = 0;
-	virtual bool insertAt(usize pos, const K &key, const V &value) = 0;
+	virtual bool search(const K& search, usize& index) const = 0;
+	virtual bool insertAt(usize pos, const K& key, const V& value) = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

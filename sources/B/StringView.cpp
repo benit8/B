@@ -17,12 +17,12 @@ StringView::StringView()
 , m_len(0)
 {}
 
-StringView::StringView(const String &string)
+StringView::StringView(const String& string)
 : m_chars(string.cStr())
 , m_len(string.length())
 {}
 
-StringView::StringView(const char *str)
+StringView::StringView(const char* str)
 : m_chars(str)
 , m_len(0)
 {
@@ -30,7 +30,7 @@ StringView::StringView(const char *str)
 		for (m_len = 0; str[m_len] != '\0'; m_len++);
 }
 
-StringView::StringView(const char *str, usize length)
+StringView::StringView(const char* str, usize length)
 : m_chars(length > 0 ? str : nullptr)
 , m_len(length)
 {}
@@ -221,7 +221,7 @@ usize StringView::findLastOf(StringView s, usize end) const
 }
 
 
-StringView &StringView::operator =(nullptr_t)
+StringView& StringView::operator =(nullptr_t)
 {
 	m_chars = nullptr;
 	m_len = 0;
@@ -259,7 +259,7 @@ bool StringView::operator >=(StringView rhs) const
 }
 
 
-Writer &operator <<(Writer &os, StringView s)
+Writer& operator <<(Writer& os, StringView s)
 {
 	if (s.null())
 		return os << "(nullStrVw)";
@@ -267,7 +267,7 @@ Writer &operator <<(Writer &os, StringView s)
 	return os;
 }
 
-std::ostream &operator <<(std::ostream &os, StringView s)
+std::ostream& operator <<(std::ostream& os, StringView s)
 {
 	if (s.null())
 		return os << "(nullStrVw)";

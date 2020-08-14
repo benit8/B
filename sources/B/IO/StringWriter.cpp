@@ -12,7 +12,7 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-StringWriter::StringWriter(String &string)
+StringWriter::StringWriter(String& string)
 : m_string(string)
 {}
 
@@ -32,9 +32,9 @@ bool StringWriter::put(int c)
 	return true;
 }
 
-usize StringWriter::write(const void *data, usize size)
+usize StringWriter::write(const void* data, usize size)
 {
-	auto datap = static_cast<const char *>(data);
+	auto datap = static_cast<const char*>(data);
 	m_string.insert(m_offset, datap, size);
 	return size;
 }

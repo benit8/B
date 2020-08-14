@@ -21,7 +21,7 @@ class Stat
 {
 public:
 	Stat(int fd);
-	Stat(const String &filename, bool dereference = true);
+	Stat(const String& filename, bool dereference = true);
 	~Stat() {}
 
 	bool good() const { return m_good; }

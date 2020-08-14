@@ -26,7 +26,7 @@ T parse(StringView str, unsigned short base = 10)
 }
 
 template <typename T>
-T parse(Reader &rd, unsigned short base = 10)
+T parse(Reader& rd, unsigned short base = 10)
 {
 	T num = 0;
 

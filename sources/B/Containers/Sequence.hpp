@@ -38,21 +38,21 @@ public:
 		reset();
 	}
 
-	virtual T *data() { return m_data; }
-	virtual const T *data() const { return m_data; }
+	virtual T* data() { return m_data; }
+	virtual const T* data() const { return m_data; }
 	virtual usize capacity() const { return m_capacity; }
 	virtual usize size() const override { return m_size; }
 	virtual bool null() const { return data() == nullptr; }
 	virtual bool empty() const override { return null() || size() == 0; }
 
-	virtual T &at(usize i)
+	virtual T& at(usize i)
 	{
 		if (i >= size())
 			throw std::out_of_range(tfm::format("Sequence::at(): i(%zu) >= size(%zu)", i, size()));
 		return data()[i];
 	}
 
-	virtual const T &at(usize i) const
+	virtual const T& at(usize i) const
 	{
 		if (i >= size())
 			throw std::out_of_range(tfm::format("Sequence::at(): i(%zu) >= size(%zu)", i, size()));
@@ -81,7 +81,7 @@ public:
 		if (newSize <= capacity() && capacity() > 0)
 			return;
 		newSize = recommend(newSize);
-		T *newData = new T[newSize];
+		T* newData = new T[newSize];
 		assert(newData != nullptr);
 		if (!null()) {
 			Memory<T>::move(newData, data(), size());
@@ -91,7 +91,7 @@ public:
 		m_capacity = newSize;
 	}
 
-	virtual void resize(usize newSize, const T &filler = T())
+	virtual void resize(usize newSize, const T& filler = T())
 	{
 		if (newSize == size())
 			return;
@@ -108,7 +108,7 @@ public:
 	{
 		if (empty() || size() == capacity())
 			return;
-		T *newData = new T[size()];
+		T* newData = new T[size()];
 		Memory<T>::move(newData, m_data, size());
 		delete[] m_data;
 		m_data = newData;
@@ -118,14 +118,14 @@ public:
 protected:
 	Sequence() = default;
 
-	T *slot(usize i)
+	T* slot(usize i)
 	{
 		if (i >= capacity())
 			throw std::out_of_range(tfm::format("Sequence::slot(): i(%zu) >= capacity(%zu)", i, capacity()));
 		return &m_data[i];
 	}
 
-	const T *slot(usize i) const
+	const T* slot(usize i) const
 	{
 		if (i >= capacity())
 			throw std::out_of_range(tfm::format("Sequence::slot(): i(%zu) >= capacity(%zu)", i, capacity()));
@@ -157,7 +157,7 @@ public:
 	static const usize growthFactor;
 
 protected:
-	T *m_data = nullptr;
+	T* m_data = nullptr;
 	usize m_capacity = 0;
 	usize m_size = 0;
 };

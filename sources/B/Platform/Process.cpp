@@ -12,7 +12,7 @@ namespace B
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Process::Process(const Vector<String> &args, Process::Flags flags)
+Process::Process(const Vector<String>& args, Process::Flags flags)
 {
 	create(args, flags);
 }
@@ -23,7 +23,7 @@ Process::~Process()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Process::create(const Vector<String> &args, Process::Flags flags)
+bool Process::create(const Vector<String>& args, Process::Flags flags)
 {
 	if (!m_inPipe || !m_outPipe || !m_errPipe)
 		return false;
@@ -50,7 +50,7 @@ bool Process::create(const Vector<String> &args, Process::Flags flags)
 		::dup2(m_errPipe.out(), STDERR_FILENO);
 
 
-		char **cArgs = buildCStringArray(args);
+		char** cArgs = buildCStringArray(args);
 		if ((flags & Flags::EmptyEnv) == Flags::EmptyEnv)
 			exit(::execvp(cArgs[0], cArgs));
 		else
@@ -130,9 +130,9 @@ bool Process::running() const
 
 ////////////////////////////////////////////////////////////////////////////////
 
-char **Process::buildCStringArray(const Vector<String> &vector)
+char** Process::buildCStringArray(const Vector<String> &vector)
 {
-	char **array = (char**)::calloc(vector.size() + 1, sizeof(char *));
+	char** array = (char**)::calloc(vector.size() + 1, sizeof(char*));
 	if (array == NULL)
 		return NULL;
 
@@ -148,7 +148,7 @@ char **Process::buildCStringArray(const Vector<String> &vector)
 	return array;
 }
 
-void Process::freeCStringArray(char **array)
+void Process::freeCStringArray(char** array)
 {
 	for (usize i = 0; array[i] != NULL; ++i)
 		::free(array[i]);

@@ -26,7 +26,7 @@ FileReader::FileReader(int fd, OpenMode mode)
 	}
 }
 
-FileReader::FileReader(const String &filename, OpenMode mode)
+FileReader::FileReader(const String& filename, OpenMode mode)
 {
 	m_fd = ::open(filename.cStr(), int(mode & OpenMode::StandardFlags));
 	if (m_fd == -1)
@@ -84,12 +84,12 @@ int FileReader::get()
 	return r == 1 ? c : EOF;
 }
 
-usize FileReader::read(void *data, usize size)
+usize FileReader::read(void* data, usize size)
 {
 	if (eof())
 		return 0;
 
-	auto datap = static_cast<byte *>(data);
+	auto datap = static_cast<byte*>(data);
 
 	if (m_peeked) {
 		*datap = m_peeked.value();

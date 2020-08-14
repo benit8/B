@@ -18,12 +18,12 @@ FileReader Reader::fromFd(int fd, OpenMode mode)
 	return FileReader(fd, mode);
 }
 
-FileReader Reader::fromFile(const String &filename, OpenMode mode)
+FileReader Reader::fromFile(const String& filename, OpenMode mode)
 {
 	return FileReader(filename, mode);
 }
 
-BufferReader Reader::fromBuffer(const Buffer &buffer, bool binary)
+BufferReader Reader::fromBuffer(const Buffer& buffer, bool binary)
 {
 	return BufferReader(buffer, binary);
 }
@@ -51,13 +51,13 @@ bool Reader::peek(int c)
 	return peek() == c;
 }
 
-bool Reader::read(Buffer &buffer)
+bool Reader::read(Buffer& buffer)
 {
 	buffer.clear();
 	return read(buffer.data(), buffer.size()) == buffer.size();
 }
 
-bool Reader::readLine(String &line)
+bool Reader::readLine(String& line)
 {
 	if (eof())
 		return false;
@@ -75,7 +75,7 @@ bool Reader::readLine(String &line)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Reader &Reader::operator >>(bool &b)
+Reader& Reader::operator >>(bool& b)
 {
 	if (binary())
 		b = get() > 0;
@@ -86,13 +86,13 @@ Reader &Reader::operator >>(bool &b)
 	return *this;
 }
 
-Reader &Reader::operator >>(char &c)
+Reader& Reader::operator >>(char& c)
 {
 	c = get();
 	return *this;
 }
 
-Reader &Reader::operator >>(i8 &n)
+Reader& Reader::operator >>(i8& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -101,7 +101,7 @@ Reader &Reader::operator >>(i8 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(i16 &n)
+Reader& Reader::operator >>(i16& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -110,7 +110,7 @@ Reader &Reader::operator >>(i16 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(i32 &n)
+Reader& Reader::operator >>(i32& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -119,7 +119,7 @@ Reader &Reader::operator >>(i32 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(i64 &n)
+Reader& Reader::operator >>(i64& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -128,7 +128,7 @@ Reader &Reader::operator >>(i64 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(u8 &n)
+Reader& Reader::operator >>(u8& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -137,7 +137,7 @@ Reader &Reader::operator >>(u8 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(u16 &n)
+Reader& Reader::operator >>(u16& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -146,7 +146,7 @@ Reader &Reader::operator >>(u16 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(u32 &n)
+Reader& Reader::operator >>(u32& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -155,7 +155,7 @@ Reader &Reader::operator >>(u32 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(u64 &n)
+Reader& Reader::operator >>(u64& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -164,7 +164,7 @@ Reader &Reader::operator >>(u64 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(f32 &n)
+Reader& Reader::operator >>(f32& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -173,7 +173,7 @@ Reader &Reader::operator >>(f32 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(f64 &n)
+Reader& Reader::operator >>(f64& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -182,7 +182,7 @@ Reader &Reader::operator >>(f64 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(f128 &n)
+Reader& Reader::operator >>(f128& n)
 {
 	if (binary())
 		read(&n, sizeof(n));
@@ -191,7 +191,7 @@ Reader &Reader::operator >>(f128 &n)
 	return *this;
 }
 
-Reader &Reader::operator >>(String &value)
+Reader& Reader::operator >>(String& value)
 {
 	value.erase();
 

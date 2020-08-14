@@ -46,34 +46,34 @@ public:
 	constexpr usize size() const { return S; }
 	constexpr bool empty() const { return S == 0; }
 
-	T &front() { return data()[0]; }
-	T &back() { return data()[S - 1]; }
-	T *data() { return _data; }
-	T &at(usize i)
+	T& front() { return data()[0]; }
+	T& back() { return data()[S - 1]; }
+	T* data() { return _data; }
+	T& at(usize i)
 	{
 		if (i >= S)
 			throw std::runtime_error(tfm::format("Array::at: i(%zu) >= size(%zu)", i, S));
 		return data()[i];
 	}
 
-	const T &front() const { return data()[0]; }
-	const T &back() const { return data()[S - 1]; }
-	const T *data() const { return _data; }
-	const T &at(usize i) const
+	const T& front() const { return data()[0]; }
+	const T& back() const { return data()[S - 1]; }
+	const T* data() const { return _data; }
+	const T& at(usize i) const
 	{
 		if (i >= S)
 			throw std::runtime_error(tfm::format("Array::at: i(%zu) >= size(%zu)", i, S));
 		return data()[i];
 	}
 
-	void fill(const T &value)
+	void fill(const T& value)
 	{
 		for (usize i = 0; i < S; ++i)
 			data()[i] = value;
 	}
 
-	T &operator [](usize i) { return data()[i]; }
-	const T &operator [](usize i) const { return data()[i]; }
+	T& operator [](usize i) { return data()[i]; }
+	const T& operator [](usize i) const { return data()[i]; }
 
 	Vector<T> toVector() const { return Vector<T>(data(), size()); }
 };

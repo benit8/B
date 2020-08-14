@@ -13,13 +13,13 @@ namespace B
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-SingleList<T>::SingleList(const SingleList &other)
+SingleList<T>::SingleList(const SingleList& other)
 {
 	assign(other.begin(), other.end());
 }
 
 template <typename T>
-SingleList<T>::SingleList(SingleList &&other)
+SingleList<T>::SingleList(SingleList&& other)
 {
 	clear();
 	std::swap(m_head, other.m_head);
@@ -50,7 +50,7 @@ template <typename T>
 size_t SingleList<T>::size() const
 {
 	size_t s = 0;
-	for (auto *curr = m_head; curr != nullptr; curr = curr->next)
+	for (auto curr = m_head; curr != nullptr; curr = curr->next)
 		++s;
 	return s;
 }
@@ -64,7 +64,7 @@ bool SingleList<T>::empty() const
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-bool SingleList<T>::contains(const T &value) const
+bool SingleList<T>::contains(const T& value) const
 {
 	return find(value) != end();
 }
@@ -72,8 +72,8 @@ bool SingleList<T>::contains(const T &value) const
 template <typename T>
 void SingleList<T>::clear()
 {
-	for (Node *curr = m_head; curr != nullptr; ) {
-		Node *next = curr->next;
+	for (auto curr = m_head; curr != nullptr; ) {
+		auto next = curr->next;
 		delete curr;
 		curr = next;
 	}
@@ -91,7 +91,7 @@ void SingleList<T>::assign(It first, It last)
 	if (first == last)
 		return;
 
-	Node **ptrToCurrent = &m_head;
+	Node** ptrToCurrent = &m_head;
 	for (auto it = first; it != last; ++it) {
 		*ptrToCurrent = new Node(*it);
 		ptrToCurrent = &(*ptrToCurrent)->next;
@@ -105,17 +105,17 @@ void SingleList<T>::assign(std::initializer_list<T> il)
 }
 
 template <typename T>
-void SingleList<T>::push(const T &value)
+void SingleList<T>::push(const T& value)
 {
-	auto *n = new Node(value);
+	auto n = new Node(value);
 	n->next = m_head;
 	m_head = n;
 }
 
 template <typename T>
-void SingleList<T>::push(T &&value)
+void SingleList<T>::push(T&& value)
 {
-	auto *n = new Node(std::move(value));
+	auto n = new Node(std::move(value));
 	n->next = m_head;
 	m_head = n;
 }
@@ -126,28 +126,28 @@ void SingleList<T>::pop()
 	if (empty())
 		return;
 
-	auto *second = m_head->next;
+	auto second = m_head->next;
 	delete m_head;
 	m_head = second;
 }
 
 template <typename T>
-typename SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, const T &value)
+typename SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, const T& value)
 {
 	assert(!it.isEnd());
 
-	auto *n = new Node(value);
+	auto n = new Node(value);
 	n->next = it.m_node->next;
 	it.m_node->next = n;
 	return Iterator(n, it.m_node);
 }
 
 template <typename T>
-typename SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, T &&value)
+typename SingleList<T>::Iterator SingleList<T>::insertAfter(SingleList<T>::Iterator it, T&& value)
 {
 	assert(!it.isEnd());
 
-	auto *n = new Node(std::move(value));
+	auto n = new Node(std::move(value));
 	n->next = it.m_node->next;
 	it.m_node->next = n;
 	return Iterator(n, it.m_node);
@@ -186,9 +186,9 @@ void SingleList<T>::erase(SingleList<T>::Iterator first, SingleList<T>::Iterator
 }
 
 template <typename T>
-size_t SingleList<T>::remove(const T &search)
+size_t SingleList<T>::remove(const T& search)
 {
-	return removeIf([&search] (const T &value) {
+	return removeIf([&search] (const T& value) {
 		return value == search;
 	});
 }
@@ -199,11 +199,11 @@ size_t SingleList<T>::removeIf(F filter)
 {
 	size_t removed = 0;
 
-	Node *prev = nullptr;
-	Node *curr = m_head;
+	Node* prev = nullptr;
+	auto curr = m_head;
 	while (curr != nullptr) {
 		if (filter(curr->value)) {
-			Node *toDel = curr;
+			auto toDel = curr;
 			curr = curr->next;
 			delete toDel;
 
@@ -231,11 +231,11 @@ size_t SingleList<T>::unique()
 
 	size_t removed = 0;
 
-	Node *prev = m_head;
-	Node *curr = m_head->next;
+	auto prev = m_head;
+	auto curr = m_head->next;
 	while (curr != nullptr) {
 		if (prev->value == curr->value) {
-			Node *toDel = curr;
+			auto toDel = curr;
 			curr = curr->next;
 			delete toDel;
 
@@ -272,9 +272,9 @@ void SingleList<T>::reverse()
 	if (m_head && !m_head->next)
 		return;
 
-	Node *prev = nullptr;
-	for (Node *curr = m_head; curr; ) {
-		Node *next = curr->next;
+	Node* prev = nullptr;
+	for (auto curr = m_head; curr; ) {
+		auto next = curr->next;
 		curr->next = prev;
 		prev = curr;
 		curr = next;
@@ -285,7 +285,7 @@ void SingleList<T>::reverse()
 template <typename T>
 void SingleList<T>::sort()
 {
-	sort([] (const T &a, const T &b) {
+	sort([] (const T& a, const T& b) {
 		return a < b;
 	});
 }
@@ -293,12 +293,12 @@ void SingleList<T>::sort()
 template <typename T>
 void SingleList<T>::sort(Function<bool(const T&, const T&)> comparator)
 {
-	std::function<void(Node *&)> sortFromNode = [&] (Node *&head) -> void
+	std::function<void(Node*&)> sortFromNode = [&] (Node*& head) -> void
 	{
-		auto splitInHalf = [] (Node *head) -> Pair<Node*, Node*>
+		auto splitInHalf = [] (Node* head) -> Pair<Node*, Node*>
 		{
-			Node *slow = head;
-			Node *fast = head->next;
+			auto slow = head;
+			auto fast = head->next;
 			while (fast) {
 				fast = fast->next;
 				if (fast) {
@@ -311,7 +311,7 @@ void SingleList<T>::sort(Function<bool(const T&, const T&)> comparator)
 			return {head, head2};
 		};
 
-		std::function<Node*(Node*, Node*)> sortedMerge = [&] (Node *a, Node *b) -> Node*
+		std::function<Node*(Node*, Node*)> sortedMerge = [&] (Node* a, Node* b) -> Node*
 		{
 			if (!a)
 				return b;
@@ -343,7 +343,7 @@ void SingleList<T>::sort(Function<bool(const T&, const T&)> comparator)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-typename SingleList<T>::Iterator SingleList<T>::find(const T &value)
+typename SingleList<T>::Iterator SingleList<T>::find(const T& value)
 {
 	return find([&](auto &other) { return value == other; });
 }
@@ -351,8 +351,8 @@ typename SingleList<T>::Iterator SingleList<T>::find(const T &value)
 template <typename T>
 typename SingleList<T>::Iterator SingleList<T>::find(Function<bool(const T&)> finder)
 {
-	Node *prev = nullptr;
-	for (Node *curr = m_head; curr != nullptr; curr = curr->next) {
+	Node* prev = nullptr;
+	for (auto curr = m_head; curr != nullptr; curr = curr->next) {
 		if (finder(curr->value))
 			return Iterator(curr, prev);
 		prev = curr;
@@ -361,7 +361,7 @@ typename SingleList<T>::Iterator SingleList<T>::find(Function<bool(const T&)> fi
 }
 
 template <typename T>
-typename SingleList<T>::ConstIterator SingleList<T>::find(const T &value) const
+typename SingleList<T>::ConstIterator SingleList<T>::find(const T& value) const
 {
 	return find([&](auto &other) { return value == other; });
 }
@@ -369,8 +369,8 @@ typename SingleList<T>::ConstIterator SingleList<T>::find(const T &value) const
 template <typename T>
 typename SingleList<T>::ConstIterator SingleList<T>::find(Function<bool(const T&)> finder) const
 {
-	Node *prev = nullptr;
-	for (Node *curr = m_head; curr != nullptr; curr = curr->next) {
+	Node* prev = nullptr;
+	for (auto curr = m_head; curr != nullptr; curr = curr->next) {
 		if (finder(curr->value))
 			return ConstIterator(curr, prev);
 		prev = curr;
@@ -381,14 +381,14 @@ typename SingleList<T>::ConstIterator SingleList<T>::find(Function<bool(const T&
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-SingleList<T> &SingleList<T>::operator =(const SingleList &other)
+SingleList<T>& SingleList<T>::operator =(const SingleList& other)
 {
 	assign(other.begin(), other.end());
 	return *this;
 }
 
 template <typename T>
-SingleList<T> &SingleList<T>::operator =(SingleList &&other)
+SingleList<T>& SingleList<T>::operator =(SingleList&& other)
 {
 	clear();
 	std::swap(m_head, other.m_head);
@@ -396,7 +396,7 @@ SingleList<T> &SingleList<T>::operator =(SingleList &&other)
 }
 
 template <typename T>
-SingleList<T> &SingleList<T>::operator =(std::initializer_list<T> il)
+SingleList<T>& SingleList<T>::operator =(std::initializer_list<T> il)
 {
 	assign(il);
 	return *this;
@@ -405,13 +405,13 @@ SingleList<T> &SingleList<T>::operator =(std::initializer_list<T> il)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-bool SingleList<T>::operator ==(const SingleList<T> &other)
+bool SingleList<T>::operator ==(const SingleList<T>& other)
 {
 	if (empty() && other.empty())
 		return true;
 
-	Node *a = m_head;
-	Node *b = other.m_head;
+	auto a = m_head;
+	auto b = other.m_head;
 	while (a != nullptr && b != nullptr) {
 		if (a->value != b->value)
 			return false;
@@ -427,7 +427,7 @@ bool SingleList<T>::operator ==(std::initializer_list<T> il)
 	if (empty() && il.size() == 0)
 		return true;
 
-	Node *node = m_head;
+	auto node = m_head;
 	for (auto el : il) {
 		if (node == nullptr)
 			return false;
@@ -439,13 +439,13 @@ bool SingleList<T>::operator ==(std::initializer_list<T> il)
 }
 
 template <typename T>
-bool SingleList<T>::operator !=(const SingleList<T> &other)
+bool SingleList<T>::operator !=(const SingleList<T>& other)
 {
 	if (empty() && other.empty())
 		return false;
 
-	Node *a = m_head;
-	Node *b = other.m_head;
+	auto a = m_head;
+	auto b = other.m_head;
 	while (a != nullptr && b != nullptr) {
 		if (a->value != b->value)
 			return true;
@@ -475,7 +475,7 @@ bool SingleList<T>::operator !=(std::initializer_list<T> il)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-Writer &operator <<(Writer &wrt, const SingleList<T> &l)
+Writer& operator <<(Writer& wrt, const SingleList<T>& l)
 {
 	wrt << "SingleList<" << typeid(T).name() << ">{";
 

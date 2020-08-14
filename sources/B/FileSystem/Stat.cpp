@@ -17,7 +17,7 @@ Stat::Stat(int fd)
 	m_good = fstat(fd, &m_stat) == 0;
 }
 
-Stat::Stat(const String &filename, bool dereference)
+Stat::Stat(const String& filename, bool dereference)
 {
 	m_good = (dereference ? ::lstat : ::stat)(filename.cStr(), &m_stat) == 0;
 }

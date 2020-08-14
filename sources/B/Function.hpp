@@ -39,15 +39,15 @@ template<typename T, typename Res, typename... Args>
 class Closure final : public Callable<Res, Args...>
 {
 public:
-	Closure(const T &handler)
+	Closure(const T& handler)
 	: m_handler(handler)
 	{}
 
-	Closure(const Closure &other)
+	Closure(const Closure& other)
 	: m_handler(other.handler)
 	{}
 
-	Closure(Closure &&other)
+	Closure(Closure&& other)
 	: m_handler(std::move(other.handler))
 	{}
 
@@ -69,11 +69,11 @@ public:
 	Function() = default;
 	Function(std::nullptr_t) {}
 
-	Function(const Function &other)
+	Function(const Function& other)
 	: m_callable(other.m_callable)
 	{}
 
-	Function(Function &&other)
+	Function(Function&& other)
 	: m_callable(std::move(other.m_callable))
 	{
 		other = nullptr;
@@ -85,7 +85,7 @@ public:
 
 	// Captured lambda specialization
 	template<typename L>
-	Function(const L &lambda)
+	Function(const L& lambda)
 	: m_callable(new Closure<decltype(lambda), Res, Args...>(lambda))
 	{}
 
@@ -99,13 +99,13 @@ public:
 
 	////////////////////////////////////////////////////////
 
-	Function &operator =(const Function &other)
+	Function& operator =(const Function& other)
 	{
 		m_callable = other.m_callable;
 		return *this;
 	}
 
-	Function &operator =(Function &&other)
+	Function& operator =(Function&& other)
 	{
 		if (other.m_callable) {
 			m_callable = std::move(other.m_callable);
@@ -114,14 +114,14 @@ public:
 		return *this;
 	}
 
-	Function &operator =(std::nullptr_t)
+	Function& operator =(std::nullptr_t)
 	{
 		m_callable = nullptr;
 		return *this;
 	}
 
 private:
-	Callable<Res, Args...> *m_callable = nullptr;
+	Callable<Res, Args...>* m_callable = nullptr;
 };
 
 }

@@ -23,7 +23,7 @@ OptionParser::OptionParser()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
+bool OptionParser::parse(int argc, char** argv, bool exitOnFailure)
 {
 	auto printHelpAndExit = [this, argv, exitOnFailure] {
 		printHelp(argv[0]);
@@ -37,7 +37,7 @@ bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
 	Vector<struct option> longopt;
 	String shortopt;
 	for (size_t i = 0; i < m_options.size(); i++) {
-		auto &opt = m_options[i];
+		auto& opt = m_options[i];
 		if (opt.longName)
 			longopt.append({opt.longName, opt.requiresArgument ? required_argument : no_argument, nullptr, 0});
 		if (opt.shortName) {
@@ -58,20 +58,20 @@ bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
 			return false;
 		}
 
-		Option *opt = nullptr;
+		Option* opt = nullptr;
 		if (c == 0) {
 			assert(longIndex >= 0);
 			opt = &m_options[longIndex];
 			longIndex = -1;
 		}
 		else {
-			usize pos = m_options.find([c] (auto &o) { return c == o.shortName; });
+			usize pos = m_options.find([c] (auto& o) { return c == o.shortName; });
 			assert(pos != Vector<Option>::max);
 			opt = &m_options[pos];
 		}
 		assert(opt != nullptr);
 
-		const char *arg = opt->requiresArgument ? optarg : nullptr;
+		const char* arg = opt->requiresArgument ? optarg : nullptr;
 		if (!opt->acceptor(arg)) {
 			tfm::format(std::cerr, "Invalid value for option %s\n", argv[optind - 1]);
 			printHelpAndExit();
@@ -108,7 +108,7 @@ bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
 
 	for (size_t i = 0; i < m_args.size(); i++) {
 		for (int j = 0; j < argsValuesCount[i]; j++) {
-			const char *value = argv[optind++];
+			const char* value = argv[optind++];
 			if (!m_args[i].acceptor(value)) {
 				tfm::format(std::cerr, "Invalid value for argument %s\n", m_args[i].name);
 				printHelpAndExit();
@@ -127,9 +127,9 @@ bool OptionParser::parse(int argc, char **argv, bool exitOnFailure)
 	return true;
 }
 
-void OptionParser::printHelp(const char *programName)
+void OptionParser::printHelp(const char* programName)
 {
-	auto prettyOptionName = [] (const Option &opt) {
+	auto prettyOptionName = [] (const Option& opt) {
 		String name("\t");
 		if (opt.shortName) {
 			name.append('-');
@@ -148,7 +148,7 @@ void OptionParser::printHelp(const char *programName)
 
 
 	tfm::printf("Usage:\n\t%s", programName);
-	for (auto &arg : m_args) {
+	for (auto& arg : m_args) {
 		bool required = arg.minValues > 0;
 		bool repeated = arg.maxValues > 1;
 
@@ -164,7 +164,7 @@ void OptionParser::printHelp(const char *programName)
 
 	if (m_args.size())
 		tfm::printf("\n\nArguments:\n");
-	for (auto &arg : m_args) {
+	for (auto& arg : m_args) {
 		String name = arg.name;
 		name.padRight(30);
 		tfm::printf("\t%s %s\n", name, arg.help);
@@ -172,7 +172,7 @@ void OptionParser::printHelp(const char *programName)
 
 	if (m_options.size())
 		tfm::printf("\nOptions:\n");
-	for (auto &opt : m_options) {
+	for (auto& opt : m_options) {
 		auto name = prettyOptionName(opt);
 		name.padRight(30);
 		tfm::printf("%s", name);
@@ -184,12 +184,12 @@ void OptionParser::printHelp(const char *programName)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void OptionParser::addOption(Option &&option)
+void OptionParser::addOption(Option&& option)
 {
 	m_options.append(std::move(option));
 }
 
-void OptionParser::addOption(bool &value, char shortName, const char *longName, const char *help)
+void OptionParser::addOption(bool& value, char shortName, const char* longName, const char* help)
 {
 	m_options.append({
 		false,
@@ -197,7 +197,7 @@ void OptionParser::addOption(bool &value, char shortName, const char *longName, 
 		longName,
 		shortName,
 		nullptr,
-		[&value] (const char *s) {
+		[&value] (const char* s) {
 			assert(s == nullptr);
 			value = true;
 			return true;
@@ -205,7 +205,7 @@ void OptionParser::addOption(bool &value, char shortName, const char *longName, 
 	});
 }
 
-void OptionParser::addOption(int &value, char shortName, const char *longName, const char *help, const char *valueName)
+void OptionParser::addOption(int& value, char shortName, const char* longName, const char* help, const char* valueName)
 {
 	m_options.append({
 		true,
@@ -213,14 +213,14 @@ void OptionParser::addOption(int &value, char shortName, const char *longName, c
 		longName,
 		shortName,
 		valueName,
-		[&value](const char *s) {
+		[&value] (const char* s) {
 			value = atoi(s);
 			return true;
 		}
 	});
 }
 
-void OptionParser::addOption(String &value, char shortName, const char *longName, const char *help, const char *valueName)
+void OptionParser::addOption(String& value, char shortName, const char* longName, const char* help, const char* valueName)
 {
 	m_options.append({
 		true,
@@ -228,7 +228,7 @@ void OptionParser::addOption(String &value, char shortName, const char *longName
 		longName,
 		shortName,
 		valueName,
-		[&value] (const char *s) {
+		[&value] (const char* s) {
 			value = s;
 			return true;
 		}
@@ -242,42 +242,42 @@ void OptionParser::addArgument(Argument &&arg)
 	m_args.append(std::move(arg));
 }
 
-void OptionParser::addArgument(int &value, const char *help, const char *name, bool required)
+void OptionParser::addArgument(int& value, const char* help, const char* name, bool required)
 {
 	m_args.append({
 		help,
 		name,
 		required ? 1 : 0,
 		1,
-		[&value] (const char *s) {
+		[&value] (const char* s) {
 			value = atoi(s);
 			return true;
 		}
 	});
 }
 
-void OptionParser::addArgument(String &value, const char *help, const char *name, bool required)
+void OptionParser::addArgument(String& value, const char* help, const char* name, bool required)
 {
 	m_args.append({
 		help,
 		name,
 		required ? 1 : 0,
 		1,
-		[&value] (const char *s) {
+		[&value] (const char* s) {
 			value = s;
 			return true;
 		}
 	});
 }
 
-void OptionParser::addArgument(Vector<String> &values, const char *help, const char *name, bool required)
+void OptionParser::addArgument(Vector<String>& values, const char* help, const char* name, bool required)
 {
 	m_args.append({
 		help,
 		name,
 		required ? 1 : 0,
 		NumericTraits<int>::max,
-		[&values] (const char *s) {
+		[&values] (const char* s) {
 			values.append(s);
 			return true;
 		}

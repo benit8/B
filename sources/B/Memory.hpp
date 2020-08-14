@@ -23,7 +23,7 @@ template<typename T>
 class Memory
 {
 public:
-	static void move(T *destination, T *source, usize count)
+	static void move(T* destination, T* source, usize count)
 	{
 		assert(destination);
 		assert(source);
@@ -49,7 +49,7 @@ public:
 		}
 	}
 
-	static void copy(T *destination, const T *source, usize count)
+	static void copy(T* destination, const T* source, usize count)
 	{
 		assert(destination);
 		assert(source);
@@ -71,7 +71,7 @@ public:
 		}
 	}
 
-	static void set(T *destination, const T &value, usize count)
+	static void set(T* destination, const T& value, usize count)
 	{
 		assert(destination);
 
@@ -83,7 +83,7 @@ public:
 		}
 	}
 
-	static bool compare(const T *a, const T *b, usize count)
+	static bool compare(const T* a, const T* b, usize count)
 	{
 		assert(a);
 		assert(b);
@@ -101,7 +101,7 @@ public:
 		return true;
 	}
 
-	static void destruct(T *data, usize count)
+	static void destruct(T* data, usize count)
 	{
 		assert(data);
 

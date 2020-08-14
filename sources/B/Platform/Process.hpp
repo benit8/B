@@ -38,10 +38,10 @@ public:
 	};
 
 public:
-	explicit Process(const Vector<String> &args, Flags flags = Flags::None);
+	explicit Process(const Vector<String>& args, Flags flags = Flags::None);
 	~Process();
 
-	bool create(const Vector<String> &args, Flags flags = Flags::None);
+	bool create(const Vector<String>& args, Flags flags = Flags::None);
 	bool join();
 	void stop();
 	void kill();
@@ -55,8 +55,8 @@ public:
 	int err() const { return m_errPipe.in(); }
 
 protected:
-	char **buildCStringArray(const Vector<String> &vector);
-	void freeCStringArray(char **array);
+	char** buildCStringArray(const Vector<String>& vector);
+	void freeCStringArray(char** array);
 
 private:
 	pid_t m_pid = -1;

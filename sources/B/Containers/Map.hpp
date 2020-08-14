@@ -33,8 +33,8 @@ public:
 
 public:
 	Map();
-	Map(const Map &other);
-	Map(Map &&other);
+	Map(const Map& other);
+	Map(Map&& other);
 	Map(std::initializer_list<Pair<Key, Value>> il);
 
 	Iterator begin();
@@ -42,15 +42,15 @@ public:
 	ConstIterator begin() const;
 	ConstIterator end() const;
 
-	bool contains(const Key &key) const;
-	bool insert(const Key &key, const Value &value);
-	bool erase(const Key &key);
-	Iterator find(const Key &key);
-	ConstIterator find(const Key &key) const;
+	bool contains(const Key& key) const;
+	bool insert(const Key& key, const Value& value);
+	bool erase(const Key& key);
+	Iterator find(const Key& key);
+	ConstIterator find(const Key& key) const;
 
 private:
-	bool search(const Key &search, usize &index) const override;
-	bool insert(usize pos, const Key &key, const Value &value);
+	bool search(const Key& search, usize& index) const override;
+	bool insert(usize pos, const Key& key, const Value& value);
 
 	friend Iterator;
 	friend ConstIterator;

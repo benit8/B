@@ -29,17 +29,17 @@ public:
 	: Sequence<T>()
 	{}
 
-	T &top() { return this->at(this->size() - 1); }
-	const T &top() const { return this->at(this->size() - 1); }
+	T& top() { return this->at(this->size() - 1); }
+	const T& top() const { return this->at(this->size() - 1); }
 
-	void push(const T &value)
+	void push(const T& value)
 	{
 		this->reserve(this->size() + 1);
 		new (this->slot(this->size())) T(value);
 		this->m_size++;
 	}
 
-	void push(T &&value)
+	void push(T&& value)
 	{
 		T t(std::move(value));
 		push(t);
@@ -60,7 +60,7 @@ public:
 	}
 
 private:
-	friend std::ostream &operator <<(std::ostream &os, const Stack<T> &s)
+	friend std::ostream& operator <<(std::ostream& os, const Stack<T>& s)
 	{
 		os << "Stack<" << typeid(T).name() << ">(" << s.size() << "/" << s.capacity() << ") ";
 		if (s.null())

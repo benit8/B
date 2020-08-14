@@ -31,7 +31,7 @@ Buffer::Buffer(usize n)
 	::memset(data(), 0, size());
 }
 
-Buffer::Buffer(const Buffer &other)
+Buffer::Buffer(const Buffer& other)
 : m_data(new byte[other.m_size])
 , m_size(other.m_size)
 , m_owner(true)
@@ -39,7 +39,7 @@ Buffer::Buffer(const Buffer &other)
 	::memcpy(m_data, other.m_data, other.m_size);
 }
 
-Buffer::Buffer(Buffer &&other)
+Buffer::Buffer(Buffer&& other)
 : m_data(std::move(other.m_data))
 , m_size(other.m_size)
 , m_owner(other.m_owner)
@@ -63,7 +63,7 @@ Buffer Buffer::create(usize n)
 	return b;
 }
 
-Buffer Buffer::adopt(byte *s, usize n)
+Buffer Buffer::adopt(byte* s, usize n)
 {
 	Buffer b;
 	b.m_data = s;
@@ -72,7 +72,7 @@ Buffer Buffer::adopt(byte *s, usize n)
 	return b;
 }
 
-Buffer Buffer::wrap(const byte *s, usize n)
+Buffer Buffer::wrap(const byte* s, usize n)
 {
 	Buffer b;
 	b.m_data = const_cast<byte*>(s);
@@ -81,7 +81,7 @@ Buffer Buffer::wrap(const byte *s, usize n)
 	return b;
 }
 
-Buffer Buffer::copy(const byte *s, usize n)
+Buffer Buffer::copy(const byte* s, usize n)
 {
 	Buffer b(n);
 	::memcpy(b.data(), s, n);
@@ -128,7 +128,7 @@ usize Buffer::find(byte c) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Buffer &Buffer::operator =(const Buffer &rhs)
+Buffer& Buffer::operator =(const Buffer& rhs)
 {
 	reset();
 
@@ -139,7 +139,7 @@ Buffer &Buffer::operator =(const Buffer &rhs)
 	return *this;
 }
 
-Buffer &Buffer::operator =(Buffer &&rhs)
+Buffer& Buffer::operator =(Buffer&& rhs)
 {
 	reset();
 

@@ -19,25 +19,25 @@ Vector<T>::Vector()
 }
 
 template <typename T>
-Vector<T>::Vector(const Vector<T> &other)
+Vector<T>::Vector(const Vector<T>& other)
 {
 	this->assign(other);
 }
 
 template <typename T>
-Vector<T>::Vector(Vector<T> &&other)
+Vector<T>::Vector(Vector<T>&& other)
 {
 	this->assign(std::move(other));
 }
 
 template <typename T>
-Vector<T>::Vector(const T *buffer, usize size)
+Vector<T>::Vector(const T* buffer, usize size)
 {
 	this->assign(buffer, size);
 }
 
 template <typename T>
-Vector<T>::Vector(usize size, const T &val)
+Vector<T>::Vector(usize size, const T& val)
 {
 	this->assign(size, val);
 }
@@ -77,7 +77,7 @@ typename Vector<T>::ConstIterator Vector<T>::end() const
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-bool Vector<T>::contains(const T &val) const
+bool Vector<T>::contains(const T& val) const
 {
 	for (usize i = 0; i < this->size(); ++i) {
 		if (this->at(i) == val)
@@ -87,7 +87,7 @@ bool Vector<T>::contains(const T &val) const
 }
 
 template <typename T>
-void Vector<T>::assign(const Vector<T> &other)
+void Vector<T>::assign(const Vector<T>& other)
 {
 	this->reserve(other.size());
 	Memory<T>::copy(this->slot(0), other.data(), other.size());
@@ -95,7 +95,7 @@ void Vector<T>::assign(const Vector<T> &other)
 }
 
 template <typename T>
-void Vector<T>::assign(Vector<T> &&other)
+void Vector<T>::assign(Vector<T>&& other)
 {
 	this->reset();
 
@@ -109,7 +109,7 @@ void Vector<T>::assign(Vector<T> &&other)
 }
 
 template <typename T>
-void Vector<T>::assign(usize size, const T &val)
+void Vector<T>::assign(usize size, const T& val)
 {
 	this->reserve(size);
 	for (usize i = 0; i < size; ++i)
@@ -118,7 +118,7 @@ void Vector<T>::assign(usize size, const T &val)
 }
 
 template <typename T>
-void Vector<T>::assign(const T *buffer, usize size)
+void Vector<T>::assign(const T* buffer, usize size)
 {
 	this->reserve(size);
 	Memory<T>::copy(this->slot(0), buffer, size);
@@ -135,7 +135,7 @@ void Vector<T>::assign(std::initializer_list<T> il)
 }
 
 template <typename T>
-void Vector<T>::append(const T &val, usize n)
+void Vector<T>::append(const T& val, usize n)
 {
 	if (this->size() + n > this->capacity())
 		this->reserve(this->size() + n);
@@ -147,7 +147,7 @@ void Vector<T>::append(const T &val, usize n)
 }
 
 template <typename T>
-void Vector<T>::append(T &&val)
+void Vector<T>::append(T&& val)
 {
 	if (this->size() == this->capacity())
 		this->reserve(this->size() + 1);
@@ -156,7 +156,7 @@ void Vector<T>::append(T &&val)
 }
 
 template <typename T>
-void Vector<T>::append(const Vector<T> &other)
+void Vector<T>::append(const Vector<T>& other)
 {
 	const usize n = other.size();
 	if (this->size() + n > this->capacity())
@@ -167,7 +167,7 @@ void Vector<T>::append(const Vector<T> &other)
 }
 
 template <typename T>
-void Vector<T>::append(Vector<T> &&other)
+void Vector<T>::append(Vector<T>&& other)
 {
 	const usize n = other.size();
 	if (this->size() + n > this->capacity())
@@ -191,7 +191,7 @@ void Vector<T>::append(std::initializer_list<T> il)
 }
 
 template <typename T>
-void Vector<T>::insert(usize pos, const T &val, usize n)
+void Vector<T>::insert(usize pos, const T& val, usize n)
 {
 	if (pos > this->size())
 		return;
@@ -209,7 +209,7 @@ void Vector<T>::insert(usize pos, const T &val, usize n)
 }
 
 template <typename T>
-void Vector<T>::insert(usize pos, T &&val)
+void Vector<T>::insert(usize pos, T&& val)
 {
 	if (pos > this->size())
 		return;
@@ -226,7 +226,7 @@ void Vector<T>::insert(usize pos, T &&val)
 }
 
 template <typename T>
-void Vector<T>::insert(usize pos, const Vector &other)
+void Vector<T>::insert(usize pos, const Vector& other)
 {
 	if (pos > this->size())
 		return;
@@ -244,7 +244,7 @@ void Vector<T>::insert(usize pos, const Vector &other)
 }
 
 template <typename T>
-void Vector<T>::insert(usize pos, Vector &&other)
+void Vector<T>::insert(usize pos, Vector&& other)
 {
 	if (pos > this->size())
 		return;
@@ -336,14 +336,14 @@ void Vector<T>::pop()
 }
 
 template <typename T>
-void Vector<T>::apply(Function<void(T &)> callback)
+void Vector<T>::apply(Function<void(T&)> callback)
 {
 	for (usize i = 0; i < this->size(); ++i)
 		callback(this->at(i));
 }
 
 template <typename T>
-void Vector<T>::filter(Function<bool(const T &val)> callback)
+void Vector<T>::filter(Function<bool(const T&)> callback)
 {
 	Vector<T> r;
 	r.reserve(this->size());
@@ -360,7 +360,7 @@ void Vector<T>::filter(Function<bool(const T &val)> callback)
 template <typename T>
 void Vector<T>::sort()
 {
-	this->sort([] (const T &a, const T &b) {
+	this->sort([] (const T& a, const T& b) {
 		return a < b;
 	});
 }
@@ -402,7 +402,7 @@ void Vector<T>::sort(Function<bool(const T&, const T&)> cmp)
 }
 
 template <typename T>
-void Vector<T>::swap(Vector<T> &other)
+void Vector<T>::swap(Vector<T>& other)
 {
 	Vector<T> c(std::move(other));
 	other = std::move(*this);
@@ -427,7 +427,7 @@ void Vector<T>::reverse()
 }
 
 template <typename T>
-usize Vector<T>::find(const T &val, usize pos) const
+usize Vector<T>::find(const T& val, usize pos) const
 {
 	if (pos >= this->size())
 		return Sequence<T>::max;
@@ -440,7 +440,7 @@ usize Vector<T>::find(const T &val, usize pos) const
 }
 
 template <typename T>
-usize Vector<T>::find(Function<bool(const T &)> callback, usize pos) const
+usize Vector<T>::find(Function<bool(const T&)> callback, usize pos) const
 {
 	if (pos >= this->size())
 		return Sequence<T>::max;
@@ -453,7 +453,7 @@ usize Vector<T>::find(Function<bool(const T &)> callback, usize pos) const
 }
 
 template <typename T>
-usize Vector<T>::findLast(const T &val, usize pos) const
+usize Vector<T>::findLast(const T& val, usize pos) const
 {
 	if (pos >= this->size())
 		pos = this->size() - 1;
@@ -470,7 +470,7 @@ usize Vector<T>::findLast(const T &val, usize pos) const
 }
 
 template <typename T>
-usize Vector<T>::findLast(Function<bool(const T &)> callback, usize pos) const
+usize Vector<T>::findLast(Function<bool(const T&)> callback, usize pos) const
 {
 	if (pos >= this->size())
 		pos = this->size() - 1;
@@ -489,7 +489,7 @@ usize Vector<T>::findLast(Function<bool(const T &)> callback, usize pos) const
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-bool Vector<T>::operator ==(const Vector<T> &other) const
+bool Vector<T>::operator ==(const Vector<T>& other) const
 {
 	if (this->size() != other.size())
 		return false;
@@ -513,7 +513,7 @@ bool Vector<T>::operator ==(std::initializer_list<T> il) const
 }
 
 template <typename T>
-bool Vector<T>::operator !=(const Vector<T> &other) const
+bool Vector<T>::operator !=(const Vector<T>& other) const
 {
 	return !(*this == other);
 }
@@ -527,7 +527,7 @@ bool Vector<T>::operator !=(std::initializer_list<T> il) const
 ////////////////////////////////////////////////////////////////////////////////
 
 // template <typename T>
-// Writer &operator <<(Writer &wrt, const Vector<T> &v)
+// Writer& operator <<(Writer& wrt, const Vector<T>& v)
 // {
 // 	print(wrt, "Vector<%s>(%zu/%zu) ", typeid(T).name(), v.size(), v.capacity());
 // 	if (v.null())
