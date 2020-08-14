@@ -42,6 +42,7 @@ PUBLIC
 	sources/B/Buffer.hpp
 	sources/B/Common.hpp
 	sources/B/EnumOperators.hpp
+	sources/B/Function.hpp
 	sources/B/Memory.hpp
 	sources/B/Optional.hpp
 	sources/B/OptionParser.hpp

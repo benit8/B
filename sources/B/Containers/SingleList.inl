@@ -291,39 +291,43 @@ void SingleList<T>::sort()
 }
 
 template <typename T>
-template <typename F>
-void SingleList<T>::sort(F comparator)
+void SingleList<T>::sort(Function<bool(const T&, const T&)> comparator)
 {
-	auto splitInHalf = [] (Node *head) -> Pair<Node*, Node*> {
-		Node *slow = head;
-		Node *fast = head->next;
-		while (fast) {
-			fast = fast->next;
-			if (fast) {
-				slow = slow->next;
+	std::function<void(Node *&)> sortFromNode = [&] (Node *&head) -> void
+	{
+		auto splitInHalf = [] (Node *head) -> Pair<Node*, Node*>
+		{
+			Node *slow = head;
+			Node *fast = head->next;
+			while (fast) {
 				fast = fast->next;
+				if (fast) {
+					slow = slow->next;
+					fast = fast->next;
+				}
 			}
-		}
-		auto head2 = slow->next;
-		slow->next = nullptr;
-		return {head, head2};
-	};
+			auto head2 = slow->next;
+			slow->next = nullptr;
+			return {head, head2};
+		};
 
-	std::function<Node*(Node*, Node*)> sortedMerge = [&] (Node *a, Node *b) -> Node* {
-		if (!a) return b;
-		else if (!b) return a;
+		std::function<Node*(Node*, Node*)> sortedMerge = [&] (Node *a, Node *b) -> Node*
+		{
+			if (!a)
+				return b;
+			else if (!b)
+				return a;
 
-		if (comparator(a->value, b->value)) {
-			a->next = sortedMerge(a->next, b);
-			return a;
-		}
-		else {
-			b->next = sortedMerge(a, b->next);
-			return b;
-		}
-	};
+			if (comparator(a->value, b->value)) {
+				a->next = sortedMerge(a->next, b);
+				return a;
+			}
+			else {
+				b->next = sortedMerge(a, b->next);
+				return b;
+			}
+		};
 
-	std::function<void(Node *&)> sortFromNode = [&] (Node *&head) {
 		if (!head || !head->next)
 			return;
 
@@ -345,8 +349,7 @@ typename SingleList<T>::Iterator SingleList<T>::find(const T &value)
 }
 
 template <typename T>
-template <typename F>
-typename SingleList<T>::Iterator SingleList<T>::find(F finder)
+typename SingleList<T>::Iterator SingleList<T>::find(Function<bool(const T&)> finder)
 {
 	Node *prev = nullptr;
 	for (Node *curr = m_head; curr != nullptr; curr = curr->next) {
@@ -364,8 +367,7 @@ typename SingleList<T>::ConstIterator SingleList<T>::find(const T &value) const
 }
 
 template <typename T>
-template <typename F>
-typename SingleList<T>::ConstIterator SingleList<T>::find(F finder) const
+typename SingleList<T>::ConstIterator SingleList<T>::find(Function<bool(const T&)> finder) const
 {
 	Node *prev = nullptr;
 	for (Node *curr = m_head; curr != nullptr; curr = curr->next) {
@@ -485,7 +487,7 @@ Writer &operator <<(Writer &wrt, const SingleList<T> &l)
 			wrt.put(',');
 	}
 
-	return wrt << "}(" << len << ')';
+	return wrt << '}' << '(' << len << ')';
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -52,8 +52,8 @@ public:
 		}
 	};
 
-	using Filter = std::function<bool(const Entry &)>;
-	using Comparator = std::function<int(const Entry &, const Entry &)>;
+	using Filter = Function<bool(const Entry &)>;
+	using Comparator = Function<bool(const Entry &, const Entry &)>;
 
 public:
 	explicit Directory(const String &name);

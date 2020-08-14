@@ -7,6 +7,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Function.hpp"
 #include "B/Containers/Container.hpp"
 #include "B/Containers/Pair.hpp"
 #include "B/IO/Writer.hpp"
@@ -158,18 +159,15 @@ public:
 	void reverse();
 
 	void sort();
-	template <typename F /* bool(const T&, const T&) */>
-	void sort(F comparator);
+	void sort(Function<bool(const T&, const T&)> comparator);
 
 	bool contains(const T &value) const;
 
 	Iterator find(const T &value);
-	template <typename F /* bool(const T&) */>
-	Iterator find(F finder);
+	Iterator find(Function<bool(const T&)> finder);
 
 	ConstIterator find(const T &value) const;
-	template <typename F /* bool(const T&) */>
-	ConstIterator find(F finder) const;
+	ConstIterator find(Function<bool(const T&)> finder) const;
 
 	/// Operators
 	SingleList &operator =(const SingleList &other);
@@ -181,7 +179,7 @@ public:
 	bool operator !=(const SingleList &other);
 	bool operator !=(std::initializer_list<T> il);
 
-	friend Writer &operator <<(Writer &lhs, const String &rhs);
+	friend Writer &operator <<<>(Writer &lhs, const SingleList &rhs);
 
 private:
 	Node *m_head = nullptr;

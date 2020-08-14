@@ -7,10 +7,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Function.hpp"
 #include "B/String.hpp"
 #include "B/Containers/Vector.hpp"
-
-#include <functional>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +26,7 @@ public:
 		const char *longName = nullptr;
 		char shortName = 0;
 		const char *valueName = nullptr;
-		std::function<bool(const char*)> acceptor;
+		Function<bool(const char*)> acceptor;
 	};
 
 	struct Argument
@@ -36,7 +35,7 @@ public:
 		const char *name = nullptr;
 		int minValues = 0;
 		int maxValues = 1;
-		std::function<bool(const char*)> acceptor;
+		Function<bool(const char*)> acceptor;
 	};
 
 public:

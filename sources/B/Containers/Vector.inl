@@ -336,14 +336,14 @@ void Vector<T>::pop()
 }
 
 template <typename T>
-void Vector<T>::apply(std::function<void(T &)> callback)
+void Vector<T>::apply(Function<void(T &)> callback)
 {
 	for (usize i = 0; i < this->size(); ++i)
 		callback(this->at(i));
 }
 
 template <typename T>
-void Vector<T>::filter(std::function<bool(const T &val)> callback)
+void Vector<T>::filter(Function<bool(const T &val)> callback)
 {
 	Vector<T> r;
 	r.reserve(this->size());
@@ -366,9 +366,9 @@ void Vector<T>::sort()
 }
 
 template <typename T>
-void Vector<T>::sort(std::function<bool(const T&, const T&)> cmp)
+void Vector<T>::sort(Function<bool(const T&, const T&)> cmp)
 {
-	std::function<void(usize, usize)> partition = [&] (usize start, usize end)
+	Function<void(usize, usize)> partition = [&] (usize start, usize end)
 	{
 		if (start >= end)
 			return;
@@ -440,7 +440,7 @@ usize Vector<T>::find(const T &val, usize pos) const
 }
 
 template <typename T>
-usize Vector<T>::find(std::function<bool(const T &)> callback, usize pos) const
+usize Vector<T>::find(Function<bool(const T &)> callback, usize pos) const
 {
 	if (pos >= this->size())
 		return Sequence<T>::max;
@@ -470,7 +470,7 @@ usize Vector<T>::findLast(const T &val, usize pos) const
 }
 
 template <typename T>
-usize Vector<T>::findLast(std::function<bool(const T &)> callback, usize pos) const
+usize Vector<T>::findLast(Function<bool(const T &)> callback, usize pos) const
 {
 	if (pos >= this->size())
 		pos = this->size() - 1;
@@ -526,21 +526,24 @@ bool Vector<T>::operator !=(std::initializer_list<T> il) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename T>
-std::ostream &operator <<(std::ostream &os, const Vector<T> &v)
-{
-	os << "Vector<" << typeid(T).name() << ">(" << v.size() << "/" << v.capacity() << ") ";
-	if (v.null())
-		return os << "null";
+// template <typename T>
+// Writer &operator <<(Writer &wrt, const Vector<T> &v)
+// {
+// 	print(wrt, "Vector<%s>(%zu/%zu) ", typeid(T).name(), v.size(), v.capacity());
+// 	if (v.null())
+// 		print(wrt, "null");
+// 	else {
+// 		wrt.put('{');
+// 		for (usize i = 0; i < v.size(); ++i) {
+// 			if (i > 0)
+// 				print(wrt, ", ");
+// 			wrt << v[i];
+// 		}
+// 		wrt.put('}');
+// 	}
 
-	os << '{';
-	for (usize i = 0; i < v.size(); ++i) {
-		if (i > 0)
-			os << ", ";
-		os << v[i];
-	}
-	return os << '}';
-}
+// 	return wrt;
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 

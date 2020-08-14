@@ -14,13 +14,12 @@ namespace B {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Function.hpp"
 #include "B/Memory.hpp"
 #include "B/Containers/Iterators.hpp"
 #include "B/Containers/Sequence.hpp"
 
 #include <initializer_list>
-#include <functional>
-#include <iostream>         // ostream
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -85,18 +84,18 @@ public:
 	void erase(usize pos, usize l = 1);
 	void shift();
 	void pop();
-	void apply(std::function<void(T &)> f);
-	void filter(std::function<bool(const T &)> f);
+	void apply(Function<void(T &)> f);
+	void filter(Function<bool(const T &)> f);
 	void sort();
-	void sort(std::function<bool(const T&, const T&)> cmp);
+	void sort(Function<bool(const T&, const T&)> cmp);
 	void swap(Vector &other);
 	void shuffle();
 	void reverse();
 
 	usize find(const T &val, usize pos = 0) const;
-	usize find(std::function<bool(const T &)> f, usize pos = 0) const;
+	usize find(Function<bool(const T &)> f, usize pos = 0) const;
 	usize findLast(const T &val, usize pos = Sequence<T>::max) const;
-	usize findLast(std::function<bool(const T &)> f, usize pos = Sequence<T>::max) const;
+	usize findLast(Function<bool(const T &)> f, usize pos = Sequence<T>::max) const;
 
 
 	Vector &operator =(const Vector &other) { assign(other); return *this; }
