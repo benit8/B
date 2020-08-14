@@ -1,0 +1,22 @@
+/*
+** B, 2020
+** Hashing.hpp
+*/
+
+#pragma once
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include "B/Types.hpp"
+
+////////////////////////////////////////////////////////////////////////////////
+
+namespace B
+{
+
+u32 hash_int(u32 x);
+// u32 hash_int(u64 x);
+u32 hash_data(const void* data, usize length);
+u32 hash_string(const char* s);
+
+}

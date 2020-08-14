@@ -52,6 +52,9 @@ public:
 	const char& last() const { return at(length() - 1); }
 	const char& operator [](usize i) const { return data()[i]; }
 
+	const char* begin() const { return data(); }
+	const char* end() const { return data() + length(); }
+
 	void assign(String&&);
 	void assign(const String&);
 	void assign(const char*);
@@ -210,6 +213,32 @@ public:
 private:
 	// Allocate for the null terminator too
 	void reserve(usize newSize) override { return Sequence<char>::reserve(newSize + 1); }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <>
+struct Traits<String> : public GenericTraits<String>
+{
+	static u32 hash(const String& s) { return hash_data(s.cStr(), s.length()); };
+};
+
+struct CaseInsensitiveStringTraits : public Traits<String>
+{
+	static bool equals(const String& a, const String& b)
+	{
+		return a.caseCompare(b) == 0;
+	}
+
+	static unsigned hash(const String& s)
+	{
+		if (s.empty())
+			return 0;
+		u32 hash = 0x811c9dc5;
+		for (auto c : s)
+			hash = (hash ^ tolower(c)) * 0x01000193;
+		return hash;
+	}
 };
 
 ////////////////////////////////////////////////////////////////////////////////

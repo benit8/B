@@ -43,6 +43,7 @@ PUBLIC
 	sources/B/Common.hpp
 	sources/B/EnumOperators.hpp
 	sources/B/Function.hpp
+	sources/B/Hashing.hpp
 	sources/B/Memory.hpp
 	sources/B/Optional.hpp
 	sources/B/OptionParser.hpp
@@ -78,6 +79,7 @@ PUBLIC
 
 PRIVATE
 	sources/B/Buffer.cpp
+	sources/B/Hashing.cpp
 	sources/B/OptionParser.cpp
 	sources/B/String.cpp
 	sources/B/StringView.cpp

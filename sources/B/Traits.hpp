@@ -56,6 +56,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "B/Hashing.hpp"
+#include "B/Types.hpp"
 #include <cstddef>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -372,6 +374,51 @@ struct EnableIf {};
 
 template <class T>
 struct EnableIf<true, T> { typedef T Type; };
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+struct GenericTraits
+{
+	static bool equals(const T& a, const T& b) { return a == b; }
+};
+
+template<typename T>
+struct Traits : public GenericTraits<T>
+{};
+
+template <>
+struct Traits<char> : public GenericTraits<char>
+{
+	static u32 hash(char n) { return hash_int(n); }
+};
+
+template <>
+struct Traits<int> : public GenericTraits<int>
+{
+	static u32 hash(int n) { return hash_int(n); }
+};
+
+template <>
+struct Traits<unsigned> : public GenericTraits<unsigned>
+{
+	static u32 hash(unsigned n) { return hash_int(n); }
+};
+
+template <typename T>
+struct Traits<T*> : public GenericTraits<T*>
+{
+	static u32 hash(const T* p) { return hash_int((__PTRDIFF_TYPE__)p); }
+	static bool equals(const T* a, const T* b) { return a == b; }
+};
+
+template <>
+struct Traits<char*> : public GenericTraits<char*>
+{
+	static u32 hash(const char* s) { return hash_string(s); }
+	static bool equals(const char* a, const char* b) { return __builtin_strcmp(a, b) == 0; }
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
