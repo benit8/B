@@ -15,7 +15,6 @@ namespace B {
 
 #include "B/StringView.hpp"
 #include "B/Containers/Sequence.hpp"
-#include "B/Containers/Vector.hpp"
 #include "B/IO/Writer.hpp"
 #include "tinyformat.hpp"
 
@@ -126,12 +125,12 @@ public:
 
 	Vector<String> chunk(usize chunksLength) const;
 
-	Vector<String> split(const String &delim, bool keepEmptySpans = true, usize limit = -1) const { return split(delim.cStr(), delim.length(), keepEmptySpans, limit); }
-	Vector<String> split(const char *delim,   bool keepEmptySpans = true, usize limit = -1) const { return split(delim, strlen(delim), keepEmptySpans, limit); }
+	Vector<String> split(const String &delim, bool keepEmptySpans = true, usize limit = -1) const;
+	Vector<String> split(const char *delim,   bool keepEmptySpans = true, usize limit = -1) const;
 	Vector<String> split(const char *delim, usize delimLength, bool keepEmptySpans = true, usize limit = -1) const;
 
-	static String join(const Vector<String> &spans, const String &glue) { return join(spans, glue.cStr(), glue.length()); }
-	static String join(const Vector<String> &spans, const char *glue)   { return join(spans, glue, strlen(glue)); }
+	static String join(const Vector<String> &spans, const String &glue);
+	static String join(const Vector<String> &spans, const char *glue);
 	static String join(const Vector<String> &spans, const char *glue, usize glueLength);
 
 	bool startsWith(const String &s) const;
@@ -200,8 +199,8 @@ public:
 
 	String operator *(usize rhs);
 
-	Vector<String> operator /(const String &rhs) const { return split(rhs); }
-	Vector<String> operator /(const char *rhs)   const { return split(rhs); }
+	Vector<String> operator /(const String &rhs) const;
+	Vector<String> operator /(const char *rhs)   const;
 
 	friend Writer &operator <<(Writer &lhs, const String &rhs);
 	friend std::ostream &operator <<(std::ostream &lhs, const String &rhs);

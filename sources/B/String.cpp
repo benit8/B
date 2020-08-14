@@ -340,6 +340,16 @@ Vector<String> String::chunk(usize chunkLength) const
 	return chunks;
 }
 
+Vector<String> String::split(const String &delim, bool keepEmptySpans, usize limit) const
+{
+	return split(delim.cStr(), delim.length(), keepEmptySpans, limit);
+}
+
+Vector<String> String::split(const char *delim, bool keepEmptySpans, usize limit) const
+{
+	return split(delim, strlen(delim), keepEmptySpans, limit);
+}
+
 Vector<String> String::split(const char *delimiter, usize delimiterLength, bool keepEmptySpans, usize limit) const
 {
 	if (empty())
@@ -357,6 +367,16 @@ Vector<String> String::split(const char *delimiter, usize delimiterLength, bool 
 	if (length() - lastPos > 0 || keepEmptySpans)
 		spans.append(substr(lastPos));
 	return spans;
+}
+
+String String::join(const Vector<String> &spans, const String &glue)
+{
+	return join(spans, glue.cStr(), glue.length());
+}
+
+String String::join(const Vector<String> &spans, const char *glue)
+{
+	return join(spans, glue, strlen(glue));
 }
 
 String String::join(const Vector<String> &spans, const char *glue, usize glueLength)
@@ -583,6 +603,16 @@ String String::operator *(usize rhs)
 	String s(*this);
 	s.repeat(rhs);
 	return s;
+}
+
+Vector<String> String::operator /(const String &rhs) const
+{
+	return split(rhs);
+}
+
+Vector<String> String::operator /(const char *rhs) const
+{
+	return split(rhs);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
