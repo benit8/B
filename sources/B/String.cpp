@@ -301,13 +301,13 @@ void String::trim()
 	trimLeft();
 }
 
-void String::toLower()
+void String::toLowercase()
 {
 	for (usize i = 0; i < length(); ++i)
 		at(i) = tolower(at(i));
 }
 
-void String::toUpper()
+void String::toUppercase()
 {
 	for (usize i = 0; i < length(); ++i)
 		at(i) = toupper(at(i));

@@ -121,8 +121,8 @@ public:
 	void trimLeft();
 	void trim();
 
-	void toLower();
-	void toUpper();
+	void toLowercase();
+	void toUppercase();
 
 	String substr(usize start = 0, usize length = -1) const;
 
